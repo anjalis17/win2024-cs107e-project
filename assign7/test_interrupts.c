@@ -1,6 +1,9 @@
 /* File: test_interrupts.c
  * -----------------------
- * ***** TODO: add your file header comment here *****
+ * Author: CS107E Staff & Anjali Sreenivas
+ * 
+ * The test_interrupts.c file contains a series of tests that can be used 
+ * to test key input receiving from a PS/2 keyboard using interrupts. 
  */
 #include "gpio.h"
 #include "gpio_extra.h"
@@ -9,6 +12,8 @@
 #include "printf.h"
 #include "timer.h"
 #include "uart.h"
+
+#define ESC_SCANCODE 0x76
 
 /*
  * This function tests the behavior of the assign5 ps2

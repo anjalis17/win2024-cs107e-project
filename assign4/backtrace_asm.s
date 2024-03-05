@@ -5,4 +5,7 @@
 
 .globl backtrace_get_fp
 backtrace_get_fp:
-    /***** TODO: Your code goes here *****/
+    # move value in fp register to a0 register to be  
+    # accessible from C code (via argument passing)
+    mv a0, fp
+    ret 

@@ -2,8 +2,8 @@
 RUN_PROGRAM   = interrupts_console_shell.bin
 TEST_PROGRAM  = test_interrupts.bin
 
-MY_MODULE_SOURCES = gpio.c timer.c strings.c printf.c backtrace.c malloc.c \
-                    ps2.c keyboard.c shell.c fb.c gl.c console.c
+MY_MODULE_SOURCES = timer.c strings.c backtrace.c console.c \
+                    ps2.c fb.c gl.c keyboard.c printf.c shell.c
 
 # MY_MODULE_SOURCES is a list of those library modules (such as gpio.c)
 # for which you intend to use your own code. The reference implementation

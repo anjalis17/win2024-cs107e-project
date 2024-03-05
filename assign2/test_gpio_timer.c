@@ -20,7 +20,12 @@ void abort(void) {
     while (1) { // infinite loop
         *GPIO_DATA ^= (1 << 18); // invert value
         for (volatile int delay = 0x100000; delay > 0; delay--) ; // wait
-    }
+   }
+}
+
+// Test function to ensure invalid pin IDs passed through get function are properly handled
+void test_invalid_pin_ids(gpio_id_t pin) {
+    assert(gpio_get_function(pin) == GPIO_INVALID_REQUEST);
 }
 
 void test_gpio_set_get_function(void) {
@@ -34,6 +39,46 @@ void test_gpio_set_get_function(void) {
     // Set pin to input, confirm get returns what was set
     gpio_set_input(GPIO_PC0);
     assert( gpio_get_function(GPIO_PC0) == GPIO_FN_INPUT );
+    
+    // Set pin at offset config register to input; verify 
+    gpio_set_input(GPIO_PB8);
+    assert( gpio_get_function(GPIO_PB8) == GPIO_FN_INPUT );
+    // Change state of same pin and verify re-configuration
+    gpio_set_output(GPIO_PB8);
+    assert( gpio_get_function(GPIO_PB8) == GPIO_FN_OUTPUT );
+    
+    // Verify non input/output configurations
+    gpio_set_function(GPIO_PB3, GPIO_FN_ALT3);
+    assert( gpio_get_function(GPIO_PB3) == GPIO_FN_ALT3);
+
+    // Verify pin configuration independence
+    gpio_set_function(GPIO_PB4, GPIO_FN_ALT5);
+    // configs of nearby pins in same config register should not be lost
+    assert(gpio_get_function(GPIO_PB4) == GPIO_FN_ALT5);
+    assert(gpio_get_function(GPIO_PB3) == GPIO_FN_ALT3);
+    assert(gpio_get_function(GPIO_PB2) == GPIO_FN_DISABLED);
+    
+    // testing input of invalid pins into get function
+    test_invalid_pin_ids(0x013);
+    test_invalid_pin_ids(0x225);
+    // verify that configs of existing pins are not modified after call with invalid pin
+    assert(gpio_get_function(GPIO_PB4) == GPIO_FN_ALT5);
+    assert(gpio_get_function(GPIO_PB3) == GPIO_FN_ALT3);
+    assert(gpio_get_function(GPIO_PB2) == GPIO_FN_DISABLED);
+}
+
+// Prior to calling this function, I wrote to the pin's config using xfel, allowing me to verify that my gpio_get_function is working.
+void test_get_with_xfel(gpio_id_t pin, unsigned int function) {
+    assert(gpio_get_function(pin) == function);    
+}
+
+// Function to visually verify functionality of gpio_write function - verified that connected LED lit up! :)
+void visual_test(gpio_id_t pin) {
+    gpio_set_output(pin);
+    gpio_write(pin, 1);
+    // Verified gpio_read accuracy by writing to register via xfel, 
+    // and here, further verifying its consistency with gpio_write function
+    assert(gpio_read(pin) == GPIO_FN_OUTPUT);
 }
 
 void test_gpio_read_write(void) {
@@ -51,6 +96,16 @@ void test_gpio_read_write(void) {
     // gpio_write low, confirm gpio_read reads what was written
     gpio_write(GPIO_PB4, 0);
     assert( gpio_read(GPIO_PB4) ==  0 );
+
+    visual_test(GPIO_PB12);
+    // Verify data config independence; i.e. other pin data not changed
+    assert(gpio_read(GPIO_PB4) == 0); 
+    visual_test(GPIO_PD17);
+    visual_test(GPIO_PB6);
+
+    // Verify proper handling of reading an invalid pin
+    assert(gpio_read(0x013) == GPIO_INVALID_REQUEST);
+    gpio_write(0x013, 1); // nothing should happen (verified no change in visual output)
 }
 
 void test_timer(void) {
@@ -100,11 +155,12 @@ void main(void) {
     gpio_init();
     timer_init();
 
-    // Uncomment the call to each test function below when you have implemented
-    // the functions and are ready to test them
+   // test_gpio_set_get_function();
+    // See function header comment - requires xfel config for assert to pass 
+    // test_get_with_xfel(GPIO_PB7, GPIO_FN_ALT2);
+    // test_get_with_xfel(GPIO_PG16, GPIO_FN_ALT8);
 
-    test_gpio_set_get_function();
-    // test_gpio_read_write();
-    // test_timer();
-    // test_breadboard();
+   // test_gpio_read_write();
+   // test_timer();
+    test_breadboard();
 }

@@ -1,6 +1,9 @@
 /* File: timer.c
  * -------------
- * ***** TODO: add your file header comment here *****
+ * The timer.c module consists of a set of functions that 
+ * can be used to keep track of elapsed time and configure 
+ * delays in terms of microseconds (us), milliseconds (ms), 
+ * and/or seconds (secs).  
  */
 #include "timer.h"
 

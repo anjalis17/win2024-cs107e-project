@@ -2,7 +2,7 @@
 RUN_PROGRAM   = heap_workflow.bin
 TEST_PROGRAM  = test_backtrace_malloc.bin
 
-MY_MODULE_SOURCES = backtrace.c backtrace_asm.s symtab.c malloc.c
+MY_MODULE_SOURCES = backtrace.c backtrace_asm.s symtab.c malloc.c gpio.c timer.c strings.c cstart.c
 
 # MY_MODULE_SOURCES is a list of those library modules (such as gpio.c)
 # for which you intend to use your own code. The reference implementation

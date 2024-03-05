@@ -2,7 +2,7 @@
 RUN_PROGRAM   = print_pinout.bin
 TEST_PROGRAM  = test_strings_printf.bin
 
-MY_MODULE_SOURCES = strings.c printf.c
+MY_MODULE_SOURCES = strings.c printf.c gpio.c timer.c
 
 # MY_MODULE_SOURCES is a list of those library modules (such as gpio.c)
 # for which you intend to use your own code. The reference implementation

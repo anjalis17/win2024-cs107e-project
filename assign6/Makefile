@@ -2,7 +2,7 @@
 RUN_PROGRAM   = console_shell.bin
 TEST_PROGRAM  = test_gl_console.bin
 
-MY_MODULE_SOURCES = fb.c gl.c console.c
+MY_MODULE_SOURCES = fb.c gl.c console.c config_fp.s
 
 # MY_MODULE_SOURCES is a list of those library modules (such as gpio.c)
 # for which you intend to use your own code. The reference implementation
@@ -29,7 +29,7 @@ PROGRAMS      = $(RUN_PROGRAM) $(TEST_PROGRAM)
 all: $(PROGRAMS)
 
 # Flags for compile and link
-ARCH    = -march=rv64im -mabi=lp64
+ARCH    = -march=rv64imf -mabi=lp64
 ASFLAGS = $(ARCH)
 CFLAGS  = $(ARCH) -g -Og -I$$CS107E/include $$warn $$freestanding -fno-omit-frame-pointer
 LDFLAGS = -nostdlib -L$$CS107E/lib -T memmap.ld
