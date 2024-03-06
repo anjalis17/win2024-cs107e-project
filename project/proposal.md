@@ -115,7 +115,13 @@ After high-level architecture plan...
 - Stretch goal -- start workig on piece rotation  
 
 ADITI
-XXXXXX FILL IN XXXXX
+- obtain/solder all materials
+- working accelerometer (driver + fix drifts + interface to get useful data (eg. "tilted left") easily)
+- buttons & potentially other sensors/actuators
+- interrupts handled for all sensors; easy implementation offered
+- test cases for all of the above
+- remote CAD -- improve!
+- read up on scoring system
 
 ## Resources needed, issues
  * Are there books/code/tools/materials that you need access to? 
@@ -135,6 +141,6 @@ HARDWARE
  * Multiple interrupts changing the same static variables (cooridnate position of falling piece)
 
 # Route for success
- * I (Aditi) will definitely be coming by to office hours/posting on the Ed for help
+ * Aditi - I will definitely be coming by to office hours/posting on the Ed for help
  * Anjali - encouragement along the way, especially when I get stuck or nervous! Patience / willingness to let me walk through my code and potentially offer a debug idea when I run into a bug I can't figure out :'/ 
  THANK YOU in advance!!! <3 We appreciate you all!
