@@ -124,6 +124,7 @@ ADITI
 - read up on scoring system
 
 ## Resources needed, issues
+ * Answered below!!
  * Are there books/code/tools/materials that you need access to? 
  * What are the possible risks to overcome? What are you concerned about? 
  * How can we help you succeed?
