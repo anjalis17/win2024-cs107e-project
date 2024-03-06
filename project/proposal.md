@@ -60,6 +60,7 @@ The pulses occur at a 20 mSec (50 Hz) interval, and vary between 1 and 2 mSec in
 
 # Active/passive buzzer (music!) (output)
  * FROM 107E LAB
+ * for songs!
  * https://blog.tarkalabs.com/digital-audio-101-playing-audio-from-a-microcontroller-5df1463616c 
 has code
 
@@ -90,4 +91,3 @@ What are the one-week goals you plan to meet for next week?
 
 ### route for success
  * I (Aditi) will definitely be coming by to office hours/posting on the Ed for help
-
