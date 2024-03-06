@@ -1,8 +1,14 @@
 ## Project title
+Tiltris 
 
 ## Team members
+Anjali Sreenivas (anjalisr), Aditi Bhaskar (aditijb)
 
 ## Project description
+Tetris, but with a tiltable controller
+
+
+### TODO
 
 ## Member contribution
 A short description of the work performed by each member of the team.
