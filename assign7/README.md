@@ -1,2 +1,0 @@
-Hi! I didn't add additional optimizations for speed, so please keep in mind that things may be a bit slow if you type fast when testing. :) But it shouldn't be unbearably slow!
-Thank you so much!!! -Anjali
