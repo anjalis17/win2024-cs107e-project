@@ -8,13 +8,18 @@ static struct {
     int ncols;
     color_t background = GL_INDIGO;
     void* background_tracker;
-} config;
+} game_config;
 
-void piece_config_init(int nrows, int ncols, color_t background) {
+// Required init 
+void piece_config_init(int nrows, int ncols) {
+    if (game_config.background_tracker != NULL) free(game_config.background_tracker);
+    game_config.nrows = nrows;
+    game_config.ncols = ncols;
 
+    int nbytes = game_config.width * game_config.height;
+    game_config.background_tracker = malloc(nbytes);
 }
 
-// numRows, numCols = dimensions of game board
 bool checkIfValidMove(falling_piece_t piece) {
 
 }
