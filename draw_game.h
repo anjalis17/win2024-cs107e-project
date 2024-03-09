@@ -23,4 +23,5 @@ typedef struct {
     char rotation;  // direction of rotation (0 through 3)
     char x;
     char y;
+    bool fallen;
 } falling_piece_t;
