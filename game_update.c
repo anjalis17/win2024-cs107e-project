@@ -1,6 +1,5 @@
 #include "game_update.h"
 #include "malloc.h"
-#include "strings.h"
 #include "uart.h"
 
 static struct {
@@ -23,10 +22,13 @@ void piece_config_init(int nrows, int ncols) {
     memset(game_config.background_tracker, 0, nbytes);
 
     // need gl init here
+    gl_init(game_config.ncols * SQUARE_DIM, game_config.nrows * SQUARE_DIM, GL_DOUBLEBUFFER);
+    gl_clear(module.background);
+    gl_swap_buffer();
 }
 
 //////////////// STATICS 
-typedef bool (*functionPtr)(int x, int y, color_t color); 
+// typedef bool (*functionPtr)(int x, int y, color_t color); 
 
 bool iterateThroughPieceSquares(falling_piece_t piece, functionPtr action) {
     int piece_config = (piece.pieceT).block_rotations[piece.rotation];
@@ -58,7 +60,7 @@ bool checkIfValidMove(int x, int y, color_t color) {
 // framebuffer (handled by gl / fb modules)
 // Returns true always -- function only called after valid move is verified
 bool drawSquare(int x, int y, color_t color) {
-    gl_draw_rect(x, y, SQUARE_DIM, SQUARE_DIM, color);
+    gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, color);
     return true;
 }
 
@@ -95,6 +97,7 @@ bool move_down(falling_piece_t* piece) {
         return true;
     }
     return false;
+    gl_swap_buffer();
 }
 
 void move_left(falling_piece_t* piece) {
