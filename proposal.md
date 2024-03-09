@@ -26,7 +26,6 @@ Layer 2 (P2) - Tying Game Together!
 •   Support for double/triple row animation clearing
 •   Servo motor/vibration triggered when user clears row
 •   Visible queue of next 3 pieces 
-•   Graphics optimized to the extent where the whole screen is not redrawn for each change made
 
 Layer 3 (P3) - The Cherries on Top :)
 ---------------------
