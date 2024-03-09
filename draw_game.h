@@ -19,7 +19,7 @@ const piece_t z = {'z', GL_RED, {0x0C60, 0x4C80, 0xC600, 0x2640}};
 const piece_t pieces[7] = {i, j, l, o, s, t, z};
 
 typedef struct {
-    piece_t piece;
+    piece_t pieceT;
     char rotation;  // direction of rotation (0 through 3)
     char x;
     char y;

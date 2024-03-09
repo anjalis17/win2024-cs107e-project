@@ -16,18 +16,46 @@ void piece_config_init(int nrows, int ncols) {
     game_config.nrows = nrows;
     game_config.ncols = ncols;
 
-    int nbytes = game_config.width * game_config.height;
+    int nbytes = game_config.nrows * game_config.ncols;
     game_config.background_tracker = malloc(nbytes);
+    memset(game_config.background_tracker, '\0', nbytes);
 }
 
-bool checkIfValidMove(falling_piece_t piece) {
+typedef bool (*functionPtr)(int x, int y); 
 
+bool iterateThroughPieceSquares(falling_piece_t piece, functionPtr action) {
+    int piece_config = (piece.pieceT).block_rotations[piece.rotation];
+
+    // pieceRow and pieceCol will change from 0 through 3 during loop
+    // Indicates where on 4x4 piece grid we are checking
+    int pieceRow = 0; int pieceCol = 0;  
+    for (int bitSequence = 0x8000; bit > 0; bit = bit >> 1) {
+        // if piece has a square in the 4x4 grid spot we're checking, perform action fn on that square
+        if (piece_config & bitSequence) {
+            if (!action(piece.x + pieceCol, piece.y + pieceRow)) return false;
+        }
+        pieceCol++;
+        // move to next row in grid, reset pieceCol to 0
+        if (pieceCol == 4) {
+            pieceCol = 0; pieceRow++;
+        }
+    }
+    return true;
 }
 
-bool checkIfFallenInPlace(falling_piece_t piece) {
+bool checkIfValidMove(int x, int y) {
+    
+}
+
+// returns true if piece is in fallen state (i.e. square below one of the squares is occupied)
+bool drawSquare(int x, int y) {
     // piece should be drawn into background
 }
 
+// iterate through piece squares
+// check if fallen in place -- bool
+// draw piece -- bool
+// 
 void move_down(falling_piece_t piece) {
 
 }
