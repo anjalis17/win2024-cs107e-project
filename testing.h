@@ -1,8 +1,7 @@
-#include "game_update.h"
-#include "uart.h"
-#include "assert.h"
-#include "timer.h"
-#include "printf.h"
+#ifndef _TESTING_H
+#define _TESTING_H
 
 void test_basic_block_motion(void);
-static void pause(const char *message);
+void pause(const char *message);
+
+#endif

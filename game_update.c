@@ -2,15 +2,6 @@
 #include "malloc.h"
 #include "strings.h"
 
-static struct {
-    int nrows;
-    int ncols;
-    color_t bg_col;
-    void* background_tracker;  
-} game_config;
-
-const unsigned int SQUARE_DIM = 40; // game pixel dimensions
-
 const piece_t i = {'i', GL_CYAN, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', GL_BLUE, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
 const piece_t l = {'l', GL_ORANGE, {0x4460, 0x0E80, 0xC440, 0x2E00}};
@@ -20,6 +11,15 @@ const piece_t t = {'t', GL_PURPLE, {0x0E40, 0x4C40, 0x4E00, 0x4640}};
 const piece_t z = {'z', GL_RED, {0x0C60, 0x4C80, 0xC600, 0x2640}};
 
 const piece_t pieces[7] = {i, j, l, o, s, t, z};
+
+static struct {
+    int nrows;
+    int ncols;
+    color_t bg_col;
+    void* background_tracker;  
+} game_config;
+
+const unsigned int SQUARE_DIM = 50; // game pixel dimensions
 
 // Required init 
 void game_update_init(int nrows, int ncols) {
@@ -32,7 +32,6 @@ void game_update_init(int nrows, int ncols) {
     game_config.background_tracker = malloc(nbytes);
     memset(game_config.background_tracker, 0, nbytes);
 
-    // need gl init heres
     gl_init(game_config.ncols * SQUARE_DIM, game_config.nrows * SQUARE_DIM, GL_DOUBLEBUFFER);
     gl_clear(game_config.bg_col);
     gl_swap_buffer();
