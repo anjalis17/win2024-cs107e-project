@@ -41,7 +41,7 @@ bool update_background(int x, int y, falling_piece_t* piece);
 
 void wipe_screen(void);
 
-bool move_down(falling_piece_t* piece);
+void move_down(falling_piece_t* piece);
 
 void move_left(falling_piece_t* piece);
 
