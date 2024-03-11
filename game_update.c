@@ -81,8 +81,13 @@ bool iterateThroughPieceSquares(falling_piece_t* piece, functionPtr action) {
 }
 
 bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
+    // make sure (x, y) is in bounds
     if (x < 0 || y < 0) return false;
     if (x >= game_config.ncols || y >= game_config.nrows) return false;
+
+    // make sure another piece is not there already
+    unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
+    if ((background[y][x]) != 0) return false;
     return true;
 }
 
@@ -130,17 +135,20 @@ void wipe_screen(void) {
     }
 }
 
-////////////////  
-
-// Move and rotate functions do nothing for invalid move 
-void move_down(falling_piece_t* piece) {
+void drawPiece(falling_piece_t* piece) {
     wipe_screen();
-    piece->y += 1;
     iterateThroughPieceSquares(piece, drawSquare);
     gl_swap_buffer();
     if (piece->fallen) {
         iterateThroughPieceSquares(piece, update_background);
     }
+}
+///////
+
+// Move and rotate functions do nothing for invalid move 
+void move_down(falling_piece_t* piece) {
+    piece->y += 1;
+    drawPiece(piece);
 }
 
 void move_left(falling_piece_t* piece) {
@@ -149,20 +157,17 @@ void move_left(falling_piece_t* piece) {
         piece->x += 1;
         return;
     };
-    wipe_screen();
-    iterateThroughPieceSquares(piece, drawSquare);
-    gl_swap_buffer();
+    drawPiece(piece);
 }
 
 void move_right(falling_piece_t* piece) {
     piece->x += 1;
     if (!iterateThroughPieceSquares(piece, checkIfValidMove)) {
+        printf("invalid right");
         piece->x -= 1;
         return;
     };
-    wipe_screen();
-    iterateThroughPieceSquares(piece, drawSquare);
-    gl_swap_buffer();
+    drawPiece(piece);
 }
 
 void rotate(falling_piece_t* piece) {
@@ -172,10 +177,5 @@ void rotate(falling_piece_t* piece) {
         piece->rotation = origRotation;
         return;
     };
-    wipe_screen();
-    iterateThroughPieceSquares(piece, drawSquare);
-    gl_swap_buffer();
-    if (piece->fallen) {
-        iterateThroughPieceSquares(piece, update_background);
-    }
+    drawPiece(piece);
 }
