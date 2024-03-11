@@ -147,23 +147,23 @@ bool move_down(falling_piece_t* piece) {
 
 // Does nothing for invalid move 
 void move_left(falling_piece_t* piece) {
-    wipe_screen();
     piece->x -= 1;
     if (!iterateThroughPieceSquares(piece, checkIfValidMove)) {
         piece->x += 1;
         return;
     };
+    wipe_screen();
     iterateThroughPieceSquares(piece, drawSquare);
     gl_swap_buffer();
 }
 
 void move_right(falling_piece_t* piece) {
-    wipe_screen();
     piece->x += 1;
     if (!iterateThroughPieceSquares(piece, checkIfValidMove)) {
         piece->x -= 1;
         return;
     };
+    wipe_screen();
     iterateThroughPieceSquares(piece, drawSquare);
     gl_swap_buffer();
 }
