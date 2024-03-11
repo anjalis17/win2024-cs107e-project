@@ -13,22 +13,53 @@
 #include "LSD6DS33.h"
 #include "i2c.h"
 #include "game_update.h"
+#include "ringbuffer.h"
+#include "remote.h"
+#include "printf.h"
 
-static struct {
-    gpio_id_t servo ;
-    gpio_id_t button ;
-    
-} remote ;
+#include "assert.h"
+
+
+static remote_t remote ;
 
 // handles a button press 
 static void handle_button(uintptr_t pc, void *aux_data) {
     gpio_interrupt_clear(remote.button) ;
 
-    // todo implm the ring buffer so I can dequeue in main game
-    // rotate(&piece);
+    remote_t *rem = (remote_t *)aux_data ;
+
+    unsigned int i = 1 ;
+    printf("preenqueued") ;
+
+    printf("addr %p remote.rb %p", &remote.servo, &remote.rb) ;
+
+    // todo CONTINUE HERE ADITI MAR 11 2024 2:30pm
+    // if(!rb_enqueue(rem->rb, i)) { 
+    //     printf("in enqueue") ;
+
+    //     uart_putchar('!') ;
+    // }
+    printf("enqueued") ;
+
     uart_putchar('b') ; // todo do something with this related to the game
     servo_vibrate_milli_sec(100) ;
     // todo turn into an RBQ and dequeue when we want to potentially vibrate/do something onscreen
+}
+
+// checks if there are presses in the queue
+bool is_button_press(void) {
+    int k = 0 ;
+        printf("here") ;
+
+    if (!(rb_empty(remote.rb))) {
+            printf("here2") ;
+
+       rb_dequeue(remote.rb, &k) ;
+           printf("here3") ;
+
+       return true ;
+    }
+    return false ;
 }
 
 void remote_init(gpio_id_t servo_id, gpio_id_t button_id) { // todo add gpio_id_t accelerometer_id
@@ -37,6 +68,8 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) { // todo add gpio_id_
 
     remote.servo = servo_id ;    
     servo_init(servo_id) ;
+
+    remote.rb = rb_new() ;
 
     // accelerometer init
     i2c_init();
