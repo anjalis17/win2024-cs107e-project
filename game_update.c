@@ -169,5 +169,13 @@ void move_right(falling_piece_t* piece) {
 }
 
 void rotate(falling_piece_t* piece) {
-
+    char origRotation = piece->rotation;
+    piece->rotation = (origRotation + 1) % 4;
+    if (!iterateThroughPieceSquares(piece, checkIfValidMove)) {
+        piece->rotation = origRotation;
+        return;
+    };
+    wipe_screen();
+    iterateThroughPieceSquares(piece, drawSquare);
+    gl_swap_buffer();
 }

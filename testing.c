@@ -46,15 +46,16 @@ void test_basic_block_motion(void) {
     }
 }
 
-void test_horiz_motion(void) {
+void test_motions(void) {
     timer_init();
     game_update_init(20, 10);
     falling_piece_t piece = init_falling_piece();
     while (1) {
-        int ch = get_keystroke("key press to move down ('s') / left ('a')");
+        int ch = get_keystroke("key press to move down (S) / left (A) / right (D) or rotate (R)");
         if (ch == 's') move_down(&piece);
         else if (ch == 'a') move_left(&piece);
         else if (ch == 'd') move_right(&piece);
+        else if (ch == 'r') rotate(&piece);
         if (piece.fallen) {
             printf("fallen; new piece spawning");
             piece = init_falling_piece();
