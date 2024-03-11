@@ -29,15 +29,15 @@ falling_piece_t init_falling_piece(void);
 // Required init 
 void game_update_init(int nrows, int ncols);
 
-typedef bool (*functionPtr)(int x, int y, color_t color); 
+typedef bool (*functionPtr)(int x, int y, falling_piece_t* piece); 
 
-bool iterateThroughPieceSquares(falling_piece_t piece, functionPtr action);
+bool iterateThroughPieceSquares(falling_piece_t* piece, functionPtr action);
 
-bool checkIfValidMove(int x, int y, color_t color);
+bool checkIfValidMove(int x, int y, falling_piece_t* piece);
 
-bool drawSquare(int x, int y, color_t color);
+bool drawSquare(int x, int y, falling_piece_t* piece);
 
-bool update_background(int x, int y, color_t color);
+bool update_background(int x, int y, falling_piece_t* piece);
 
 void wipe_screen(void);
 
@@ -48,5 +48,7 @@ void move_left(falling_piece_t* piece);
 void move_right(falling_piece_t* piece);
 
 void rotate(falling_piece_t* piece);
+
+void checkIfFallen(int x, int y, falling_piece_t* piece);
 
 #endif

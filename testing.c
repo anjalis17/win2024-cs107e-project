@@ -6,13 +6,6 @@
 #include "timer.h"
 #include "printf.h"
 
-void test_basic_block_motion(void) {
-    game_update_init(20, 10);
-    // falling_piece_t piece = init_falling_piece();
-    drawSquare(5, 5, GL_BLACK);
-    pause("test");
-}
-
 void pause(const char *message) {
     if (message) printf("\n%s\n", message);
     printf("[PAUSED] type any key in minicom/terminal to continue: ");
@@ -21,5 +14,25 @@ void pause(const char *message) {
     uart_putchar('\n');
 }
 
+
+void test_random_init(void) {
+    for (int i = 0; i < 10; i++) {
+        timer_init();
+        game_update_init(20, 10);
+        falling_piece_t piece = init_falling_piece();
+        pause("start");
+    }
+}
+
+void test_basic_block_motion(void) {
+    timer_init();
+    game_update_init(20, 10);
+    falling_piece_t piece = init_falling_piece();
+    while (!piece.fallen) {
+        pause("key press to move down");
+        move_down(&piece);
+    }
+    pause("fallen");
+}
 
 
