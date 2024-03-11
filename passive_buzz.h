@@ -7,7 +7,6 @@
 #include "gpio.h"
 #include <stdbool.h>
 
-
 // todo move this into header??
 enum { // in hertz 
 // https://miro.medium.com/v2/resize:fit:618/format:webp/1*K7y56Rd1kolwV_GNOpmwEg.png
@@ -32,6 +31,8 @@ enum { // in hertz
     NOTE_FREQ_B = 494
 } ;
 
-
 void buzzer_init(gpio_id_t id) ; 
+
+// plays a note at frequency `frequency` for duration `duration_msec` in milliseconds
+// durations < 200ms do not play
 void buzzer_play_note(int frequency, int duration_msec) ; 

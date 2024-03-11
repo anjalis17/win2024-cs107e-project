@@ -10,6 +10,8 @@
 #include "interrupts.h"
 #include "uart.h"
 #include <stddef.h>
+#include "LSD6DS33.h"
+#include "i2c.h"
 
 static struct {
     gpio_id_t servo ;
@@ -31,6 +33,10 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) { // todo add gpio_id_
     remote.servo = servo_id ;    
     servo_init(servo_id) ;
 
+    // accelerometer init
+    i2c_init();
+	lsm6ds33_init();
+
     gpio_interrupt_init() ;
     gpio_interrupt_config(remote.button, GPIO_INTERRUPT_DOUBLE_EDGE, true) ; // while pressed
     gpio_interrupt_register_handler(remote.button, handle_button, NULL) ;
@@ -41,4 +47,18 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) { // todo add gpio_id_
 // only vibrates the most recently configured servo
 void remote_vibrate(int duration_sec) {
     servo_vibrate(duration_sec) ;
+}
+
+// returns int enum "left/right/home" ... enum defined in lsd6ds33.h
+int get_tilt() {
+    short x, y, z;
+    int state = lsm6ds33_read_durable_pos_y(&x, &y, &z) ; // read and print avged positions
+    return state ;
+}
+
+// returns true if remote is in "drop block" (tilt tip towards the ground) orientation
+bool is_drop() {
+    short x, y, z;
+    int state = lsm6ds33_read_durable_pos_y(&x, &y, &z) ;
+    return lsm6ds33_durable_pos_x(x);
 }

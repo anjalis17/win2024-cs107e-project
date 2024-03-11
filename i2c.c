@@ -6,7 +6,7 @@
      Author: Julie Zelenski
      Tue Feb 13 17:44:05 PST 2024
 
-     Updated by Aditi Bhaskar to re-attempt non-ack'ed sequences
+     Updated by Aditi Bhaskar (aditijb@stanford.edu) to repeat commands if not rightfully ACK/NAK'ed
  */
 #include "i2c.h"
 #include "gpio.h"
