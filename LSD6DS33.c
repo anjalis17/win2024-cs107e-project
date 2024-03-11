@@ -122,11 +122,9 @@ bool lsm6ds33_durable_pos_x(short x) {
 
 // initializes the accelerometer
 void lsm6ds33_init(void) {
-    printf("in accel init 0") ;
+    printf("in accel init") ;
 
     unsigned id = read_reg(WHO_AM_I);  // confirm id, expect 0x69
-    printf("in accel init 1") ;
-
     assert(id == 0x69); 
     
 	write_reg(CTRL1_XL, 0x80);  // 1600Hz (high perf mode)

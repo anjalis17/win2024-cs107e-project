@@ -111,18 +111,22 @@ void test_motions_integrated(void) {
         
         // todo fix the aclr drifting readings - impl recalibration at each reading?
 
+        // horizontal movement
         if (tilt_status == LEFT) move_left(&piece);
         else if (tilt_status == RIGHT) move_right(&piece);
+        
+        // drop a block faster
         if (is_drop()) { // TODO add a drop version where it goes faster vs it just drops the full way
             printf("\n*** x dropped ***\n"); 
             while(!piece.fallen && is_drop()){ 
                 move_down(&piece);
             }
         }
-        // else if (tilt_status == LEFT) move_left(&piece);
-        // else if (tilt_status == RIGHT) move_right(&piece);
 
-        // else if () rotate(&piece); // TODO add to the button intrpt
+        // rotate block // todo integrate so this doesnt cause a holdup
+        while (is_button_press()) {
+            rotate(&piece);
+        }
         
         if (piece.fallen) {
             printf("fallen; new piece spawning");
