@@ -31,6 +31,4 @@ void remote_vibrate(int duration_sec) ;
 int get_tilt() ;
 bool is_drop() ;
 
-
-
 #endif

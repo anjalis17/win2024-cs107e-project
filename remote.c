@@ -9,15 +9,14 @@
 #include "gpio_interrupt.h"
 #include "interrupts.h"
 #include "uart.h"
-#include <stddef.h>
 #include "LSD6DS33.h"
 #include "i2c.h"
 #include "game_update.h"
 #include "ringbuffer.h"
 #include "remote.h"
 #include "printf.h"
-
 #include "assert.h"
+#include <stddef.h>
 
 
 static remote_t remote ;
@@ -28,41 +27,25 @@ static void handle_button(uintptr_t pc, void *aux_data) {
 
     remote_t *rem = (remote_t *)aux_data ;
 
-    unsigned int i = 1 ;
-    printf("preenqueued") ;
+    if(!rb_enqueue(rem->rb, 1)) { 
+        uart_putchar('!') ;
+    }
 
-    printf("addr %p remote.rb %p", &remote.servo, &remote.rb) ;
-
-    // todo CONTINUE HERE ADITI MAR 11 2024 2:30pm
-    // if(!rb_enqueue(rem->rb, i)) { 
-    //     printf("in enqueue") ;
-
-    //     uart_putchar('!') ;
-    // }
-    printf("enqueued") ;
-
-    uart_putchar('b') ; // todo do something with this related to the game
+    uart_putchar('b') ; // debugging message
     servo_vibrate_milli_sec(100) ;
-    // todo turn into an RBQ and dequeue when we want to potentially vibrate/do something onscreen
 }
 
 // checks if there are presses in the queue
 bool is_button_press(void) {
     int k = 0 ;
-        printf("here") ;
-
     if (!(rb_empty(remote.rb))) {
-            printf("here2") ;
-
        rb_dequeue(remote.rb, &k) ;
-           printf("here3") ;
-
        return true ;
     }
     return false ;
 }
 
-void remote_init(gpio_id_t servo_id, gpio_id_t button_id) { // todo add gpio_id_t accelerometer_id
+void remote_init(gpio_id_t servo_id, gpio_id_t button_id) {
     gpio_set_input(button_id) ;
     remote.button = button_id ;
 
@@ -76,8 +59,8 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) { // todo add gpio_id_
 	lsm6ds33_init();
 
     gpio_interrupt_init() ;
-    gpio_interrupt_config(remote.button, GPIO_INTERRUPT_DOUBLE_EDGE, true) ; // while pressed
-    gpio_interrupt_register_handler(remote.button, handle_button, NULL) ;
+    gpio_interrupt_config(remote.button, GPIO_INTERRUPT_POSITIVE_EDGE, true) ; // while pressed
+    gpio_interrupt_register_handler(remote.button, handle_button, &remote) ;
     gpio_interrupt_enable(remote.button) ;
 
 }
