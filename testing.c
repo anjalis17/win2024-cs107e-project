@@ -109,16 +109,19 @@ void test_motions_integrated(void) {
         int tilt_status = get_tilt();
         printf("\n device.state %s\n", tilt_status==HOME?"home":(tilt_status==LEFT?"left":"right")) ;
         
+        // todo fix the aclr drifting readings - impl recalibration at each reading?
+
         if (tilt_status == LEFT) move_left(&piece);
         else if (tilt_status == RIGHT) move_right(&piece);
         if (is_drop()) { // TODO add a drop version where it goes faster vs it just drops the full way
             printf("\n*** x dropped ***\n"); 
-            while(!piece.fallen){
+            while(!piece.fallen && is_drop()){ 
                 move_down(&piece);
             }
         }
         // else if (tilt_status == LEFT) move_left(&piece);
         // else if (tilt_status == RIGHT) move_right(&piece);
+
         // else if () rotate(&piece); // TODO add to the button intrpt
         
         if (piece.fallen) {
@@ -126,7 +129,7 @@ void test_motions_integrated(void) {
             piece = init_falling_piece();
         }
 
-        // timer_delay_ms(300) ;
+        timer_delay_ms(500) ;
         move_down(&piece); // todo make time consistent per loop
     }
 }
