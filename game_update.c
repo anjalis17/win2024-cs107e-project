@@ -135,12 +135,48 @@ void wipe_screen(void) {
     }
 }
 
+void clearRow(int row) {
+    unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
+    for (int col = 0; col < game_config.ncols; col++) {
+        background[row][col] = 0;
+    }
+    wipe_screen();
+    gl_swap_buffer();
+    timer_delay_ms(1000);
+
+    for (int destRow = row; row > 0; row--) {
+        for (int col = 0; col < game_config.ncols; col++) {
+            background[destRow][col] = background[destRow - 1][col];
+        }
+    }
+    // reset 1st row of background 
+    memset(game_config.background_tracker, 0, game_config.ncols * sizeof(color_t));
+    wipe_screen();
+    gl_swap_buffer();
+}
+
+void clearRows(void) {
+    unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
+    for (int row = 0; row < game_config.nrows; row++) {
+        bool rowFilled = true;
+        for (int col = 0; col < game_config.ncols; col++) {
+            // if we find an empty square, the row is not filled
+            if (background[row][col] == 0) {
+                rowFilled = false;
+                break;
+            }
+        }
+        if (rowFilled) clearRow(row); 
+    }
+}
+
 void drawPiece(falling_piece_t* piece) {
     wipe_screen();
     iterateThroughPieceSquares(piece, drawSquare);
     gl_swap_buffer();
     if (piece->fallen) {
         iterateThroughPieceSquares(piece, update_background);
+        clearRows();
     }
 }
 ///////
