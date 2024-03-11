@@ -13,7 +13,7 @@ Anjali Sreenivas (anjalisr), Aditi Bhaskar (aditijb)
 Layer 1 (P1) - Building Blocks
 ---------------------
 •   Clean falling of colored tetris pieces 
-•   Working accelerometer that translates into correct ID of motion (left/right/down) --> interrupt system (based on time) set up
+•   Working accelerometer that translates into correct ID of motion (left/right/down) --> ?? interrupt system (based on time) set up? periodic sampling?
 •   Correct handling of left/right/down motion (software/graphics)
 •   Single row clearing functionality – clears all filled rows after move
 •   Scoring system
