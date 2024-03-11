@@ -7,5 +7,6 @@ void main(void) {
     // test_random_init();
     // test_basic_block_motion();
     // test_motions();
-    test_remote() ;
+    // test_remote() ;
+    test_motions_integrated() ;
 }

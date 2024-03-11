@@ -76,7 +76,7 @@ void test_remote(void) {
     uart_init() ;
     interrupts_init() ;
     remote_init(GPIO_PB1, GPIO_PB0) ; 
-    interrupts_global_enable() ; // todo ask in OH - is this correct?
+    interrupts_global_enable() ; 
     printf("\nremote tests enabled\n") ;
     while(1) {
         // tilt blocks
@@ -94,14 +94,39 @@ void test_motions_integrated(void) {
     uart_init() ;
     interrupts_init() ;
     remote_init(GPIO_PB1, GPIO_PB0) ; 
-    interrupts_global_enable() ; // todo ask in OH - is this correct?
-    printf("\nremote tests 2enabled\n") ;
+    interrupts_global_enable() ;
+    
+    game_update_init(20, 10);
+
+
+    falling_piece_t piece = init_falling_piece();
+
+    printf("\nin test_motions_integrated; initialized\n") ;
+
+
     while(1) {
         // tilt blocks
         int tilt_status = get_tilt();
         printf("\n device.state %s\n", tilt_status==HOME?"home":(tilt_status==LEFT?"left":"right")) ;
         
-        // drop blocks
-        if (is_drop()) {printf("\n*** x dropped ***\n");}
+        if (tilt_status == LEFT) move_left(&piece);
+        else if (tilt_status == RIGHT) move_right(&piece);
+        if (is_drop()) { // TODO add a drop version where it goes faster vs it just drops the full way
+            printf("\n*** x dropped ***\n"); 
+            while(!piece.fallen){
+                move_down(&piece);
+            }
+        }
+        // else if (tilt_status == LEFT) move_left(&piece);
+        // else if (tilt_status == RIGHT) move_right(&piece);
+        // else if () rotate(&piece); // TODO add to the button intrpt
+        
+        if (piece.fallen) {
+            printf("fallen; new piece spawning");
+            piece = init_falling_piece();
+        }
+
+        // timer_delay_ms(300) ;
+        move_down(&piece); // todo make time consistent per loop
     }
 }

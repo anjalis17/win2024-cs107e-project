@@ -39,7 +39,7 @@ static struct {
 
 // Calibrated values; sensor-specific. 
 // Tuned by Aditi Mar 11 2024
-#define LEFT_ANGLE -15000 // for y
+#define LEFT_ANGLE -12000 // for y // was -15000
 #define RIGHT_ANGLE 9000 // for y
 #define HOME_ANGLE -4000 // for y
 #define WIGGLE_ROOM 2000
