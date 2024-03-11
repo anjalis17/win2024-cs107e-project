@@ -13,5 +13,4 @@ void servo_vibrate(int duration_sec) ;
 
 void servo_vibrate_milli_sec(int duration_milli_sec) ;
 
-
 #endif
