@@ -19,8 +19,8 @@ extern const piece_t pieces[7];
 typedef struct {
     piece_t pieceT;
     char rotation;  // direction of rotation (0 through 3)
-    char x;
-    char y;
+    int x;
+    int y;
     bool fallen;
 } falling_piece_t;
 
