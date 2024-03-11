@@ -6,6 +6,13 @@
 #include "timer.h"
 #include "printf.h"
 
+#include "gpio.h"
+#include "servo.h"
+#include "remote.h"
+#include "LSD6DS33.h"
+#include "i2c.h"
+#include "passive_buzz.h"
+
 void pause(const char *message) {
     if (message) printf("\n%s\n", message);
     printf("[PAUSED] type any key in minicom/terminal to continue: ");
@@ -63,3 +70,38 @@ void test_motions(void) {
     }
 }
 
+void test_remote(void) {
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ;
+    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    interrupts_global_enable() ; // todo ask in OH - is this correct?
+    printf("\nremote tests enabled\n") ;
+    while(1) {
+        // tilt blocks
+        int tilt_status = get_tilt();
+        printf("\n device.state %s\n", tilt_status==HOME?"home":(tilt_status==LEFT?"left":"right")) ;
+        
+        // drop blocks
+        if (is_drop()) {printf("\n*** x dropped ***\n");}
+    }
+}
+
+void test_motions_integrated(void) {
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ;
+    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    interrupts_global_enable() ; // todo ask in OH - is this correct?
+    printf("\nremote tests 2enabled\n") ;
+    while(1) {
+        // tilt blocks
+        int tilt_status = get_tilt();
+        printf("\n device.state %s\n", tilt_status==HOME?"home":(tilt_status==LEFT?"left":"right")) ;
+        
+        // drop blocks
+        if (is_drop()) {printf("\n*** x dropped ***\n");}
+    }
+}
