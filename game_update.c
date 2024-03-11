@@ -132,20 +132,17 @@ void wipe_screen(void) {
 
 ////////////////  
 
-// Return true if piece is in fallen state -- prompt generation of new falling piece in client file
-bool move_down(falling_piece_t* piece) {
+// Move and rotate functions do nothing for invalid move 
+void move_down(falling_piece_t* piece) {
     wipe_screen();
     piece->y += 1;
     iterateThroughPieceSquares(piece, drawSquare);
     gl_swap_buffer();
     if (piece->fallen) {
         iterateThroughPieceSquares(piece, update_background);
-        return true;
     }
-    return false;
 }
 
-// Does nothing for invalid move 
 void move_left(falling_piece_t* piece) {
     piece->x -= 1;
     if (!iterateThroughPieceSquares(piece, checkIfValidMove)) {
@@ -178,4 +175,7 @@ void rotate(falling_piece_t* piece) {
     wipe_screen();
     iterateThroughPieceSquares(piece, drawSquare);
     gl_swap_buffer();
+    if (piece->fallen) {
+        iterateThroughPieceSquares(piece, update_background);
+    }
 }
