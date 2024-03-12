@@ -32,6 +32,7 @@ enum { // in hertz
 } ;
 
 enum {
+    NOTE_WHOLE = 2000,
     NOTE_HALF = 1000,
     NOTE_QUARTER = 500,
     NOTE_EIGHTH = 250,
