@@ -107,7 +107,7 @@ void test_motions_integrated(void) {
     // we write accelerometer x/y position meanings to these vars
     int pitch = 0; int roll = 0;
 
-    int n = 200 ; // total ms wait for each loop
+    int n = 400 ; // total ms wait for each loop
     n = (n*1000*TICKS_PER_USEC);
 
     while(1) {
@@ -148,4 +148,9 @@ void test_motions_integrated(void) {
         while (timer_get_ticks() % n != 0) {} 
         // timer_delay_ms(200) ;
     }
+}
+
+void tetris_theme_song(void) {
+    // todo add here from aditi branch; finish writing notes
+    // add music lib?
 }

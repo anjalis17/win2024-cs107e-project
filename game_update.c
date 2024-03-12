@@ -4,6 +4,8 @@
 #include "printf.h"
 #include "timer.h"
 
+
+// todo redo colors - proper for the game
 const piece_t i = {'i', GL_CYAN, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', GL_BLUE, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
 const piece_t l = {'l', GL_ORANGE, {0x4460, 0x0E80, 0xC440, 0x2E00}};
