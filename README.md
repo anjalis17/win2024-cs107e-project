@@ -29,3 +29,6 @@ what you learned along the way? Tell us about it!
 ## Photos
 You are encouraged to submit photos/videos of your project in action. 
 Add the files and commit to your project repository to include along with your submission.
+
+## Sharing Code
+Our code for i2c.c was shared with Sazzad and Aditri's teams. They both said they would cite me. Thought it was worth mentioning here for good measure.

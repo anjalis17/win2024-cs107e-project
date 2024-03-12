@@ -8,11 +8,12 @@
 #include <stdbool.h>
 
 enum { // in hertz 
-// https://miro.medium.com/v2/resize:fit:618/format:webp/1*K7y56Rd1kolwV_GNOpmwEg.png
+    // https://miro.medium.com/v2/resize:fit:618/format:webp/1*K7y56Rd1kolwV_GNOpmwEg.png
 
-// most of the notes are in the 4th octave; notes outside 4th octave are explicitly named with the octave number after the note like NOTE_FREQ_B_3
-// notes lower on the piano are towards the top of this list 
-
+    // most of the notes are in the 4th octave; notes outside 4th octave are explicitly named with the octave number after the note like NOTE_FREQ_B_3
+    // notes lower on the piano are towards the top of this list 
+    
+    NOTE_FREQ_G_SHARP_3 = 208, 
     NOTE_FREQ_A_3 = 220, 
     NOTE_FREQ_A_SHARP_3 = 233,
     NOTE_FREQ_B_3 = 247, 
@@ -29,6 +30,13 @@ enum { // in hertz
     NOTE_FREQ_A_SHARP = 466,
     NOTE_FREQ_B = 494
 } ;
+
+enum {
+    NOTE_HALF = 1000,
+    NOTE_QUARTER = 500,
+    NOTE_EIGHTH = 250,
+    NOTE_SIXTEENTH = 125
+}
 
 void buzzer_init(gpio_id_t id) ; 
 

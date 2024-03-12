@@ -44,7 +44,7 @@ enum reg_address {
 #define HOME_ANGLE -4000 // for y
 // #define WIGGLE_ROOM 2000
 #define X_FAST_DOWN 9000 // for x
-#define X_SLAM_DOWN 13000 // for x
+// #define X_SLAM_DOWN 13000 // for x
 
 // LSM6DS33 6-Axis IMU (0x6A or 0x6B) - https://learn.adafruit.com/i2c-addresses/the-list
 // static const unsigned MY_I2C_ADDR = 0x6A; // confirm device id, components can differ!
@@ -113,37 +113,16 @@ void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *
     } 
 
 // update x info
-    if (*x > X_SLAM_DOWN) { // flick remote tip towards ground
-        *x_state = X_SLAM ;
-    } else if (*x > X_FAST_DOWN) {
+    // if (*x > X_SLAM_DOWN) { // flick remote tip towards ground
+    //     *x_state = X_SLAM ;
+    // } else 
+    if (*x > X_FAST_DOWN) {
         *x_state = X_FAST ;
     } else {
         *x_state = X_HOME ;
     }
 
 }
-
-// int lsm6ds33_read_durable_pos_y(short *x, short *y, short *z) {
-
-//     lsm6ds33_read_accelerometer_durable(x, y, z) ;
-//     if (*y < LEFT_ANGLE + WIGGLE_ROOM) { //} && *y > LEFT_ANGLE - WIGGLE_ROOM) {
-//         LSD6DS33_device.state = LEFT;
-//     } else if (*y > RIGHT_ANGLE- WIGGLE_ROOM) { // && *y < RIGHT_ANGLE + WIGGLE_ROOM) {
-//         LSD6DS33_device.state = RIGHT;
-//     } else { //} (*y < HOME_ANGLE + WIGGLE_ROOM && *y > HOME_ANGLE - WIGGLE_ROOM) {
-//         LSD6DS33_device.state = HOME;
-//     } 
-    
-//     return LSD6DS33_device.state ;
-// }
-
-// returns true if there was a down-flick of the remote
-// bool lsm6ds33_durable_pos_x(short x) {
-//     if (x > X_FAST_DOWN) { // flick remote tip towards ground
-//         return true ;
-//     }
-//     return false ;
-// }
 
 // initializes the accelerometer
 void lsm6ds33_init(void) {

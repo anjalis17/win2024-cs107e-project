@@ -24,4 +24,3 @@ void lsm6ds33_read_accelerometer(short *x, short *y, short *z);
 //  y: tilt the accelerometer is at (LEFT/HOME/RIGHT) - roll
 //  x: tilt the accelerometer is at (HOME/FAST/SLAM) - pitch
 void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *y_state, int *x_state) ;
-
