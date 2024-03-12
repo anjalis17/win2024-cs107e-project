@@ -152,10 +152,12 @@ void test_motions_integrated(void) {
 void tetris_theme_song(void) {
 
     buzzer_init(GPIO_PE17) ;
+    // each block of code is a measure
     // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
     while(1) {
         printf("in buzzer tetris theme");
-        // fast part; each block of code is a measure
+
+        // fast part
         for (int i = 0; i < 2; i++) {
             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
@@ -205,10 +207,8 @@ void tetris_theme_song(void) {
             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
             buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
         }
-        // todo fill in rest of tetris theme
 
         // slow falling part
-
         buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
         buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
 
