@@ -151,87 +151,87 @@ void test_motions_integrated(void) {
     }
 }
 
-void tetris_theme_song(void) {
+// void tetris_theme_song(void) {
 
-    buzzer_init(GPIO_PE17) ;
-    // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
-    while(1) {
-        printf("in buzzer tetris theme");
-        // fast part; each block of code is a measure
-        for (int i = 0; i < 2; i++) {
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_B_3, EIGHTH) ;
+//     buzzer_init(GPIO_PE17) ;
+//     // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
+//     while(1) {
+//         printf("in buzzer tetris theme");
+//         // fast part; each block of code is a measure
+//         for (int i = 0; i < 2; i++) {
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
 
-            buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, HALF) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, HALF) ;
 
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_F, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_A, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_G, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_F, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_F, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_A, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_G, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_F, EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_E, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_E, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_B_3, QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
 
-            buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, HALF) ;
-        }
-        // todo fill in rest of tetris theme
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, HALF) ;
+//         }
+//         // todo fill in rest of tetris theme
 
-        // slow falling part
+//         // slow falling part
 
-        buzzer_play_note(NOTE_FREQ_E, HALF) ;
-        buzzer_play_note(NOTE_FREQ_C, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_E, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_D, HALF) ;
-        buzzer_play_note(NOTE_FREQ_B_3, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_D, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_B_3, HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_C, HALF) ;
-        buzzer_play_note(NOTE_FREQ_A_3, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_A_3, HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_G_SHARP_3, HALF+HALF) ;
+//         buzzer_play_note(NOTE_FREQ_G_SHARP_3, HALF+HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_E, HALF) ;
-        buzzer_play_note(NOTE_FREQ_C, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_E, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_D, HALF) ;
-        buzzer_play_note(NOTE_FREQ_B_3, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_D, HALF) ;
+//         buzzer_play_note(NOTE_FREQ_B_3, HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_C, QUARTER) ;
-        buzzer_play_note(NOTE_FREQ_E, QUARTER) ;
-        buzzer_play_note(NOTE_FREQ_A, HALF) ; 
+//         buzzer_play_note(NOTE_FREQ_C, QUARTER) ;
+//         buzzer_play_note(NOTE_FREQ_E, QUARTER) ;
+//         buzzer_play_note(NOTE_FREQ_A, HALF) ; 
 
-        buzzer_play_note(NOTE_FREQ_G_SHARP, HALF+HALF) ;
-    }
-}
+//         buzzer_play_note(NOTE_FREQ_G_SHARP, HALF+HALF) ;
+//     }
+// }

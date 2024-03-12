@@ -36,7 +36,7 @@ enum {
     NOTE_QUARTER = 500,
     NOTE_EIGHTH = 250,
     NOTE_SIXTEENTH = 125
-}
+} ;
 
 void buzzer_init(gpio_id_t id) ; 
 
