@@ -90,6 +90,61 @@ void test_remote(void) {
     }
 }
 
+
+void integration_test_v2(void) {
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ;
+    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    interrupts_global_enable() ;
+    
+    game_update_init(20, 10);
+    falling_piece_t piece = init_falling_piece();
+
+    printf("\nin test_motions_integrated; initialized\n") ;
+
+    // we write accelerometer x/y position meanings to these vars
+    int pitch = 0; int roll = 0;
+    long n = 400 ; // total ms wait for each loop
+    n = (n * 1000 * TICKS_PER_USEC);
+
+    while(1) {
+        printf ("timer get ticks START(): %ld\n", timer_get_ticks() % n) ;
+        while (timer_get_ticks() % n <= (0.9 * n)) {
+            // tilt blocks
+            remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+    
+            // horizontal movement
+            if (roll == LEFT) move_left(&piece);
+            else if (roll == RIGHT) move_right(&piece);
+        
+            // drop a block faster
+            if (pitch == X_FAST) { 
+                // printf("\n*** x dropped ***\n"); // for debugging
+                if (!piece.fallen){
+                    move_down(&piece);
+                }
+                if (!piece.fallen){
+                    move_down(&piece);
+                }
+            }
+
+            // rotate block // p2 todo integrate so this doesnt cause a holdup...
+            while (remote_is_button_press()) {
+                rotate(&piece);
+            }  
+            if (piece.fallen) {
+                piece = init_falling_piece();
+            }
+            timer_delay_ms(100);
+        } 
+        printf("timer get ticks END(): %ld\n", timer_get_ticks() % n) ;     
+        move_down(&piece);
+
+        while (timer_get_ticks() % n > (0.9 * n));
+    }
+}
 void test_motions_integrated(void) {
     gpio_init() ;
     timer_init() ;

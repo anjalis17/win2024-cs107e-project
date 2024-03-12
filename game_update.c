@@ -49,7 +49,6 @@ falling_piece_t init_falling_piece(void) {
     // subtract half of 4x4 grid width from board center x coordinate since bits sequence denotes 4x4 grid 
     piece.x = (game_config.ncols / 2) - 2;
     piece.y = 0;
-    printf("piece.x: %d; piece.y: %d\n", piece.x, piece.y);
     piece.fallen = false;
 
     iterateThroughPieceSquares(&piece, drawSquare);
@@ -96,7 +95,6 @@ bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
 // framebuffer (handled by gl / fb modules)
 // Returns true always -- function only called after valid move is verified
 bool drawSquare(int x, int y, falling_piece_t* piece) {
-    printf("x: %d, y: %d, color: %x\n", x, y, piece->pieceT.color);
     gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, piece->pieceT.color);
     checkIfFallen(x, y, piece);
     return true;
@@ -204,7 +202,6 @@ void move_left(falling_piece_t* piece) {
 void move_right(falling_piece_t* piece) {
     piece->x += 1;
     if (!iterateThroughPieceSquares(piece, checkIfValidMove)) {
-        printf("invalid right");
         piece->x -= 1;
         return;
     };

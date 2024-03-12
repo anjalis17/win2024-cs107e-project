@@ -13,5 +13,6 @@ void main(void) {
     // test_remote() ;
 
     // aditi tests
-    test_motions_integrated() ;
+    // test_motions_integrated() ;
+    integration_test_v2();
 }
