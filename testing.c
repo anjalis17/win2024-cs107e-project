@@ -214,7 +214,9 @@ void test_motions_integrated(void) {
 }
 
 void tetris_theme_song(void) {
-
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
     buzzer_init(GPIO_PE17) ;
     // each block of code is a measure
     // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
