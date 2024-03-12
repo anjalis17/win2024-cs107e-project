@@ -106,22 +106,27 @@ void integration_test_v2(void) {
 
     // we write accelerometer x/y position meanings to these vars
     int pitch = 0; int roll = 0;
-    long n = 400 ; // total ms wait for each loop
+    long n = 500 ; // total ms wait for each loop
     n = (n * 1000 * TICKS_PER_USEC);
+
+    int toggle_turns = 0 ;
 
     while(1) {
         printf ("timer get ticks START(): %ld\n", timer_get_ticks() % n) ;
-        while (timer_get_ticks() % n <= (0.9 * n)) {
+        while (timer_get_ticks() % n <= (0.8 * n)) {
+            toggle_turns += 1 ;
             // tilt blocks
             remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
     
             // horizontal movement
-            if (roll == LEFT) move_left(&piece);
-            else if (roll == RIGHT) move_right(&piece);
+            if (toggle_turns % 3 == 0) {
+                if (roll == LEFT) move_left(&piece);
+                else if (roll == RIGHT) move_right(&piece);                
+            }
         
             // drop a block faster
             if (pitch == X_FAST) { 
-                // printf("\n*** x dropped ***\n"); // for debugging
+                printf("\n*** x dropped fast ***\n"); // for debugging
                 if (!piece.fallen){
                     move_down(&piece);
                 }
@@ -137,12 +142,16 @@ void integration_test_v2(void) {
             if (piece.fallen) {
                 piece = init_falling_piece();
             }
-            timer_delay_ms(100);
+            // timer_delay_ms(20);
         } 
         printf("timer get ticks END(): %ld\n", timer_get_ticks() % n) ;     
+        
+        printf("\n*** x dropped normal ***\n"); // for debugging
         move_down(&piece);
 
-        while (timer_get_ticks() % n > (0.9 * n));
+        while (timer_get_ticks() % n > (0.8 * n)) {
+            printf("waiting...");
+        };
     }
 }
 void test_motions_integrated(void) {
