@@ -144,7 +144,7 @@ void clearRow(int row) {
     }
     wipe_screen();
     gl_swap_buffer();
-    timer_delay_ms(1000);
+    timer_delay_ms(500);
 
     for (int destRow = row; destRow > 0; destRow--) {
         for (int col = 0; col < game_config.ncols; col++) {
@@ -186,6 +186,10 @@ void drawPiece(falling_piece_t* piece) {
 // Move and rotate functions do nothing for invalid move 
 void move_down(falling_piece_t* piece) {
     piece->y += 1;
+    if (!iterateThroughPieceSquares(piece, checkIfValidMove)) {
+        piece->y -= 1;
+        return;
+    };
     drawPiece(piece);
 }
 

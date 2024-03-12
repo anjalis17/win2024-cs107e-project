@@ -78,7 +78,7 @@ void lsm6ds33_read_accelerometer(short *x, short *y, short *z) {
 // durably (n samples) reads accelerometer x y z values
 static void lsm6ds33_read_accelerometer_durable(short *x, short *y, short *z) {
     int x_sum = 0 ; int y_sum = 0 ; //int z_sum = 0 ;
-    unsigned int n = 5 ;
+    unsigned int n = 2 ;
     for(int i = 0; i < n; i++) {
         int x_read = read_reg(OUTX_L_XL);
         x_read |= read_reg(OUTX_H_XL) << 8;

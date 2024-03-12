@@ -107,7 +107,7 @@ void test_motions_integrated(void) {
     // we write accelerometer x/y position meanings to these vars
     int pitch = 0; int roll = 0;
 
-    int n = 400 ; // total ms wait for each loop
+    int n = 500 ; // total ms wait for each loop
     n = (n*1000*TICKS_PER_USEC);
 
     while(1) {
@@ -127,23 +127,25 @@ void test_motions_integrated(void) {
             if(!piece.fallen){
                 move_down(&piece);
             }
+            if(!piece.fallen){
+                move_down(&piece);
+            }
         }
-        if (pitch == X_SLAM) { 
-            // printf("\n*** x slammed ***\n"); // for debugging
-            // p2 TODO add game functionality so it just drops the full way immediately!!
-        }
+        // if (pitch == X_SLAM) { 
+        //     // printf("\n*** x slammed ***\n"); // for debugging
+        //     // p2 TODO add game functionality so it just drops the full way immediately!!
+        // }
 
         // rotate block // p2 todo integrate so this doesnt cause a holdup...
         while (remote_is_button_press()) {
             rotate(&piece);
         }
         
+        move_down(&piece); 
         if (piece.fallen) {
             // printf("fallen; new piece spawning"); // for debugging
             piece = init_falling_piece();
         }
-
-        move_down(&piece); 
 
         while (timer_get_ticks() % n != 0) {}  // todo incr this when we clear line??
         // timer_delay_ms(200) ;
