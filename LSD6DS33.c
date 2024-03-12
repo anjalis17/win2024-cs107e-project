@@ -96,17 +96,19 @@ static void lsm6ds33_read_accelerometer_durable(short *x, short *y, short *z) {
     // *z = (short)(z_sum/n) ;
 }
 
-
+// edits x_state and y_state, passed by reference with the (durably read)
+//      y (roll) position's meaning  (LEFT/HOME/RIGHT) 
+//      x (pitch) position's meaning  (HOME/FAST/SLAM) 
 void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *y_state) {
 
     lsm6ds33_read_accelerometer_durable(x, y, z) ; // shorter bc I only read data once
 
 // update y info
-    if (*y < LEFT_ANGLE) { //} + WIGGLE_ROOM) { //} && *y > LEFT_ANGLE - WIGGLE_ROOM) {
+    if (*y < LEFT_ANGLE) { 
         *y_state = LEFT;
-    } else if (*y > RIGHT_ANGLE) { //- WIGGLE_ROOM) { // && *y < RIGHT_ANGLE + WIGGLE_ROOM) {
+    } else if (*y > RIGHT_ANGLE) {
         *y_state = RIGHT;
-    } else { //} (*y < HOME_ANGLE + WIGGLE_ROOM && *y > HOME_ANGLE - WIGGLE_ROOM) {
+    } else { 
         *y_state = HOME;
     } 
 
@@ -121,7 +123,6 @@ void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *
 
 }
 
-// // reads (durably) the y position and its meaning
 // int lsm6ds33_read_durable_pos_y(short *x, short *y, short *z) {
 
 //     lsm6ds33_read_accelerometer_durable(x, y, z) ;

@@ -9,11 +9,9 @@
 
 // remote struct 
 typedef struct {
-    // typedef union { // todo del
     gpio_id_t servo ;
     gpio_id_t button ;
     rb_t *rb ;
-    // }
 } remote_t;
 
 // initializes button and servo
@@ -27,8 +25,6 @@ bool is_button_press(void) ; // returns whether there is a button press in rb qu
 void remote_vibrate(int duration_sec) ;
 
 // accelerometer
-// int get_tilt() ;
-// bool is_drop() ;
 void get_x_y_status(int *x, int *y) ;
 
 #endif
