@@ -36,7 +36,7 @@ static void handle_button(uintptr_t pc, void *aux_data) {
 }
 
 // checks if there are presses in the queue
-bool is_button_press(void) {
+bool remote_is_button_press(void) {
     int k = 0 ;
     if (!(rb_empty(remote.rb))) {
        rb_dequeue(remote.rb, &k) ;
@@ -71,7 +71,7 @@ void remote_vibrate(int duration_sec) {
 }
 
 // returns int enum "left/right/home" ... enum defined in lsd6ds33.h
-void get_x_y_status(int *x_mod, int *y_mod) {
+void remote_get_x_y_status(int *x_mod, int *y_mod) {
     short x=0; short y=0; short z=0;
     lsm6ds33_read_durable_pos(&x, &y, &z, x_mod, y_mod) ; // read and print avged positions
 }

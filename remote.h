@@ -2,6 +2,7 @@
 #define REMOTE_H
 
 #include "ringbuffer.h"
+#include "gpio.h"
 /*
  * Module for remote control for Tetris game
  * Author: Aditi Bhaskar (aditijb@stanford.edu)
@@ -19,12 +20,12 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) ;
 
 // button
 // handled via interrupt
-bool is_button_press(void) ; // returns whether there is a button press in rb queue
+bool remote_is_button_press(void) ; // returns whether there is a button press in rb queue
 
 // servo
 void remote_vibrate(int duration_sec) ;
 
 // accelerometer
-void get_x_y_status(int *x, int *y) ;
+void remote_get_x_y_status(int *x, int *y) ;
 
 #endif

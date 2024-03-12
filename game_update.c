@@ -3,7 +3,7 @@
 #include "strings.h"
 #include "printf.h"
 #include "timer.h"
-
+#include "remote.h"
 
 // todo redo colors - proper for the game
 const piece_t i = {'i', GL_CYAN, {0x0F00, 0x2222, 0x00F0, 0x4444}};
@@ -168,7 +168,7 @@ void clearRows(void) {
                 break;
             }
         }
-        if (rowFilled) clearRow(row); 
+        if (rowFilled) {clearRow(row); remote_vibrate(1);}
     }
 }
 
