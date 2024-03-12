@@ -31,16 +31,9 @@ enum reg_address {
     OUTZ_H_XL = 0x2D,
 };
 
-// Calibrated values; sensor-specific. 
-// Tuned by Aditi Mar 11 2024
-#define LEFT_ANGLE -8000 // for y // was -12000 // was -15000
-#define RIGHT_ANGLE 7000 // for y // was 9000
-#define HOME_ANGLE -4000 // for y
-#define X_FAST_DOWN 9000 // for x
-
-// LSM6DS33 6-Axis IMU (0x6A or 0x6B) - https://learn.adafruit.com/i2c-addresses/the-list
+// LSM6DS33 6-Axis IMU (0x6A or 0x6B) - https://learn.adafruit.com/i2c-addresses/the-list 
 // static const unsigned MY_I2C_ADDR = 0x6A; // confirm device id, components can differ!
-static const unsigned MY_I2C_ADDR = 0x6B; // connected 3.3Vout to VDD (https://learn.adafruit.com/lsm6ds33-6-dof-imu=accelerometer-gyro/arduino)
+static const unsigned MY_I2C_ADDR = 0x6B; // connected 3.3Vout to SDO (https://learn.adafruit.com/lsm6ds33-6-dof-imu=accelerometer-gyro/arduino)
 
 // writes to an accelerometer register
 static void write_reg(unsigned char reg, unsigned char val) {
@@ -57,7 +50,55 @@ static unsigned read_reg(unsigned char reg) {
 	return val;
 }
 
+// initializes the accelerometer
+void lsm6ds33_init(void) {
+    printf("in accel init") ;
+
+    unsigned id = read_reg(WHO_AM_I);  // confirm id, expect 0x69
+    assert(id == 0x69); 
+    
+	write_reg(CTRL1_XL, 0x80);  // 1600Hz (high perf mode)
+    // accelerator _XL registers
+    write_reg(CTRL9_XL, 0x38);  // ACCEL: x,y,z enabled (bits 4-6)
+}
+
+/// GENERAL-PURPOSE FUNCTIONS
+
 // reads the accelerometer x y z values
+void lsm6ds33_read_accelerometer_all(short *x, short *y, short *z) {
+    *x =  read_reg(OUTX_L_XL);
+    *x |= read_reg(OUTX_H_XL) << 8;
+    *y =  read_reg(OUTY_L_XL);
+    *y |= read_reg(OUTY_H_XL) << 8;
+    *z =  read_reg(OUTZ_L_XL);
+    *z |= read_reg(OUTZ_H_XL) << 8;
+}
+
+// reads the accelerometer values for an axis
+void lsm6ds33_read_accelerometer_x(short *x) {
+    *x =  read_reg(OUTX_L_XL);
+    *x |= read_reg(OUTX_H_XL) << 8;
+}
+void lsm6ds33_read_accelerometer_y(short *y) {
+    *y =  read_reg(OUTY_L_XL);
+    *y |= read_reg(OUTY_H_XL) << 8;
+}
+void lsm6ds33_read_accelerometer_z(short *z) {
+    *z =  read_reg(OUTZ_L_XL);
+    *z |= read_reg(OUTZ_H_XL) << 8;
+}
+
+
+/// USED FOR TETRIS
+
+// Calibrated values; sensor-specific. 
+// Tuned by Aditi Mar 11 2024
+#define LEFT_ANGLE -8000 // for y // was -12000 // was -15000
+#define RIGHT_ANGLE 7000 // for y // was 9000
+#define HOME_ANGLE -4000 // for y
+#define X_FAST_DOWN 9000 // for x
+
+// reads the accelerometer x y values
 void lsm6ds33_read_accelerometer(short *x, short *y, short *z) {
     *x =  read_reg(OUTX_L_XL);
     *x |= read_reg(OUTX_H_XL) << 8;
@@ -65,7 +106,7 @@ void lsm6ds33_read_accelerometer(short *x, short *y, short *z) {
     *y |= read_reg(OUTY_H_XL) << 8;
 }
 
-// durably (n samples) reads accelerometer x y z values
+// durably (n samples) reads accelerometer x y values
 static void lsm6ds33_read_accelerometer_durable(short *x, short *y, short *z) {
     int x_sum = 0 ; int y_sum = 0 ; //int z_sum = 0 ;
     unsigned int n = 3 ;
@@ -89,7 +130,7 @@ void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *
 
     lsm6ds33_read_accelerometer_durable(x, y, z) ; // shorter bc I only read data once
 
-// update y info
+    // update y info
     if (*y < LEFT_ANGLE) { 
         *y_state = LEFT;
     } else if (*y > RIGHT_ANGLE) {
@@ -98,22 +139,10 @@ void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *
         *y_state = HOME;
     } 
 
-// update x info
+    // update x info
     if (*x > X_FAST_DOWN) {
         *x_state = X_FAST ;
     } else {
         *x_state = X_HOME ;
     }
-}
-
-// initializes the accelerometer
-void lsm6ds33_init(void) {
-    printf("in accel init") ;
-
-    unsigned id = read_reg(WHO_AM_I);  // confirm id, expect 0x69
-    assert(id == 0x69); 
-    
-	write_reg(CTRL1_XL, 0x80);  // 1600Hz (high perf mode)
-    // accelerator _XL registers
-    write_reg(CTRL9_XL, 0x38);  // ACCEL: x,y,z enabled (bits 4-6)
 }

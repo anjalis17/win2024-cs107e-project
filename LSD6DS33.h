@@ -15,10 +15,24 @@ enum { X_HOME = 0, X_FAST, X_SLAM };
 // initializes the accelerometer
 void lsm6ds33_init(void) ;
 
-// reads x, y, and z values from the accelerometer
-void lsm6ds33_read_accelerometer(short *x, short *y, short *z);
+
+
+
+
 
 // Aditi's new functions ~~
+
+//// general-purpose:
+
+void lsm6ds33_read_accelerometer_all(short *x, short *y, short *z) ;
+void lsm6ds33_read_accelerometer_x(short *x) ;
+void lsm6ds33_read_accelerometer_y(short *y) ;
+void lsm6ds33_read_accelerometer_z(short *z) ;
+
+//// specific to tetris:
+
+// reads x, y values from the accelerometer
+void lsm6ds33_read_accelerometer(short *x, short *y, short *z);
 
 // reads an avg of x,y,z and returns what 
 //  y: tilt the accelerometer is at (LEFT/HOME/RIGHT) - roll

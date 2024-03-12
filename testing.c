@@ -199,8 +199,9 @@ void test_motions_integrated(void) {
             piece = init_falling_piece();
         }
 
-        while (timer_get_ticks() % n != 0) {}  // todo incr this when we clear line??
-        // timer_delay_ms(200) ;
+        while (timer_get_ticks() % n != 0) {}  
+
+        // todo incr clear line score when we clear line??
     }
 }
 
@@ -209,6 +210,7 @@ void tetris_theme_song(void) {
     timer_init() ;
     uart_init() ;
     buzzer_init(GPIO_PE17) ;
+    buzzer_set_tempo(TEMPO_ANDANTE) ; // TODO FIX allegro+ tempos not working :(
     // each block of code is a measure
     // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
     while(1) {
@@ -234,7 +236,7 @@ void tetris_theme_song(void) {
             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
 
             buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;

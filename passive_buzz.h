@@ -7,7 +7,9 @@
 #include "gpio.h"
 #include <stdbool.h>
 
-enum { // in hertz 
+enum { // NOTE FREQUENCY
+    
+    // in hertz 
     // https://miro.medium.com/v2/resize:fit:618/format:webp/1*K7y56Rd1kolwV_GNOpmwEg.png
 
     // most of the notes are in the 4th octave; notes outside 4th octave are explicitly named with the octave number after the note like NOTE_FREQ_B_3
@@ -31,7 +33,7 @@ enum { // in hertz
     NOTE_FREQ_B = 494
 } ;
 
-enum {
+enum { // NOTE LENGTH
     NOTE_WHOLE = 2000,
     NOTE_HALF = 1000,
     NOTE_QUARTER = 500,
@@ -39,7 +41,24 @@ enum {
     NOTE_SIXTEENTH = 125
 } ;
 
+enum { // TEMPO
+    TEMPO_LENTO = 55,
+    TEMPO_DEFAULT = 60,
+    TEMPO_ADAGIO = 65,
+    TEMPO_ANDANTE = 85,
+    TEMPO_MODERATO = 115,
+    TEMPO_ALLEGRETTO = 120,
+    TEMPO_ALLEGRO = 140,
+    TEMPO_VIVACE = 160,
+} ;
+
 void buzzer_init(gpio_id_t id) ; 
+
+// update the tempo (bpm) we want the buzzer to buzz at
+bool buzzer_set_tempo(int new_tempo) ;
+
+// returns the currrent tempo (bpm) 
+int buzzer_get_tempo(void) ;
 
 // plays a note at frequency `frequency` for duration `duration_msec` in milliseconds
 // durations < 200ms do not play
