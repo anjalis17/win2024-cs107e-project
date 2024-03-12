@@ -7,7 +7,6 @@
 #include "gpio.h"
 #include <stdbool.h>
 
-// todo move this into header??
 enum { // in hertz 
 // https://miro.medium.com/v2/resize:fit:618/format:webp/1*K7y56Rd1kolwV_GNOpmwEg.png
 
