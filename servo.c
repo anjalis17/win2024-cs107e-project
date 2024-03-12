@@ -31,7 +31,7 @@ void servo_turn(int scale) {
     timer_delay_us(20000 - (1500 + scale*(500))) ; // 19 millisecond
 }
 
-// todo figure out actual pwm usage here ??
+// p4 todo figure out actual pwm usage here ??
 // 'servo_vibrate'
 // vibrates by turning servo back and forth
 void servo_vibrate(int duration_sec) {

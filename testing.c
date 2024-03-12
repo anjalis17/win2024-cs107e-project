@@ -104,32 +104,36 @@ void test_motions_integrated(void) {
 
     printf("\nin test_motions_integrated; initialized\n") ;
 
-    int x = 0; int y = 0;
+    // we write accelerometer x/y position meanings to these vars
+    int pitch = 0; int roll = 0;
+
+    int n = 200 ; // total ms wait for each loop
+    n = (n*1000*TICKS_PER_USEC);
 
     while(1) {
         // tilt blocks
-        get_x_y_status(&x, &y); // the x and y tilt statuses
+        get_x_y_status(&pitch, &roll); // the x and y tilt statuses
         // printf("\n device.state %s\n", y==HOME?"home":(y==LEFT?"left":"right")) ; // for debugging
         
         // p3 todo fix the aclr drifting readings - impl recalibration at each reading?
 
         // horizontal movement
-        if (y == LEFT) move_left(&piece);
-        else if (y == RIGHT) move_right(&piece);
+        if (roll == LEFT) move_left(&piece);
+        else if (roll == RIGHT) move_right(&piece);
         
         // drop a block faster
-        if (x == X_FAST) { 
+        if (pitch == X_FAST) { 
             // printf("\n*** x dropped ***\n"); // for debugging
             if(!piece.fallen){
                 move_down(&piece);
             }
         }
-        if (x == X_SLAM) { 
+        if (pitch == X_SLAM) { 
             // printf("\n*** x slammed ***\n"); // for debugging
-            // TODO add game functionality so it just drops the full way immediately!!
+            // p2 TODO add game functionality so it just drops the full way immediately!!
         }
 
-        // rotate block // todo integrate so this doesnt cause a holdup...
+        // rotate block // p2 todo integrate so this doesnt cause a holdup...
         while (is_button_press()) {
             rotate(&piece);
         }
@@ -139,7 +143,9 @@ void test_motions_integrated(void) {
             piece = init_falling_piece();
         }
 
-        timer_delay_ms(200) ;
-        move_down(&piece); // todo make time consistent per loop
+        move_down(&piece); 
+
+        while (timer_get_ticks() % n != 0) {} 
+        // timer_delay_ms(200) ;
     }
 }

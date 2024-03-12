@@ -1,18 +1,6 @@
 #### Aditi Todo
 
-## integrate basic hardware
- - accelerometer
- - button/servo
- - test full system
-
-## block hex colors
- - i-1AE6DC
- - j-0000E4
- - l-EA9B11
- - o-E5E900
- - s-03E800
- - t-9305E2
- - z-E80201
+## check "todo" in var. files
 
 ## Line clear score
 notes:
