@@ -144,13 +144,13 @@ void clearRow(int row) {
     gl_swap_buffer();
     timer_delay_ms(1000);
 
-    for (int destRow = row; row > 0; row--) {
+    for (int destRow = row; destRow > 0; destRow--) {
         for (int col = 0; col < game_config.ncols; col++) {
             background[destRow][col] = background[destRow - 1][col];
         }
     }
     // reset 1st row of background 
-    memset(game_config.background_tracker, 0, game_config.ncols * sizeof(color_t));
+    memset(background, 0, game_config.ncols * sizeof(color_t));
     wipe_screen();
     gl_swap_buffer();
 }
