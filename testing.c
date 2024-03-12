@@ -7,6 +7,7 @@
 #include "printf.h"
 
 #include "gpio.h"
+#include "gpio_extra.h"
 #include "servo.h"
 #include "remote.h"
 #include "LSD6DS33.h"
@@ -154,7 +155,7 @@ void integration_test_v2(void) {
         };
     }
 }
-void test_motions_integrated(void) {
+void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
     gpio_init() ;
     timer_init() ;
     uart_init() ;
@@ -218,7 +219,7 @@ void tetris_theme_song(void) {
     gpio_init() ;
     timer_init() ;
     uart_init() ;
-    buzzer_init(GPIO_PE17) ;
+    buzzer_init(GPIO_PB6) ; // is also pwm 1
     buzzer_set_tempo(TEMPO_ANDANTE) ; // TODO FIX allegro+ tempos not working :(
     // each block of code is a measure
     // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
