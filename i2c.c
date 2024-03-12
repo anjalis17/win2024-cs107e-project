@@ -1,12 +1,13 @@
 /*
-     simple implementation of i2c using bit bang
-     Not sure if properly conforms to timing specs
-     Missing:  bus arbitration (assumes can master), clock stretch, error checking, reset
+    simple implementation of i2c using bit bang
+    Not sure if properly conforms to timing specs
+    Missing:  bus arbitration (assumes can master), clock stretch, error checking, reset
+    Author: Julie Zelenski
+    Tue Feb 13 17:44:05 PST 2024
 
-     Author: Julie Zelenski
-     Tue Feb 13 17:44:05 PST 2024
-
-     Updated by Aditi Bhaskar (aditijb@stanford.edu) to repeat commands if not rightfully ACK/NAK'ed
+////////////////
+    Updated by Aditi Bhaskar (aditijb@stanford.edu) to repeat commands if not rightfully ACK/NAK'ed
+    i2c reference: https://www.ti.com/lit/an/slva704/slva704.pdf
  */
 #include "i2c.h"
 #include "gpio.h"
@@ -46,6 +47,9 @@ static void stop(void) {
     gpio_set_input(module.sda);
 }
 
+// amended by aditijb@stanford.edu
+// edits include the goto statement to re-send the address if not rightfully ACK'ed
+// WARNING: this code has not been tested on writing multiple-byte (>1 byte) data 
 static void write_byte(unsigned char byte) {
     write:
     for (int j = 0; j < 8; j++) {
@@ -62,10 +66,13 @@ static void write_byte(unsigned char byte) {
     gpio_write(module.scl, 1); // clock hi
     timer_delay_us(5); 
 
-    // gpio_read(module.sda) -- Julie's implm - no error checking
 
-    // Aditi's implm with check (via. printing) -- this discards need for logic analyzer for basic tests
+    // Julie's implm - no error checking
+    // gpio_read(module.sda) 
+
+    // Aditi's implm WITH check 
     int dev_ack = gpio_read(module.sda) ;
+
 
     gpio_write(module.scl, 0); // clock low
     timer_delay_us(1);
@@ -73,12 +80,11 @@ static void write_byte(unsigned char byte) {
     gpio_write(module.sda, 0); // data low
     timer_delay_ms(1); // pause for debugging
     
-    if (dev_ack) { timer_delay_us(1); start(); goto write; } // try writing the same thing again until it's ack'ed!}
-    // todo amend: this is very sketchy and doesn't work if it's in the middle of a longer write()
+    if (dev_ack) { timer_delay_us(1); start(); goto write; } // try writing the same thing again until it's ack'ed!
 }
 
-// pg 30 - table 14 https://www.pololu.com/file/0J1087/LSM6DS33.pdf
-static int read_byte(bool last) { // if last, respond with NAK in place of ACK
+// if last byte, the device should respond with NAK in place of ACK
+static int read_byte(bool last) { 
 
     unsigned char byte = 0;
     gpio_set_input(module.sda);
@@ -104,7 +110,6 @@ static int read_byte(bool last) { // if last, respond with NAK in place of ACK
 
     return byte;
 }
-
 
 void i2c_write(unsigned char device_id, unsigned char *data, int data_length) {
     start();
