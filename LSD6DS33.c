@@ -18,8 +18,6 @@
 #include "ringbuffer.h"
 #include "malloc.h"
 
-// todo faster aclr readings: don't read z? do x readings @ same time as y reading? pass as ptr for mult returns?
-
 enum reg_address {
     WHO_AM_I  = 0x0F, // original
     CTRL1_XL  = 0x10,
@@ -33,19 +31,20 @@ enum reg_address {
     OUTZ_H_XL = 0x2D,
 };
 
-static struct {
-    int state;
-} LSD6DS33_device = {
-    .state = HOME // LEFT = 0, HOME, RIGHT
-};
+// static struct {
+//     int state;
+// } LSD6DS33_device = {
+//     .state = HOME // LEFT = 0, HOME, RIGHT
+// };
 
 // Calibrated values; sensor-specific. 
 // Tuned by Aditi Mar 11 2024
-#define LEFT_ANGLE -10000 // for y // was -12000 // was -15000
-#define RIGHT_ANGLE 5000 // for y // was 9000
+#define LEFT_ANGLE -8000 // for y // was -12000 // was -15000
+#define RIGHT_ANGLE 7000 // for y // was 9000
 #define HOME_ANGLE -4000 // for y
-#define WIGGLE_ROOM 2000
-#define POINT_DOWN 9000 // for x
+// #define WIGGLE_ROOM 2000
+#define X_FAST_DOWN 9000 // for x
+#define X_SLAM_DOWN 13000 // for x
 
 // LSM6DS33 6-Axis IMU (0x6A or 0x6B) - https://learn.adafruit.com/i2c-addresses/the-list
 // static const unsigned MY_I2C_ADDR = 0x6A; // confirm device id, components can differ!
@@ -97,28 +96,53 @@ static void lsm6ds33_read_accelerometer_durable(short *x, short *y, short *z) {
     // *z = (short)(z_sum/n) ;
 }
 
-// reads (durably) the y position and its meaning
-int lsm6ds33_read_durable_pos_y(short *x, short *y, short *z) {
 
-    lsm6ds33_read_accelerometer_durable(x, y, z) ;
-    if (*y < LEFT_ANGLE + WIGGLE_ROOM) { //} && *y > LEFT_ANGLE - WIGGLE_ROOM) {
-        LSD6DS33_device.state = LEFT;
-    } else if (*y > RIGHT_ANGLE- WIGGLE_ROOM) { // && *y < RIGHT_ANGLE + WIGGLE_ROOM) {
-        LSD6DS33_device.state = RIGHT;
+void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *y_state) {
+
+    lsm6ds33_read_accelerometer_durable(x, y, z) ; // shorter bc I only read data once
+
+// update y info
+    if (*y < LEFT_ANGLE) { //} + WIGGLE_ROOM) { //} && *y > LEFT_ANGLE - WIGGLE_ROOM) {
+        *y_state = LEFT;
+    } else if (*y > RIGHT_ANGLE) { //- WIGGLE_ROOM) { // && *y < RIGHT_ANGLE + WIGGLE_ROOM) {
+        *y_state = RIGHT;
     } else { //} (*y < HOME_ANGLE + WIGGLE_ROOM && *y > HOME_ANGLE - WIGGLE_ROOM) {
-        LSD6DS33_device.state = HOME;
+        *y_state = HOME;
     } 
-    
-    return LSD6DS33_device.state ;
+
+// update x info
+    if (*x > X_SLAM_DOWN) { // flick remote tip towards ground
+        *x_state = X_SLAM ;
+    } else if (*x > X_FAST_DOWN) {
+        *x_state = X_FAST ;
+    } else {
+        *x_state = X_HOME ;
+    }
+
 }
+
+// // reads (durably) the y position and its meaning
+// int lsm6ds33_read_durable_pos_y(short *x, short *y, short *z) {
+
+//     lsm6ds33_read_accelerometer_durable(x, y, z) ;
+//     if (*y < LEFT_ANGLE + WIGGLE_ROOM) { //} && *y > LEFT_ANGLE - WIGGLE_ROOM) {
+//         LSD6DS33_device.state = LEFT;
+//     } else if (*y > RIGHT_ANGLE- WIGGLE_ROOM) { // && *y < RIGHT_ANGLE + WIGGLE_ROOM) {
+//         LSD6DS33_device.state = RIGHT;
+//     } else { //} (*y < HOME_ANGLE + WIGGLE_ROOM && *y > HOME_ANGLE - WIGGLE_ROOM) {
+//         LSD6DS33_device.state = HOME;
+//     } 
+    
+//     return LSD6DS33_device.state ;
+// }
 
 // returns true if there was a down-flick of the remote
-bool lsm6ds33_durable_pos_x(short x) {
-    if (x > POINT_DOWN) { // flick remote tip towards ground
-        return true ;
-    }
-    return false ;
-}
+// bool lsm6ds33_durable_pos_x(short x) {
+//     if (x > X_FAST_DOWN) { // flick remote tip towards ground
+//         return true ;
+//     }
+//     return false ;
+// }
 
 // initializes the accelerometer
 void lsm6ds33_init(void) {

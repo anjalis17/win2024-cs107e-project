@@ -71,15 +71,21 @@ void remote_vibrate(int duration_sec) {
 }
 
 // returns int enum "left/right/home" ... enum defined in lsd6ds33.h
-int get_tilt() {
-    short x, y, z;
-    int state = lsm6ds33_read_durable_pos_y(&x, &y, &z) ; // read and print avged positions
-    return state ;
+void get_x_y_status(int *x_mod, int *y_mod) {
+    short x=0; short y=0; short z=0;
+    lsm6ds33_read_durable_pos(&x, &y, &z, x_mod, y_mod) ; // read and print avged positions
 }
 
-// returns true if remote is in "drop block" (tilt tip towards the ground) orientation
-bool is_drop() {
-    short x, y, z;
-    int state = lsm6ds33_read_durable_pos_y(&x, &y, &z) ;
-    return lsm6ds33_durable_pos_x(x);
-}
+// // returns int enum "left/right/home" ... enum defined in lsd6ds33.h
+// int get_tilt() {
+//     short x, y, z;
+//     int state = lsm6ds33_read_durable_pos_y(&x, &y, &z) ; // read and print avged positions
+//     return state ;
+// }
+
+// // returns true if remote is in "drop block" (tilt tip towards the ground) orientation
+// bool is_drop() {
+//     short x, y, z;
+//     int state = lsm6ds33_read_durable_pos_y(&x, &y, &z) ;
+//     return lsm6ds33_durable_pos_x(x);
+// }

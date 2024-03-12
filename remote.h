@@ -23,12 +23,12 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) ;
 // handled via interrupt
 bool is_button_press(void) ; // returns whether there is a button press in rb queue
 
-
 // servo
 void remote_vibrate(int duration_sec) ;
 
 // accelerometer
-int get_tilt() ;
-bool is_drop() ;
+// int get_tilt() ;
+// bool is_drop() ;
+void get_x_y_status(int *x, int *y) ;
 
 #endif

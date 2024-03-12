@@ -79,12 +79,13 @@ void test_remote(void) {
     interrupts_global_enable() ; 
     printf("\nremote tests enabled\n") ;
     while(1) {
-        // tilt blocks
-        int tilt_status = get_tilt();
-        printf("\n device.state %s\n", tilt_status==HOME?"home":(tilt_status==LEFT?"left":"right")) ;
+        // obsolete function calls :(
+        // // tilt blocks
+        // int tilt_status = get_tilt();
+        // printf("\n device.state %s\n", tilt_status==HOME?"home":(tilt_status==LEFT?"left":"right")) ;
         
-        // drop blocks
-        if (is_drop()) {printf("\n*** x dropped ***\n");}
+        // // drop blocks
+        // if (is_drop()) {printf("\n*** x dropped ***\n");}
     }
 }
 
@@ -103,37 +104,42 @@ void test_motions_integrated(void) {
 
     printf("\nin test_motions_integrated; initialized\n") ;
 
+    int x = 0; int y = 0;
 
     while(1) {
         // tilt blocks
-        int tilt_status = get_tilt();
-        printf("\n device.state %s\n", tilt_status==HOME?"home":(tilt_status==LEFT?"left":"right")) ;
+        get_x_y_status(&x, &y); // the x and y tilt statuses
+        // printf("\n device.state %s\n", y==HOME?"home":(y==LEFT?"left":"right")) ; // for debugging
         
-        // todo fix the aclr drifting readings - impl recalibration at each reading?
+        // p3 todo fix the aclr drifting readings - impl recalibration at each reading?
 
         // horizontal movement
-        if (tilt_status == LEFT) move_left(&piece);
-        else if (tilt_status == RIGHT) move_right(&piece);
+        if (y == LEFT) move_left(&piece);
+        else if (y == RIGHT) move_right(&piece);
         
         // drop a block faster
-        if (is_drop()) { // TODO add a drop version where it goes faster vs it just drops the full way
-            printf("\n*** x dropped ***\n"); 
-            while(!piece.fallen && is_drop()){ 
+        if (x == X_FAST) { 
+            // printf("\n*** x dropped ***\n"); // for debugging
+            if(!piece.fallen){
                 move_down(&piece);
             }
         }
+        if (x == X_SLAM) { 
+            // printf("\n*** x slammed ***\n"); // for debugging
+            // TODO add game functionality so it just drops the full way immediately!!
+        }
 
-        // rotate block // todo integrate so this doesnt cause a holdup
+        // rotate block // todo integrate so this doesnt cause a holdup...
         while (is_button_press()) {
             rotate(&piece);
         }
         
         if (piece.fallen) {
-            printf("fallen; new piece spawning");
+            // printf("fallen; new piece spawning"); // for debugging
             piece = init_falling_piece();
         }
 
-        timer_delay_ms(500) ;
+        timer_delay_ms(200) ;
         move_down(&piece); // todo make time consistent per loop
     }
 }
