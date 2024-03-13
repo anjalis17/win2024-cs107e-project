@@ -301,7 +301,6 @@ void tetris_theme_song(void) {
     }
 }
 
-
 void test_leaderboard(void) {
 
     gpio_init() ;
@@ -343,7 +342,7 @@ void integration_test_v3(void) {
         game_update_init(20, 10);
         falling_piece_t piece = init_falling_piece();
 
-        // we write accelerometer x/y position meanings to these vars
+        // write accelerometer x/y position to pitch(x) and roll(y)
         int pitch = 0; int roll = 0;
         long n = 500 ; // total ms wait for each loop
         n = (n * 1000 * TICKS_PER_USEC);
@@ -351,7 +350,6 @@ void integration_test_v3(void) {
         int toggle_turns = 0 ;
 
         while(1) {
-            // printf ("timer get ticks START(): %ld\n", timer_get_ticks() % n) ;
             while (timer_get_ticks() % n <= (0.8 * n)) {
                 toggle_turns += 1 ;
                 // tilt blocks
@@ -365,38 +363,24 @@ void integration_test_v3(void) {
             
                 // drop a block faster
                 if (pitch == X_FAST) { 
-                    printf("\n*** x dropped fast ***\n"); // for debugging
-                    if (!piece.fallen){
-                        move_down(&piece);
-                    }
-                    if (!piece.fallen){
-                        move_down(&piece);
-                    }
+                    if (!piece.fallen) move_down(&piece);
+                    if (!piece.fallen) move_down(&piece);
                 }
 
-                while (remote_is_button_press()) {
-                    rotate(&piece);
-                }  
-                if (piece.fallen) {
-                    piece = init_falling_piece();
-                }
-                // timer_delay_ms(20);
+                while (remote_is_button_press()) rotate(&piece);
+                if (piece.fallen) piece = init_falling_piece();
             } 
-            // printf("timer get ticks END(): %ld\n", timer_get_ticks() % n) ;     
-            
-            printf("\n*** x dropped normal ***\n"); // for debugging
-            move_down(&piece);
 
+            move_down(&piece);
             if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
 
             while (timer_get_ticks() % n > (0.8 * n)) {
-                printf("waiting...");
                 // todo aditi play music notes in here???
-
             };
         } 
 
         game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
-
     }
 }
+
+
