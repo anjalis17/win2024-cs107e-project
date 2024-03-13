@@ -11,9 +11,9 @@ void main(void) {
     // test_basic_block_motion();
     // test_motions();
     // test_remote() ;
-    // integration_test_v2();
+    integration_test_v2();
 
     // aditi tests
     // test_motions_integrated() ;  // OBSOLETE
-    tetris_theme_song() ;
+    // tetris_theme_song() ;
 }
