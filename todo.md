@@ -12,13 +12,15 @@ notes:
  - 4 (tetris)	1200
 
 ## general todo
- - can move piece one time after it hits "ground"
- - clay to remote
- - music in waiting while?
+ - ability to move piece once after it hits "ground"
+ - clay to mould remote shape / grip
+ - music in waiting while? -- figure out what other delays are in place & play music during those times
 
  - bluetooth OR parallel processing - music?
  - piece queue / swap (p5) 
 
  ## bugs
  - doubling of the piece sometimes (sideways)
+ 
+
  
