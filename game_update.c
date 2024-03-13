@@ -19,10 +19,12 @@ static struct {
     int nrows;
     int ncols;
     color_t bg_col;
-    void* background_tracker;  
+    void* background_tracker; 
+    int gameScore;
+    int numLinesCleared; 
 } game_config;
 
-const unsigned int SQUARE_DIM = 50; // game pixel dimensions
+const unsigned int SQUARE_DIM = 20; // game pixel dimensions
 
 // Required init 
 void game_update_init(int nrows, int ncols) {
@@ -30,6 +32,7 @@ void game_update_init(int nrows, int ncols) {
     game_config.nrows = nrows;
     game_config.ncols = ncols;
     game_config.bg_col = GL_INDIGO;
+    game_config.gameScore = 0;
 
     int gridSize = game_config.nrows * game_config.ncols;
     game_config.background_tracker = malloc(gridSize * sizeof(color_t));
@@ -140,6 +143,10 @@ void wipe_screen(void) {
             }
         }
     }
+    // char* gameScore = "SCORE: ";
+
+    // // strlcat()
+    // gl_draw_string(0, 0, ___, );
 }
 
 void clearRow(int row) {
@@ -160,6 +167,7 @@ void clearRow(int row) {
     memset(background, 0, game_config.ncols * sizeof(color_t));
     wipe_screen();
     gl_swap_buffer();
+    game_config.gameScore += 40;
 }
 
 void clearRows(void) {
