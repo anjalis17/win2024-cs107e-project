@@ -14,13 +14,13 @@
 #include "i2c.h"
 #include "passive_buzz.h"
 
-void pause(const char *message) {
-    if (message) printf("\n%s\n", message);
-    printf("[PAUSED] type any key in minicom/terminal to continue: ");
-    int ch = uart_getchar();
-    uart_putchar(ch);
-    uart_putchar('\n');
-}
+// void pause(const char *message) {
+//     if (message) printf("\n%s\n", message);
+//     printf("[PAUSED] type any key in minicom/terminal to continue: ");
+//     int ch = uart_getchar();
+//     uart_putchar(ch);
+//     uart_putchar('\n');
+// }
 
 int get_keystroke(const char *message) {
     if (message) printf("\n%s\n", message);

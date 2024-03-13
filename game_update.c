@@ -4,6 +4,7 @@
 #include "printf.h"
 #include "timer.h"
 #include "remote.h"
+#include "uart.h"
 
 const piece_t i = {'i', 0x1AE6DC, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', 0x0000E4, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
@@ -55,12 +56,31 @@ falling_piece_t init_falling_piece(void) {
     piece.y = 0;
     piece.fallen = false;
 
-    iterateThroughPieceSquares(&piece, drawSquare);
-    gl_swap_buffer();
-
+    if (!iterateThroughPieceSquares(&piece, checkIfValidMove)) endGame();
+    else {
+        iterateThroughPieceSquares(&piece, drawSquare);
+        gl_swap_buffer();
+    }
     return piece;
 }
 
+void pause(const char *message) {
+    if (message) printf("\n%s\n", message);
+    printf("[PAUSED] type any key in minicom/terminal to continue: ");
+    int ch = uart_getchar();
+    uart_putchar(ch);
+    uart_putchar('\n');
+}
+
+void endGame(void) {
+    wipe_screen();
+    char buf[20];
+    int bufsize = sizeof(buf);
+    snprintf(buf, bufsize, " GAME OVER ");
+    gl_draw_string(SQUARE_DIM, game_config.ncols / 2 * SQUARE_DIM, buf, GL_WHITE);
+    gl_swap_buffer();
+    pause("END GAME");
+}
 //////////////// STATICS 
 // typedef bool (*functionPtr)(int x, int y, color_t color); 
 
@@ -148,7 +168,7 @@ void wipe_screen(void) {
     char buf[20];
     int bufsize = sizeof(buf);
     memset(buf, '\0', bufsize);
-    snprintf(buf, bufsize, "SCORE: %d", game_config.gameScore);
+    snprintf(buf, bufsize, "SCORE %d", game_config.gameScore);
     gl_draw_string(0, 0, buf, GL_WHITE);
 }
 

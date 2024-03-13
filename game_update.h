@@ -55,4 +55,8 @@ void drawPiece(falling_piece_t* piece);
 
 int get_rows_cleared(void) ;
 
+void endGame(void);
+
+void pause(const char *message);
+
 #endif
