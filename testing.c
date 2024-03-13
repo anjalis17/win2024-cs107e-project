@@ -136,7 +136,6 @@ void integration_test_v2(void) {
                 }
             }
 
-            // rotate block // p2 todo integrate so this doesnt cause a holdup...
             while (remote_is_button_press()) {
                 rotate(&piece);
             }  
@@ -180,8 +179,6 @@ void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
         remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
         // printf("\n device.state %s\n", y==HOME?"home":(y==LEFT?"left":"right")) ; // for debugging
         
-        // p3 todo fix the aclr drifting readings - impl recalibration at each reading?
-
         // horizontal movement
         if (roll == LEFT) move_left(&piece);
         else if (roll == RIGHT) move_right(&piece);
@@ -197,7 +194,6 @@ void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
             }
         }
 
-        // rotate block // p2 todo integrate so this doesnt cause a holdup...
         while (remote_is_button_press()) {
             rotate(&piece);
         }

@@ -3,7 +3,7 @@
  * Author: Aditi Bhaskar (aditijb@stanford.edu)
  */
 
-// todo -- set this up with actual pwm... should be able to multi-task from main by calling this once every 200ms loop or smth??
+// todo -- set this up with actual pwm??... should be able to multi-task from main by calling this once every 200ms loop or smth??
 
 #pragma once
 #include "gpio.h"
