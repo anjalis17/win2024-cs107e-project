@@ -99,10 +99,10 @@ bool drawSquare(int x, int y, falling_piece_t* piece) {
     
     //bevel
     // todo update the color; todo update the bevels to have the diag lines
-    gl_draw_line(x*SQUARE_DIM+1, y*SQUARE_DIM+1, x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+1, GL_WHITE) ;
-    gl_draw_line(x*SQUARE_DIM+1, y*SQUARE_DIM+1, x*SQUARE_DIM+1, y*SQUARE_DIM+SQUARE_DIM-2, GL_WHITE) ;
-    gl_draw_line(x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+SQUARE_DIM-2, x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+1, GL_WHITE) ;
-    gl_draw_line(x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+SQUARE_DIM-2, x*SQUARE_DIM+1, y*SQUARE_DIM+SQUARE_DIM-2, GL_WHITE) ;
+    gl_draw_line(x*SQUARE_DIM+1, y*SQUARE_DIM+1, x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+1, GL_BLACK) ;
+    gl_draw_line(x*SQUARE_DIM+1, y*SQUARE_DIM+1, x*SQUARE_DIM+1, y*SQUARE_DIM+SQUARE_DIM-2, GL_BLACK) ;
+    gl_draw_line(x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+SQUARE_DIM-2, x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+1, GL_BLACK) ;
+    gl_draw_line(x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+SQUARE_DIM-2, x*SQUARE_DIM+1, y*SQUARE_DIM+SQUARE_DIM-2, GL_BLACK) ;
 
     checkIfFallen(x, y, piece);
     return true;
