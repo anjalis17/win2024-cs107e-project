@@ -16,6 +16,7 @@ notes:
  - can move piece one time after it hits "ground"
  - scoring/lines cleared: display on grid
  - leaderboard
- - bluetooth OR parallel processing
+ - bluetooth OR parallel processing - music?
  - piece queue / swap (p5)
+ - clay to remote
  

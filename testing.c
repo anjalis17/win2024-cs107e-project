@@ -205,7 +205,9 @@ void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
             piece = init_falling_piece();
         }
 
-        while (timer_get_ticks() % n != 0) {}  
+        while (timer_get_ticks() % n != 0) {
+            // todo aditi play music notes in here???
+        }  
 
         // todo incr clear line score when we clear line??
     }

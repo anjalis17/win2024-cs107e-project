@@ -53,4 +53,6 @@ void checkIfFallen(int x, int y, falling_piece_t* piece);
 
 void drawPiece(falling_piece_t* piece);
 
+int get_rows_cleared(void) ;
+
 #endif

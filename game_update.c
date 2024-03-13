@@ -33,6 +33,7 @@ void game_update_init(int nrows, int ncols) {
     game_config.ncols = ncols;
     game_config.bg_col = GL_INDIGO;
     game_config.gameScore = 0;
+    game_config.numLinesCleared = 0;
 
     int gridSize = game_config.nrows * game_config.ncols;
     game_config.background_tracker = malloc(gridSize * sizeof(color_t));
@@ -181,7 +182,11 @@ void clearRows(void) {
                 break;
             }
         }
-        if (rowFilled) {clearRow(row); remote_vibrate(1);}
+        if (rowFilled) {
+            clearRow(row); 
+            remote_vibrate(1);
+            game_config.numLinesCleared++ ;
+        }
     }
 }
 
@@ -232,4 +237,8 @@ void rotate(falling_piece_t* piece) {
         return;
     };
     drawPiece(piece);
+}
+
+int get_rows_cleared(void) {
+    return game_config.numLinesCleared ;
 }
