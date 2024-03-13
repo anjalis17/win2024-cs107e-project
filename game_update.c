@@ -96,6 +96,14 @@ bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
 // Returns true always -- function only called after valid move is verified
 bool drawSquare(int x, int y, falling_piece_t* piece) {
     gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, piece->pieceT.color);
+    
+    //bevel
+    // todo update the color; todo update the bevels to have the diag lines
+    gl_draw_line(x*SQUARE_DIM+1, y*SQUARE_DIM+1, x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+1, GL_WHITE) ;
+    gl_draw_line(x*SQUARE_DIM+1, y*SQUARE_DIM+1, x*SQUARE_DIM+1, y*SQUARE_DIM+SQUARE_DIM-2, GL_WHITE) ;
+    gl_draw_line(x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+SQUARE_DIM-2, x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+1, GL_WHITE) ;
+    gl_draw_line(x*SQUARE_DIM+SQUARE_DIM-2, y*SQUARE_DIM+SQUARE_DIM-2, x*SQUARE_DIM+1, y*SQUARE_DIM+SQUARE_DIM-2, GL_WHITE) ;
+
     checkIfFallen(x, y, piece);
     return true;
 }
