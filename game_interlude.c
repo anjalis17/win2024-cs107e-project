@@ -7,7 +7,8 @@
  *   play game again
  */
 
-
+// TODO TEST:
+// adding more than 5 games (what if score doesn't fit on leaderboard?)
 
 
 #include "console.h"
@@ -37,6 +38,16 @@ void game_interlude_init(int nrows, int ncols) {
     }
 }
 
+// static void flicker(char *a, char *b, int blink_delay_ms, int reps) {
+//     for (int i = 0; i < reps; i++) {
+//         console_clear() ; 
+//         console_printf("%s", a) ;
+//         timer_delay_ms(blink_delay_ms) ;
+//         console_clear() ; 
+//         console_printf("%s", b) ;
+//         timer_delay_ms(blink_delay_ms) ;
+//     }
+// }
 
 // GET USER INITIALS!! if they are worthy of the leaderboard :)
     // how to use:
