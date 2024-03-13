@@ -39,6 +39,34 @@ void game_interlude_init(int nrows, int ncols, color_t text, color_t bg) {
     }
 }
 
+// display instructions
+static void game_interlude_operations(void) {
+    console_clear() ;
+    // o = button -- todo use symbols instead? how do i make instruction page neat?
+    // ^ = tilt
+    console_printf("leaderboard!\n\n tilt down:\n   select\n   next\n button:\n   iterate\n\n\n") ; 
+    int pitch = 0; int roll = 0 ;
+    remote_get_x_y_status(&pitch, &roll) ;
+    timer_delay(2) ;
+    while (pitch != X_FAST) { remote_get_x_y_status(&pitch, &roll) ; } // wait for tilt
+}
+
+
+/* game_interlude_print_leaderboard
+ * @param score from most recent game
+ * @param num rows cleared from most recent game
+ * @functionality prints useful info about the most recent game to screen
+ * @exit tilt remote down
+*/
+static void game_interlude_display_game_stats(unsigned int score, unsigned int lines_cleared) {
+    console_clear() ;
+    console_printf("score:\n %08d\nlines cleared:\n %03d", score, lines_cleared) ; 
+    int pitch = 0; int roll = 0 ;
+    remote_get_x_y_status(&pitch, &roll) ;
+    timer_delay(2) ;
+    while (pitch != X_FAST) { remote_get_x_y_status(&pitch, &roll) ; } // wait for tilt
+}
+
 /* game_interlude_get_user_initials
  * @functionality uses a simple state machine to prompt and read 2 letters in a user's initials
  * @returns a char* of the user's initials
@@ -50,16 +78,6 @@ static char* game_interlude_get_user_initials(void) {
     initials[0] = '\0' ;
     initials[1] = '\0' ;
     initials[2] = '\0' ;
-
-    // display instructions
-    console_clear() ;
-    // o = button -- todo use symbols instead? how do i make instruction page neat?
-    // ^ = tilt
-    console_printf("leaderboard!\n\n tilt down:\n   select\n   next\n button:\n   iterate\n\n\n") ; 
-    int pitch = 0; int roll = 0 ;
-    remote_get_x_y_status(&pitch, &roll) ;
-    timer_delay(5) ;
-    while (pitch != X_FAST) { remote_get_x_y_status(&pitch, &roll) ; } // wait for tilt
 
     // ask for input (user initials) from user
 
@@ -77,6 +95,7 @@ static char* game_interlude_get_user_initials(void) {
 
     // gather 1st initial
     int first_letter = 25 ; // Z
+    int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     while (pitch != X_FAST) {
         if(remote_is_button_press()) {
@@ -156,11 +175,17 @@ static void game_interlude_update_leaderboard(unsigned int score) {
 
 /* game_interlude_print_leaderboard
  * @param score from most recent game
+ * @param num rows cleared from most recent game
  * @functionality updates leaderboard with most recent score (prompts player for initials if necessary) and prints leaderboard to screen
- * @return prints the leaderboard directly to the screen
  * @exit tilt remote down
 */
-void game_interlude_print_leaderboard(unsigned int score) {
+void game_interlude_print_leaderboard(unsigned int score, unsigned int lines_cleared) {
+
+    // pre-leaderboard stuff
+    game_interlude_operations() ;
+    game_interlude_display_game_stats(score, lines_cleared) ; // tell the player how they did!
+
+    // now, we get to the leaderboard
     game_interlude_update_leaderboard(score) ; // need to update leaderboard first! (if worthy player)
 
     console_clear() ;

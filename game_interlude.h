@@ -27,11 +27,11 @@ void game_interlude_init(int nrows, int ncols, color_t text, color_t bg) ;
 
 /* game_interlude_print_leaderboard
  * @param score from most recent game
+ * @param num rows cleared from most recent game
  * @functionality updates leaderboard with most recent score (prompts player for initials if necessary) and prints leaderboard to screen
- * @return prints the leaderboard directly to the screen
  * @exit tilt remote down
 */
-void game_interlude_print_leaderboard(unsigned int score) ;
+void game_interlude_print_leaderboard(unsigned int score, unsigned int lines_cleared) ;
 
 // getter methods for game_interlude variables
 int game_interlude_get_rows(void) ;

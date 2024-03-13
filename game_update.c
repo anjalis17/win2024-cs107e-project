@@ -166,7 +166,6 @@ void wipe_screen(void) {
         }
     }
 
-
     char buf[20];
     int bufsize = sizeof(buf);
     memset(buf, '\0', bufsize);

@@ -317,13 +317,13 @@ void test_leaderboard(void) {
     remote_is_button_press() ; // get rid of the extra button press...
 
     game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ;
-    game_interlude_print_leaderboard(400) ;
-    game_interlude_print_leaderboard(500) ;
-    game_interlude_print_leaderboard(100) ;
-    game_interlude_print_leaderboard(400) ;
-    game_interlude_print_leaderboard(300) ;
-    game_interlude_print_leaderboard(40) ;
-    game_interlude_print_leaderboard(200) ;
+    game_interlude_print_leaderboard(400, 2) ;
+    game_interlude_print_leaderboard(500, 3) ;
+    game_interlude_print_leaderboard(100, 4) ;
+    game_interlude_print_leaderboard(400, 5) ;
+    game_interlude_print_leaderboard(300, 6) ;
+    game_interlude_print_leaderboard(40, 1) ;
+    game_interlude_print_leaderboard(200, 5) ;
 
 }
 
@@ -397,7 +397,7 @@ void integration_test_v3(void) {
             };
         } 
 
-        game_interlude_print_leaderboard(game_update_get_score()) ; // todo get an actual score for this thing
+        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; // todo get an actual score for this thing
 
     }
 
