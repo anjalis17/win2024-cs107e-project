@@ -16,5 +16,6 @@ void main(void) {
     // aditi tests
     // test_motions_integrated() ;  // OBSOLETE
     // tetris_theme_song() ;
-    test_leaderboard() ;
+    // test_leaderboard() ;
+    integration_test_v3() ;
 }

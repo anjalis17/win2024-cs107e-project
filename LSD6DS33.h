@@ -16,10 +16,6 @@ enum { X_HOME = 0, X_FAST, X_SLAM };
 void lsm6ds33_init(void) ;
 
 
-
-
-
-
 // Aditi's new functions ~~
 
 //// general-purpose:

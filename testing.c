@@ -92,6 +92,64 @@ void test_remote(void) {
     }
 }
 
+void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ;
+    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    interrupts_global_enable() ;
+    
+    game_update_init(20, 10);
+
+    falling_piece_t piece = init_falling_piece();
+
+    printf("\nin test_motions_integrated; initialized\n") ;
+
+    // we write accelerometer x/y position meanings to these vars
+    int pitch = 0; int roll = 0;
+
+    int n = 250 ; // total ms wait for each loop
+    n = (n*1000*TICKS_PER_USEC);
+
+    while(1) {
+        // tilt blocks
+        remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+        
+        // horizontal movement
+        if (roll == LEFT) move_left(&piece);
+        else if (roll == RIGHT) move_right(&piece);
+        
+        // drop a block faster
+        if (pitch == X_FAST) { 
+            // printf("\n*** x dropped ***\n"); // for debugging
+            if(!piece.fallen){
+                move_down(&piece);
+            }
+            if(!piece.fallen){
+                move_down(&piece);
+            }
+        }
+
+        while (remote_is_button_press()) {
+            rotate(&piece);
+        }
+        
+        move_down(&piece);
+
+        if (piece.fallen) {
+            // printf("fallen; new piece spawning"); // for debugging
+            piece = init_falling_piece();
+        }
+
+        while (timer_get_ticks() % n != 0) {
+            // todo aditi play music notes in here???
+        }  
+
+        // todo incr clear line score when we clear line??
+    }
+}
+
 
 void integration_test_v2(void) {
     gpio_init() ;
@@ -155,64 +213,7 @@ void integration_test_v2(void) {
         };
     }
 }
-void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
-    gpio_init() ;
-    timer_init() ;
-    uart_init() ;
-    interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
-    interrupts_global_enable() ;
-    
-    game_update_init(20, 10);
 
-    falling_piece_t piece = init_falling_piece();
-
-    printf("\nin test_motions_integrated; initialized\n") ;
-
-    // we write accelerometer x/y position meanings to these vars
-    int pitch = 0; int roll = 0;
-
-    int n = 250 ; // total ms wait for each loop
-    n = (n*1000*TICKS_PER_USEC);
-
-    while(1) {
-        // tilt blocks
-        remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
-        // printf("\n device.state %s\n", y==HOME?"home":(y==LEFT?"left":"right")) ; // for debugging
-        
-        // horizontal movement
-        if (roll == LEFT) move_left(&piece);
-        else if (roll == RIGHT) move_right(&piece);
-        
-        // drop a block faster
-        if (pitch == X_FAST) { 
-            // printf("\n*** x dropped ***\n"); // for debugging
-            if(!piece.fallen){
-                move_down(&piece);
-            }
-            if(!piece.fallen){
-                move_down(&piece);
-            }
-        }
-
-        while (remote_is_button_press()) {
-            rotate(&piece);
-        }
-        
-        move_down(&piece);
-
-        if (piece.fallen) {
-            // printf("fallen; new piece spawning"); // for debugging
-            piece = init_falling_piece();
-        }
-
-        while (timer_get_ticks() % n != 0) {
-            // todo aditi play music notes in here???
-        }  
-
-        // todo incr clear line score when we clear line??
-    }
-}
 
 void tetris_theme_song(void) {
     gpio_init() ;
@@ -310,14 +311,12 @@ void test_leaderboard(void) {
     uart_init() ;
     interrupts_init() ;
     remote_init(GPIO_PB1, GPIO_PB0) ; 
-    timer_delay(2) ;
-
     interrupts_global_enable() ;
     timer_delay(2) ;
 
     remote_is_button_press() ; // get rid of the extra button press...
 
-    game_interlude_init(30, 50) ;
+    game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ;
     game_interlude_print_leaderboard(400) ;
     game_interlude_print_leaderboard(500) ;
     game_interlude_print_leaderboard(100) ;
@@ -325,5 +324,81 @@ void test_leaderboard(void) {
     game_interlude_print_leaderboard(300) ;
     game_interlude_print_leaderboard(40) ;
     game_interlude_print_leaderboard(200) ;
+
+}
+
+
+// includes the leaderboard loop and constant games!
+void integration_test_v3(void) {
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ;
+    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    interrupts_global_enable() ;
+    timer_delay(2) ;
+
+    remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+
+    game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
+
+    while(1) {
+        game_update_init(20, 10);
+        falling_piece_t piece = init_falling_piece();
+
+        // we write accelerometer x/y position meanings to these vars
+        int pitch = 0; int roll = 0;
+        long n = 500 ; // total ms wait for each loop
+        n = (n * 1000 * TICKS_PER_USEC);
+
+        int toggle_turns = 0 ;
+
+        while(1) {
+            // printf ("timer get ticks START(): %ld\n", timer_get_ticks() % n) ;
+            while (timer_get_ticks() % n <= (0.8 * n)) {
+                toggle_turns += 1 ;
+                // tilt blocks
+                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+        
+                // horizontal movement
+                if (toggle_turns % 3 == 0) {
+                    if (roll == LEFT) move_left(&piece);
+                    else if (roll == RIGHT) move_right(&piece);                
+                }
+            
+                // drop a block faster
+                if (pitch == X_FAST) { 
+                    printf("\n*** x dropped fast ***\n"); // for debugging
+                    if (!piece.fallen){
+                        move_down(&piece);
+                    }
+                    if (!piece.fallen){
+                        move_down(&piece);
+                    }
+                }
+
+                while (remote_is_button_press()) {
+                    rotate(&piece);
+                }  
+                if (piece.fallen) {
+                    piece = init_falling_piece();
+                }
+                // timer_delay_ms(20);
+            } 
+            // printf("timer get ticks END(): %ld\n", timer_get_ticks() % n) ;     
+            
+            printf("\n*** x dropped normal ***\n"); // for debugging
+            move_down(&piece);
+
+            if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
+
+            while (timer_get_ticks() % n > (0.8 * n)) {
+                printf("waiting...");
+            };
+        } 
+
+        game_interlude_print_leaderboard(game_update_get_score()) ; // todo get an actual score for this thing
+
+    }
 
 }

@@ -23,6 +23,7 @@ static struct {
     void* background_tracker; 
     int gameScore;
     int numLinesCleared; 
+    bool gameOver ;
 } game_config;
 
 const unsigned int SQUARE_DIM = 20; // game pixel dimensions
@@ -35,6 +36,7 @@ void game_update_init(int nrows, int ncols) {
     game_config.bg_col = GL_INDIGO;
     game_config.gameScore = 0;
     game_config.numLinesCleared = 0;
+    game_config.gameOver = false;
 
     int gridSize = game_config.nrows * game_config.ncols;
     game_config.background_tracker = malloc(gridSize * sizeof(color_t));
@@ -79,7 +81,8 @@ void endGame(void) {
     snprintf(buf, bufsize, " GAME OVER ");
     gl_draw_string(SQUARE_DIM, game_config.ncols / 2 * SQUARE_DIM, buf, GL_WHITE);
     gl_swap_buffer();
-    pause("END GAME");
+    // pause("END GAME");
+    game_config.gameOver = true ;
 }
 //////////////// STATICS 
 // typedef bool (*functionPtr)(int x, int y, color_t color); 
@@ -206,7 +209,7 @@ void clearRows(void) {
         }
         if (rowFilled) {
             clearRow(row); 
-            remote_vibrate(2);
+            remote_vibrate(rowsFilled*1); // proportional to num lines cleared this time!
             game_config.numLinesCleared++ ;
             rowsFilled++;
         }
@@ -266,6 +269,14 @@ void rotate(falling_piece_t* piece) {
     drawPiece(piece);
 }
 
-int get_rows_cleared(void) {
+int game_update_get_rows_cleared(void) {
     return game_config.numLinesCleared ;
+}
+
+int game_update_get_score(void) {
+    return game_config.gameScore ;
+}
+
+bool game_update_is_game_over(void) {
+    return game_config.gameOver ;
 }

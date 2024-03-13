@@ -16,11 +16,16 @@
 #include "printf.h"
 
 static interlude_contents_t contents ;
+#define BLINK_DELAY 100 
 
-void game_interlude_init(int nrows, int ncols) {
+/* 'game_interlude_init'
+ * initializes game screen to nrows and ncols wide, where every row/col size (in pixels) is determined by the character size
+ * takes colors text and bg for the text and background colors respectively
+ */
+void game_interlude_init(int nrows, int ncols, color_t text, color_t bg) {
 
     // console info
-    console_init(nrows, ncols, GL_AMBER, GL_BLACK);
+    console_init(nrows, ncols, text, bg);
     contents._ncols = ncols ;
     contents._nrows = nrows ;
     contents._leaderboard = malloc(LEADERBOARD_SIZE*sizeof(leaderboard_character_t)) ; // 3 chars per each leaderboard thing
@@ -34,13 +39,14 @@ void game_interlude_init(int nrows, int ncols) {
     }
 }
 
-// GET USER INITIALS!! if they are worthy of the leaderboard :)
-    // how to use:
-    // click button to get to character (start at A and go to Z; loop around)
-    // tilt down to confirm character
-static char* game_interlude_get_user_initials() {
+/* game_interlude_get_user_initials
+ * @functionality uses a simple state machine to prompt and read 2 letters in a user's initials
+ * @returns a char* of the user's initials
+ * how to use: Click button to iterate thru characters. Tilt remote down to confirm character. Characters loop from A-Z
+ */
+static char* game_interlude_get_user_initials(void) {
 
-    char *initials = malloc(3) ; // todo take care of freeing this!!
+    char *initials = malloc(3) ;
     initials[0] = '\0' ;
     initials[1] = '\0' ;
     initials[2] = '\0' ;
@@ -48,23 +54,24 @@ static char* game_interlude_get_user_initials() {
     // display instructions
     // todo crop text length if necessary
     console_clear() ;
-    console_printf("Add yourself to the leaderboard!\n  button: next letter\n  tilt down: select\n\ntilt down to continue.") ; 
+    // o = button
+    // ^ = tilt
+    console_printf("leaderboard!\n\n tilt down:\n   select\n   next\n button:\n   iterate\n\n\n") ; 
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     timer_delay(5) ;
     while (pitch != X_FAST) { remote_get_x_y_status(&pitch, &roll) ; } // wait for tilt
 
     // ask for input (user initials) from user
-    int blink_delay = 100 ;
 
     // (flickering effect)
     for (int i = 0; i < 5; i++) {
         console_clear() ; 
         console_printf("your initials:\n **\n\n(click button)") ;
-        timer_delay_ms(blink_delay) ;
+        timer_delay_ms(BLINK_DELAY) ;
         console_clear() ; 
         console_printf("your initials:\n  *\n\n(click button)") ;
-        timer_delay_ms(blink_delay) ;
+        timer_delay_ms(BLINK_DELAY) ;
     }
     console_clear() ; 
     console_printf("your initials:\n **\n\n(click button)") ;
@@ -85,10 +92,10 @@ static char* game_interlude_get_user_initials() {
     for (int i = 0; i < 5; i++) {
         console_clear() ; 
         console_printf("your initials:\n %c*", ('A'+first_letter%26)) ;
-        timer_delay_ms(blink_delay) ;
+        timer_delay_ms(BLINK_DELAY) ;
         console_clear() ; 
         console_printf("your initials:\n %c ", ('A'+first_letter%26)) ;
-        timer_delay_ms(blink_delay) ;
+        timer_delay_ms(BLINK_DELAY) ;
     }
     console_clear() ; 
     console_printf("your initials:\n %c*", ('A'+first_letter%26)) ;
@@ -114,14 +121,18 @@ static char* game_interlude_get_user_initials() {
     return initials ;
 }
 
+/* game_interlude_update_leaderboard
+ * @param takes a score and adds it to the leaderboard if the score is high enough
+ */
 static void game_interlude_update_leaderboard(unsigned int score) {
-    if (score >= contents._leaderboard[LEADERBOARD_SIZE-1]._score) {  // check if the score is high enough for leaderboard and add if possible
-        char* initials = game_interlude_get_user_initials() ;
+
+    if (score >= contents._leaderboard[LEADERBOARD_SIZE-1]._score) {  // if the score is high enough for leaderboard
+
+        char* initials = game_interlude_get_user_initials() ; 
 
         for(int i = LEADERBOARD_SIZE-1; i >= 0; i--) {
-            if (score <= contents._leaderboard[i]._score || i == 0) {
-
-                if(i==0 && (score > contents._leaderboard[0]._score)) {i=-1;}  // in case we have a new high-score
+            if (score < contents._leaderboard[i]._score || i == 0) { // most recent tie will be at the top
+                if(i==0 && (score >= contents._leaderboard[0]._score)) {i=-1;}  // in case we have a new high-score
 
                 // shift the scores down
                 for (int j = LEADERBOARD_SIZE-1; j > i+1; j--) {  // todo package into a function
@@ -144,29 +155,36 @@ static void game_interlude_update_leaderboard(unsigned int score) {
     }
 }
 
-// param: score from most recent game
+/* game_interlude_print_leaderboard
+ * @param score from most recent game
+ * @functionality updates leaderboard with most recent score (prompts player for initials if necessary) and prints leaderboard to screen
+ * @return prints the leaderboard directly to the screen
+ * @exit tilt remote down
+*/
 void game_interlude_print_leaderboard(unsigned int score) {
     game_interlude_update_leaderboard(score) ; // need to update leaderboard first! (if worthy player)
 
     console_clear() ;
-    console_printf("**LEADERBOARD**\n") ;
-    console_printf("rank:\tname\tscore\n") ;
+    console_printf("*LEADERBOARD*\n") ;
+    console_printf("<#>\t <n>\tscore\n") ;
 
     for (int i = 0; i < LEADERBOARD_SIZE; i++) {
         console_printf("%d: \t\t%s \t%d\n", i, contents._leaderboard[i]._initials, contents._leaderboard[i]._score) ;
     }
 
     timer_delay(1) ; //arbitrary, todo update to ux
-    console_printf("\ntilt down to play again") ; // todo come up with better message...
+    console_printf("\ntilt to play") ; // todo come up with better message...
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     while (pitch != X_FAST) {remote_get_x_y_status(&pitch, &roll) ;}
 }
 
+// returns num rows in console
 int game_interlude_get_rows(void) {
     return contents._nrows ;
 }
 
+// returns num cols in console
 int game_interlude_get_cols(void) {
     return contents._ncols ;
 }

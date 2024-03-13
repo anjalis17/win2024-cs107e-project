@@ -53,10 +53,14 @@ void checkIfFallen(int x, int y, falling_piece_t* piece);
 
 void drawPiece(falling_piece_t* piece);
 
-int get_rows_cleared(void) ;
-
 void endGame(void);
 
 void pause(const char *message);
+
+int game_update_get_rows_cleared(void) ;
+
+int game_update_get_score(void) ;
+
+bool game_update_is_game_over(void) ;
 
 #endif
