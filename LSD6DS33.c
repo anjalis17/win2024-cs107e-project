@@ -130,20 +130,19 @@ void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *
 
     lsm6ds33_read_accelerometer_durable(x, y, z) ; // shorter bc I only read data once
 
+    *x_state = X_HOME ;
 
-    // x takes preference
-    if (*x > X_FAST_DOWN) { // update x info
-        *x_state = X_FAST ;
+    // update y info
+    if (*y < LEFT_ANGLE) { 
+        *y_state = LEFT;
+    } else if (*y > RIGHT_ANGLE) {
+        *y_state = RIGHT;
+    } else {
         *y_state = HOME;
-
-    } else {                // update y info
-        *x_state = X_HOME ;
-        if (*y < LEFT_ANGLE) { 
-            *y_state = LEFT;
-        } else if (*y > RIGHT_ANGLE) {
-            *y_state = RIGHT;
-        } 
-    }
+        if (*x > X_FAST_DOWN) {     
+            *x_state = X_FAST ;// update x info
+        }
+    } 
 
 
 }
