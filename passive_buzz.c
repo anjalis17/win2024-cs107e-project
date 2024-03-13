@@ -55,7 +55,6 @@ The PWM has the following features:
     - Minimum resolution: 1/65536
 *has nice diagrams pg1243
 
-
 pg1245
 Active state of PWM0 channel is high level (PCR0. PWM_ACT_STA = 1)
     When PCNTR0 > (PPR0. PWM_ENTIRE_CYCLE - PPR0.PWM_ACT_CYCLE), then PWM0 outputs 1 (high level).
@@ -66,14 +65,11 @@ The formula of the output period and the duty-cycle for PWM are as follows.
     Tlow-level = (PWM01_CLK / PWM0_PRESCALE_K)-1 * (PPR0.PWM_ENTIRE_CYCLE + 1 - PPR0.PWM_ACT_CYCLE)
     Duty-cycle = (high level time) / (1 period time) = Thigh-level / Tperiod
 
-
 pg 1247
 PCR0 = the PWM_MODE = set to 0 for cycle mode; 1 for pulse mode
 
-
 pg 1251 - pwm interrupt
 9.11.3.11 Interrupt - The PIS bit is set to 1 automatically by hardware and cleared by software.
-
 
 !!!! STEP BY STEP INSTRUCTIONS FOR CONFIG!
 pg 1252 -- follow instructions on configuring clock and pwm
@@ -86,6 +82,8 @@ pg 1297 - reading this register could give the pwm's pulse count...?
 9.11.6.23 0x010C + N*0x20 PWM Pulse Counter Register (Default Value: 0x0000_0000)
 
 
+cycle mode == for buzzer
+
 */
 
 }
@@ -93,7 +91,7 @@ pg 1297 - reading this register could give the pwm's pulse count...?
 // 'buzzer_set_tempo'
 // set the tempo for the buzzer
 // returns false if invalid tempo
-// TODO test tempo ranges!!
+// TODO test tempo ranges!! > andante doesn't work
 bool buzzer_set_tempo(int new_tempo) {
     if (new_tempo > 50 && new_tempo < 200) {
         tempo = new_tempo ;
