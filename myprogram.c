@@ -17,5 +17,6 @@ void main(void) {
     // test_motions_integrated() ;  // OBSOLETE
     // tetris_theme_song() ;
     // test_leaderboard() ;
-    integration_test_v3() ;
+    // integration_test_v3() ;
+    integration_test_v5() ;
 }

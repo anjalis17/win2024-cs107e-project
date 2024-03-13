@@ -32,7 +32,6 @@ static void buzzer_init_pwm(gpio_id_t id) {
     buzzer_id = id ;
     tempo = TEMPO_DEFAULT;
 
-
 /*
 aditi's pwm notes
 https://cs107e.github.io/readings/d1-h_user_manual_v1.0.pdf 
