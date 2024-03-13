@@ -59,7 +59,7 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) {
 	lsm6ds33_init();
 
     gpio_interrupt_init() ;
-    gpio_interrupt_config(remote.button, GPIO_INTERRUPT_POSITIVE_EDGE, true) ; // while pressed
+    gpio_interrupt_config(remote.button, GPIO_INTERRUPT_POSITIVE_EDGE, true) ; // if pressed
     gpio_interrupt_register_handler(remote.button, handle_button, &remote) ;
     gpio_interrupt_enable(remote.button) ;
 

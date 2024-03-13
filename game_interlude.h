@@ -20,6 +20,8 @@ typedef struct {
 
 void game_interlude_init(int nrows, int ncols) ;
 
+void game_interlude_print_leaderboard(unsigned int score) ;
+
 int game_interlude_get_rows(void) ;
 int game_interlude_get_cols(void) ;
 

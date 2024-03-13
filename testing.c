@@ -13,6 +13,7 @@
 #include "LSD6DS33.h"
 #include "i2c.h"
 #include "passive_buzz.h"
+#include "game_interlude.h"
 
 // void pause(const char *message) {
 //     if (message) printf("\n%s\n", message);
@@ -299,4 +300,26 @@ void tetris_theme_song(void) {
 
         buzzer_play_note(NOTE_FREQ_G_SHARP, NOTE_WHOLE) ;
     }
+}
+
+
+void test_leaderboard(void) {
+
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ;
+    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    timer_delay(2) ;
+
+    interrupts_global_enable() ;
+    timer_delay(2) ;
+
+    remote_is_button_press() ; // get rid of the extra button press...
+
+    game_interlude_init(30, 50) ;
+    game_interlude_print_leaderboard(500) ;
+    game_interlude_print_leaderboard(400) ;
+    game_interlude_print_leaderboard(600) ;
+
 }
