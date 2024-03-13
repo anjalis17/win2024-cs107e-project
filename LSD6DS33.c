@@ -144,5 +144,4 @@ void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *
         }
     } 
 
-
 }
