@@ -143,10 +143,8 @@ void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
         }
 
         while (timer_get_ticks() % n != 0) {
-            // todo aditi play music notes in here???
         }  
 
-        // todo incr clear line score when we clear line??
     }
 }
 
@@ -327,7 +325,6 @@ void test_leaderboard(void) {
 
 }
 
-
 // includes the leaderboard loop and constant games!
 void integration_test_v3(void) {
     gpio_init() ;
@@ -394,11 +391,12 @@ void integration_test_v3(void) {
 
             while (timer_get_ticks() % n > (0.8 * n)) {
                 printf("waiting...");
+                // todo aditi play music notes in here???
+
             };
         } 
 
-        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; // todo get an actual score for this thing
+        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
 
     }
-
 }

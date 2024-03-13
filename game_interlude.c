@@ -51,7 +51,6 @@ static void game_interlude_operations(void) {
     while (pitch != X_FAST) { remote_get_x_y_status(&pitch, &roll) ; } // wait for tilt
 }
 
-
 /* game_interlude_print_leaderboard
  * @param score from most recent game
  * @param num rows cleared from most recent game
@@ -153,7 +152,7 @@ static void game_interlude_update_leaderboard(unsigned int score) {
                 if(i==0 && (score >= contents._leaderboard[0]._score)) {i=-1;}  // in case we have a new high-score
 
                 // shift the scores down
-                for (int j = LEADERBOARD_SIZE-1; j > i+1; j--) {  // todo package into a function
+                for (int j = LEADERBOARD_SIZE-1; j > i+1; j--) { 
                     contents._leaderboard[j]._initials[0] = contents._leaderboard[j-1]._initials[0] ;
                     contents._leaderboard[j]._initials[1] = contents._leaderboard[j-1]._initials[1] ;
                     contents._leaderboard[j]._initials[2] = '\0' ; // just bc; why not! :)

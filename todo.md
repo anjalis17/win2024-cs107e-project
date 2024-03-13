@@ -13,12 +13,11 @@ notes:
 
 ## general todo
  - can move piece one time after it hits "ground"
- - lines cleared: display on grid
  - clay to remote
+ - music in waiting while?
 
  - bluetooth OR parallel processing - music?
  - piece queue / swap (p5) 
-
 
  ## bugs
  - doubling of the piece sometimes (sideways)
