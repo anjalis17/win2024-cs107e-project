@@ -1,10 +1,7 @@
 #ifndef _GAME_INTERLUDE_H
 #define _GAME_INTERLUDE_H
 
-// TODO WRITE
-
 #define LEADERBOARD_SIZE 5
-
 
 typedef struct {
     char _initials[3] ; // 2 initials + \0 = 3 characters long
@@ -14,7 +11,7 @@ typedef struct {
 typedef struct {
     int _nrows;
     int _ncols;
-    leaderboard_character_t* _leaderboard; // todo make this leaderboard??
+    leaderboard_character_t* _leaderboard;
 } interlude_contents_t;
 
 /* 'game_interlude_init'

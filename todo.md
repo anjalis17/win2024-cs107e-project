@@ -12,10 +12,8 @@ notes:
  - 4 (tetris)	1200
 
 ## general todo
- - fix the end-game (when new spawning piece intersects, end the game; print score/lines cleared count)
  - can move piece one time after it hits "ground"
- - scoring/lines cleared: display on grid
- - leaderboard (game_interlude.c)
+ - lines cleared: display on grid
  - clay to remote
 
  - bluetooth OR parallel processing - music?

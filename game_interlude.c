@@ -52,9 +52,8 @@ static char* game_interlude_get_user_initials(void) {
     initials[2] = '\0' ;
 
     // display instructions
-    // todo crop text length if necessary
     console_clear() ;
-    // o = button
+    // o = button -- todo use symbols instead? how do i make instruction page neat?
     // ^ = tilt
     console_printf("leaderboard!\n\n tilt down:\n   select\n   next\n button:\n   iterate\n\n\n") ; 
     int pitch = 0; int roll = 0 ;
