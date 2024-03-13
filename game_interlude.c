@@ -7,10 +7,6 @@
  *   play game again
  */
 
-// TODO TEST:
-// adding more than 5 games (what if score doesn't fit on leaderboard?)
-
-
 #include "console.h"
 #include "game_interlude.h"
 #include "malloc.h"
@@ -37,17 +33,6 @@ void game_interlude_init(int nrows, int ncols) {
         contents._leaderboard[i]._score = 0 ;
     }
 }
-
-// static void flicker(char *a, char *b, int blink_delay_ms, int reps) {
-//     for (int i = 0; i < reps; i++) {
-//         console_clear() ; 
-//         console_printf("%s", a) ;
-//         timer_delay_ms(blink_delay_ms) ;
-//         console_clear() ; 
-//         console_printf("%s", b) ;
-//         timer_delay_ms(blink_delay_ms) ;
-//     }
-// }
 
 // GET USER INITIALS!! if they are worthy of the leaderboard :)
     // how to use:
@@ -171,10 +156,11 @@ void game_interlude_print_leaderboard(unsigned int score) {
         console_printf("%d: \t\t%s \t%d\n", i, contents._leaderboard[i]._initials, contents._leaderboard[i]._score) ;
     }
 
+    timer_delay(1) ; //arbitrary, todo update to ux
     console_printf("\ntilt down to play again") ; // todo come up with better message...
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
-    while (pitch != X_FAST) {}
+    while (pitch != X_FAST) {remote_get_x_y_status(&pitch, &roll) ;}
 }
 
 int game_interlude_get_rows(void) {

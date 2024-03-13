@@ -318,8 +318,12 @@ void test_leaderboard(void) {
     remote_is_button_press() ; // get rid of the extra button press...
 
     game_interlude_init(30, 50) ;
-    game_interlude_print_leaderboard(500) ;
     game_interlude_print_leaderboard(400) ;
-    game_interlude_print_leaderboard(600) ;
+    game_interlude_print_leaderboard(500) ;
+    game_interlude_print_leaderboard(100) ;
+    game_interlude_print_leaderboard(400) ;
+    game_interlude_print_leaderboard(300) ;
+    game_interlude_print_leaderboard(40) ;
+    game_interlude_print_leaderboard(200) ;
 
 }
