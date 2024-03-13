@@ -139,15 +139,17 @@ void wipe_screen(void) {
         for (int x = 0; x < game_config.ncols; x++) {
             // if colored square in background (from fallen piece), draw
             if (background[y][x] != 0) {
-                // drawSquare(x, y, background[y][x]);
                 gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, background[y][x]);
             }
         }
     }
-    // char* gameScore = "SCORE: ";
 
-    // // strlcat()
-    // gl_draw_string(0, 0, ___, );
+
+    char buf[20];
+    int bufsize = sizeof(buf);
+    memset(buf, '\0', bufsize);
+    snprintf(buf, bufsize, "SCORE: %d", game_config.gameScore);
+    gl_draw_string(0, 0, buf, GL_WHITE);
 }
 
 void clearRow(int row) {
@@ -168,11 +170,11 @@ void clearRow(int row) {
     memset(background, 0, game_config.ncols * sizeof(color_t));
     wipe_screen();
     gl_swap_buffer();
-    game_config.gameScore += 40;
 }
 
 void clearRows(void) {
     unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
+    int rowsFilled = 0;
     for (int row = 0; row < game_config.nrows; row++) {
         bool rowFilled = true;
         for (int col = 0; col < game_config.ncols; col++) {
@@ -184,10 +186,15 @@ void clearRows(void) {
         }
         if (rowFilled) {
             clearRow(row); 
-            remote_vibrate(1);
+            remote_vibrate(2);
             game_config.numLinesCleared++ ;
+            rowsFilled++;
         }
     }
+    if (rowsFilled == 1) game_config.gameScore += 40;
+    else if (rowsFilled == 2) game_config.gameScore += 100;
+    else if (rowsFilled == 3) game_config.gameScore += 300;
+    else if (rowsFilled == 4) game_config.gameScore += 1200;
 }
 
 void drawPiece(falling_piece_t* piece) {
