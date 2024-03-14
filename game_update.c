@@ -149,11 +149,6 @@ void drawFallenSquare(int x, int y, color_t color) {
 bool drawFallingSquare(int x, int y, falling_piece_t* piece) {
     gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, piece->pieceT.color);
     
-    // //bevel
-    // gl_draw_line(x * SQUARE_DIM + 1, y *SQUARE_DIM + 1, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, GL_WHITE) ;
-    // gl_draw_line(x * SQUARE_DIM + 1, y * SQUARE_DIM + 1, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, GL_WHITE) ;
-    // gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, GL_WHITE) ;
-    // gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, GL_WHITE) ;
     drawBevelLines(x, y, GL_WHITE);
     checkIfFallen(x, y, piece);
     return true;
@@ -169,11 +164,18 @@ bool update_background(int x, int y, falling_piece_t* piece) {
 
 // Input (x, y) top left coordinate of tetris square being drawn; 
 // check if square directly is already filled --> if so, change piece state to fallen
-void checkIfFallen(int x, int y, falling_piece_t* piece) {
-    if ((y + 1) >= game_config.nrows) piece->fallen = true;
+bool checkIfFallen(int x, int y, falling_piece_t* piece) {
+    if ((y + 1) >= game_config.nrows) {
+        piece->fallen = true;
+        return true;
+    }
     else {
         unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
-        if (background[y + 1][x] != 0) piece->fallen = true;
+        if (background[y + 1][x] != 0) {
+            piece->fallen = true;
+            return true;
+        }
+        return false;
     }
 }
 
@@ -234,7 +236,7 @@ void clearRows(void) {
         }
         if (rowFilled) {
             clearRow(row); 
-            remote_vibrate(rowsFilled*1); // proportional to num lines cleared this time!
+            remote_vibrate(2); // remote_vibrate(rowsFilled + 1);
             game_config.numLinesCleared++ ;
             rowsFilled++;
         }

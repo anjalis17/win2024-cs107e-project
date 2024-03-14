@@ -44,7 +44,8 @@ static void game_interlude_operations(void) {
     console_clear() ;
     // o = button -- todo use symbols instead? how do i make instruction page neat?
     // ^ = tilt
-    console_printf("leaderboard!\n\n tilt down:\n   select\n   next\n button:\n   iterate\n\n\n") ; 
+    // console_printf("LEADERBOARD\n\n Tilt Down:\n   select\n   next\n button:\n   iterate\n\n\n") ; 
+    console_printf("\nLEADERBOARD!\n\n Down:\n  set / next\n  \n Button:\n  change\n\n\n") ; 
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     timer_delay(2) ;
@@ -83,14 +84,14 @@ static char* game_interlude_get_user_initials(void) {
     // (flickering effect)
     for (int i = 0; i < 5; i++) {
         console_clear() ; 
-        console_printf("your initials:\n **\n\n(click button)") ;
+        console_printf("Your Initials:\n **\n\n(Click Button)") ;
         timer_delay_ms(BLINK_DELAY) ;
         console_clear() ; 
-        console_printf("your initials:\n  *\n\n(click button)") ;
+        console_printf("Your Initials:\n  *\n\n(Click Button)") ;
         timer_delay_ms(BLINK_DELAY) ;
     }
     console_clear() ; 
-    console_printf("your initials:\n **\n\n(click button)") ;
+    console_printf("Your Initials:\n **\n\n(Click Button)") ;
 
     // gather 1st initial
     int first_letter = 25 ; // Z
@@ -100,7 +101,7 @@ static char* game_interlude_get_user_initials(void) {
         if(remote_is_button_press()) {
             first_letter ++ ;
             console_clear() ;
-            console_printf("your initials:\n %c*", ('A'+first_letter%26)) ;
+            console_printf("Your Initials:\n %c*", ('A'+first_letter%26)) ;
         }
         remote_get_x_y_status(&pitch, &roll) ;
     }
@@ -108,14 +109,14 @@ static char* game_interlude_get_user_initials(void) {
     // (flickering effect)
     for (int i = 0; i < 5; i++) {
         console_clear() ; 
-        console_printf("your initials:\n %c*", ('A'+first_letter%26)) ;
+        console_printf("Your Initials:\n %c*", ('A'+first_letter%26)) ;
         timer_delay_ms(BLINK_DELAY) ;
         console_clear() ; 
-        console_printf("your initials:\n %c ", ('A'+first_letter%26)) ;
+        console_printf("Your Initials:\n %c ", ('A'+first_letter%26)) ;
         timer_delay_ms(BLINK_DELAY) ;
     }
     console_clear() ; 
-    console_printf("your initials:\n %c*", ('A'+first_letter%26)) ;
+    console_printf("Your Initials:\n %c*", ('A'+first_letter%26)) ;
 
     // gather 2nd initial
     int second_letter = 25 ; // Z
@@ -124,7 +125,7 @@ static char* game_interlude_get_user_initials(void) {
         if(remote_is_button_press()) {
             second_letter ++ ;
             console_clear() ;
-            console_printf("your initials:\n %c%c", ('A'+first_letter%26), ('A'+second_letter%26)) ;
+            console_printf("Your Initials:\n %c%c", ('A'+first_letter%26), ('A'+second_letter%26)) ;
         }
         remote_get_x_y_status(&pitch, &roll) ;
     }
@@ -189,14 +190,14 @@ void game_interlude_print_leaderboard(unsigned int score, unsigned int lines_cle
 
     console_clear() ;
     console_printf("*LEADERBOARD*\n") ;
-    console_printf("<#>\t <n>\tscore\n") ;
+    console_printf("<#>\t <n>\tSCORE\n") ;
 
     for (int i = 0; i < LEADERBOARD_SIZE; i++) {
         console_printf("%d: \t\t%s \t%d\n", i, contents._leaderboard[i]._initials, contents._leaderboard[i]._score) ;
     }
 
     timer_delay(1) ; //arbitrary, todo update to ux
-    console_printf("\ntilt to play") ; // todo come up with better message...
+    console_printf("\nTilt to Play") ; // todo come up with better message...
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     while (pitch != X_FAST) {remote_get_x_y_status(&pitch, &roll) ;}

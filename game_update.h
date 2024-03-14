@@ -53,13 +53,15 @@ void move_right(falling_piece_t* piece);
 
 void rotate(falling_piece_t* piece);
 
-void checkIfFallen(int x, int y, falling_piece_t* piece);
+bool checkIfFallen(int x, int y, falling_piece_t* piece);
 
 void drawPiece(falling_piece_t* piece);
 
 void endGame(void);
 
 void pause(const char *message);
+
+void clearRows(void);
 
 int game_update_get_rows_cleared(void) ;
 
