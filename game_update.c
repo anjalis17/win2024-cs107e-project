@@ -1,3 +1,10 @@
+/* game_update.c
+* -----------------------------------
+* Author: Anjali Sreenivas (anjalisr)
+* 
+* FILL IN FILE HEADER
+*/
+
 #include "game_update.h"
 #include "malloc.h"
 #include "strings.h"
@@ -5,6 +12,7 @@
 #include "timer.h"
 #include "remote.h"
 #include "uart.h"
+#include "random_bag.h"
 
 const piece_t i = {'i', 0x1AE6DC, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', 0x0000E4, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
@@ -23,7 +31,7 @@ static struct {
     void* background_tracker; 
     int gameScore;
     int numLinesCleared; 
-    bool gameOver ;
+    bool gameOver;
 } game_config;
 
 const unsigned int SQUARE_DIM = 20; // game pixel dimensions
@@ -42,6 +50,7 @@ void game_update_init(int nrows, int ncols) {
     game_config.background_tracker = malloc(gridSize * sizeof(color_t));
     memset(game_config.background_tracker, 0, gridSize * sizeof(color_t));
 
+    random_bag_init();
     gl_init(game_config.ncols * SQUARE_DIM, game_config.nrows * SQUARE_DIM, GL_DOUBLEBUFFER);
     gl_clear(game_config.bg_col);
     gl_swap_buffer();
@@ -51,7 +60,8 @@ falling_piece_t init_falling_piece(void) {
     wipe_screen();
 
     falling_piece_t piece;
-    piece.pieceT = pieces[timer_get_ticks() % 7]; 
+    // piece.pieceT = pieces[timer_get_ticks() % 7]; 
+    piece.pieceT = pieces[random_bag_choose()];
     piece.rotation = 0;
     // subtract half of 4x4 grid width from board center x coordinate since bits sequence denotes 4x4 grid 
     piece.x = (game_config.ncols / 2) - 2;
@@ -82,7 +92,7 @@ void endGame(void) {
     gl_draw_string(SQUARE_DIM, game_config.ncols / 2 * SQUARE_DIM, buf, GL_WHITE);
     gl_swap_buffer();
     // pause("END GAME");
-    game_config.gameOver = true ;
+    game_config.gameOver = true;
 }
 //////////////// STATICS 
 // typedef bool (*functionPtr)(int x, int y, color_t color); 
@@ -166,6 +176,7 @@ void wipe_screen(void) {
         }
     }
 
+    // Draw score (top left of screen)
     char buf[20];
     int bufsize = sizeof(buf);
     memset(buf, '\0', bufsize);
@@ -267,14 +278,15 @@ void rotate(falling_piece_t* piece) {
     drawPiece(piece);
 }
 
+// Getters 
 int game_update_get_rows_cleared(void) {
-    return game_config.numLinesCleared ;
+    return game_config.numLinesCleared;
 }
 
 int game_update_get_score(void) {
-    return game_config.gameScore ;
+    return game_config.gameScore;
 }
 
 bool game_update_is_game_over(void) {
-    return game_config.gameOver ;
+    return game_config.gameOver;
 }
