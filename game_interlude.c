@@ -45,7 +45,7 @@ static void game_interlude_operations(void) {
     // o = button -- todo use symbols instead? how do i make instruction page neat?
     // ^ = tilt
     // console_printf("LEADERBOARD\n\n Tilt Down:\n   select\n   next\n button:\n   iterate\n\n\n") ; 
-    console_printf("\nLEADERBOARD!\n\n Down:\n  set / next\n  \n Button:\n  change\n\n\n") ; 
+    console_printf("\nLEADERBOARD!\n\n Down:\n  Set / Next\n  \n Button:\n  Change\n\n\n") ; 
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     timer_delay(2) ;

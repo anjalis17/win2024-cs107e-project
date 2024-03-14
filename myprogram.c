@@ -12,6 +12,7 @@ void main(void) {
     // test_motions();
     // test_remote() ;
     // integration_test_v2();
+    integration_test_v6();   
 
     // aditi tests
     // test_motions_integrated() ;  // OBSOLETE
@@ -19,6 +20,5 @@ void main(void) {
     // test_leaderboard() ;
     // integration_test_v3() ;
     
-    integration_test_v7() ;
-    // integration_test_v6();
+    // integration_test_v7() ;
 }
