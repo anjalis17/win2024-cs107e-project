@@ -23,6 +23,7 @@ const piece_t t = {'t', 0x9305E2, {0x0E40, 0x4C40, 0x4E00, 0x4640}};
 const piece_t z = {'z', 0xE80201, {0x0C60, 0x4C80, 0xC600, 0x2640}};
 
 const piece_t pieces[7] = {i, j, l, o, s, t, z};
+static int nextFallingPiece; // number 0 - 6 indicating which piece type in above pieces array
 
 static struct {
     int nrows;
@@ -32,6 +33,7 @@ static struct {
     int gameScore;
     int numLinesCleared; 
     bool gameOver;
+
 } game_config;
 
 const unsigned int SQUARE_DIM = 20; // game pixel dimensions
@@ -51,6 +53,7 @@ void game_update_init(int nrows, int ncols) {
     memset(game_config.background_tracker, 0, gridSize * sizeof(color_t));
 
     random_bag_init();
+    nextFallingPiece = random_bag_choose();
     gl_init(game_config.ncols * SQUARE_DIM, game_config.nrows * SQUARE_DIM, GL_DOUBLEBUFFER);
     gl_clear(game_config.bg_col);
     gl_swap_buffer();
@@ -60,7 +63,8 @@ falling_piece_t init_falling_piece(void) {
     draw_background();
 
     falling_piece_t piece;
-    piece.pieceT = pieces[random_bag_choose()];
+    piece.pieceT = pieces[nextFallingPiece];
+    nextFallingPiece = random_bag_choose();
     piece.rotation = 0;
     // subtract half of 4x4 grid width from board center x coordinate since bits sequence denotes 4x4 grid 
     piece.x = (game_config.ncols / 2) - 2;
@@ -211,6 +215,8 @@ static void draw_background(void) {
             }
         }
     }
+    // draw in top right corner color of next piece to fall
+    gl_draw_rect((game_config.ncols - 1) * SQUARE_DIM, 0, SQUARE_DIM, SQUARE_DIM, pieces[nextFallingPiece].color);
 
     // Draw score (top left of screen)
     char buf[20];
