@@ -599,7 +599,12 @@ void integration_test_v6(void) {
                 toggle_turns += 1 ; toggle_turns %= 3 ; // so we don't overflow
                 // tilt blocks
                 remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
-        
+                
+                // SWAP PIECE
+                // if (roll == UP) { -- or whatever other input method :)
+                //     swap(&piece);
+                // }
+
                 // horizontal movement
                 if (toggle_turns % 3 == 0) {
                     if (roll == LEFT) move_left(&piece);

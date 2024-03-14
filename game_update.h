@@ -15,6 +15,7 @@ typedef struct {
 
 extern const piece_t i, j, l, o, s, t, z;
 extern const piece_t pieces[7];
+extern piece_t nextFallingPiece;
 
 typedef struct {
     piece_t pieceT;
@@ -44,6 +45,8 @@ static void drawBevelLines(int x, int y, color_t color);
 bool update_background(int x, int y, falling_piece_t* piece);
 
 static void draw_background(void);
+
+void swap(falling_piece_t* piece);
 
 void move_down(falling_piece_t* piece);
 
