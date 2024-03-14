@@ -129,3 +129,33 @@ void buzzer_play_note(int frequency, int duration_msec) {
         }
     }
 }
+
+
+
+
+// new, hands-off way to do pwm :) thanks Javier for the suggestion 
+// todo test
+
+// todo create a struct for this stuff:
+static int start_ticks ;
+static int note_period ;
+
+// init for every single note change!!
+void buzzer_freq_init(int start_ticks_, int note_period_) {
+    start_ticks = start_ticks_ ; // the duration of time for an eighth notw to play, in ms
+    note_period = note_period_ ;
+}
+
+// for client:
+// input: int note_period = (SEC_IN_uSEC / music_notes[music_index]) ; 
+//  aka   int note_period = (SEC_IN_uSEC / NOTE_FREQ) ;  
+void buzzer_timing_play_note(void) {
+    // check timer
+    // if % frequency >/< 1/2 frequency, turn on/off for that note
+    if ((timer_get_ticks() - start_ticks) % (note_period) < (note_period / 2)) {
+        gpio_write(buzzer_id, 1);
+    } else {
+        gpio_write(buzzer_id, 0);
+    }
+}
+

@@ -14,8 +14,8 @@ notes:
 ## general todo
  - ability to move piece once after it hits "ground"
  - clay to mould remote shape / grip
- - music in waiting while? -- figure out what other delays are in place & play music during those times
-
+ - multithread music!
+ 
  - bluetooth OR parallel processing - music?
  - piece queue / swap (p5) 
 
