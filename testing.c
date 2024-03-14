@@ -557,11 +557,11 @@ void integration_test_v5(void) {
             int note_period = (SEC_IN_uSEC / music_notes[music_index]) ; // keep it approximate
 
             while (timer_get_ticks() % n > (0.8 * n)) {
-                // todo aditi play music notes in here???
-                gpio_write(GPIO_PB6, 1);
-                timer_delay_us(note_period/2);
-                gpio_write(GPIO_PB6, 0);
-                timer_delay_us(note_period/2);
+                // todo aditi play music notes in here??? uncojment
+                // gpio_write(GPIO_PB6, 1);
+                // timer_delay_us(note_period/2);
+                // gpio_write(GPIO_PB6, 0);
+                // timer_delay_us(note_period/2);
             };
         } 
 

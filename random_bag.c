@@ -6,6 +6,7 @@
 */
 
 #include "random_bag.h"
+#include "timer.h"
 #define BAG_SIZE 28
 
 static struct {

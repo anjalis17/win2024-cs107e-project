@@ -39,7 +39,7 @@ bool drawSquare(int x, int y, falling_piece_t* piece);
 
 bool update_background(int x, int y, falling_piece_t* piece);
 
-void wipe_screen(void);
+void draw_background(void);
 
 void move_down(falling_piece_t* piece);
 

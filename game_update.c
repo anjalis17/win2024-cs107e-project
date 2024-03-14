@@ -57,7 +57,7 @@ void game_update_init(int nrows, int ncols) {
 }
 
 falling_piece_t init_falling_piece(void) {
-    wipe_screen();
+    draw_background();
 
     falling_piece_t piece;
     // piece.pieceT = pieces[timer_get_ticks() % 7]; 
@@ -85,7 +85,7 @@ void pause(const char *message) {
 }
 
 void endGame(void) {
-    wipe_screen();
+    draw_background();
     char buf[20];
     int bufsize = sizeof(buf);
     snprintf(buf, bufsize, " GAME OVER ");
@@ -164,7 +164,7 @@ void checkIfFallen(int x, int y, falling_piece_t* piece) {
 
 // Called as prologue to every move/rotate function
 // Sets up screen according to background tracker 
-void wipe_screen(void) {
+void draw_background(void) {
     gl_clear(game_config.bg_col);
     unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
     for (int y = 0; y < game_config.nrows; y++) {
@@ -189,7 +189,7 @@ void clearRow(int row) {
     for (int col = 0; col < game_config.ncols; col++) {
         background[row][col] = 0;
     }
-    wipe_screen();
+    draw_background();
     gl_swap_buffer();
     timer_delay_ms(500);
 
@@ -200,7 +200,7 @@ void clearRow(int row) {
     }
     // reset 1st row of background 
     memset(background, 0, game_config.ncols * sizeof(color_t));
-    wipe_screen();
+    draw_background();
     gl_swap_buffer();
 }
 
@@ -230,7 +230,7 @@ void clearRows(void) {
 }
 
 void drawPiece(falling_piece_t* piece) {
-    wipe_screen();
+    draw_background();
     iterateThroughPieceSquares(piece, drawSquare);
     gl_swap_buffer();
     if (piece->fallen) {
