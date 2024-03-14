@@ -722,29 +722,35 @@ void integration_test_v7(void) {
                 // tilt blocks
                 remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
         
+                // buzzer_timing_play_note() ; // play the note!
+
                 // horizontal movement
                 if (toggle_turns % 3 == 0) {
                     if (roll == LEFT) move_left(&piece);
                     else if (roll == RIGHT) move_right(&piece);                
                 }
-            
+
+                // buzzer_timing_play_note() ; // play the note!
+
                 // drop a block faster
                 if (pitch == X_FAST) { 
                     if (!piece.fallen) move_down(&piece);
                     if (!piece.fallen) move_down(&piece);
                 }
 
+                // buzzer_timing_play_note() ; // play the note!
+
                 while (remote_is_button_press()) rotate(&piece);
                 if (piece.fallen) piece = init_falling_piece();
 
-                buzzer_timing_play_note() ; // play the note!
+                // buzzer_timing_play_note() ; // play the note!
             } 
 
             move_down(&piece);
             if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
 
             while (timer_get_ticks() % n > (0.8 * n)) {
-                buzzer_timing_play_note() ; // play the note!
+                // buzzer_timing_play_note() ; // play the note!
             };
         } 
 
