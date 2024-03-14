@@ -60,7 +60,6 @@ falling_piece_t init_falling_piece(void) {
     draw_background();
 
     falling_piece_t piece;
-    // piece.pieceT = pieces[timer_get_ticks() % 7]; 
     piece.pieceT = pieces[random_bag_choose()];
     piece.rotation = 0;
     // subtract half of 4x4 grid width from board center x coordinate since bits sequence denotes 4x4 grid 
@@ -91,10 +90,9 @@ void endGame(void) {
     snprintf(buf, bufsize, " GAME OVER ");
     gl_draw_string(SQUARE_DIM, game_config.ncols / 2 * SQUARE_DIM, buf, GL_WHITE);
     gl_swap_buffer();
-    // pause("END GAME");
     game_config.gameOver = true;
 }
-//////////////// STATICS 
+
 // typedef bool (*functionPtr)(int x, int y, color_t color); 
 
 bool iterateThroughPieceSquares(falling_piece_t* piece, functionPtr action) {
@@ -117,7 +115,7 @@ bool iterateThroughPieceSquares(falling_piece_t* piece, functionPtr action) {
     return true;
 }
 
-bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
+static bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
     // make sure (x, y) is in bounds
     if (x < 0 || y < 0) return false;
     if (x >= game_config.ncols || y >= game_config.nrows) return false;
@@ -135,10 +133,10 @@ static void drawBevelLines(int x, int y, color_t color) {
     gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, color);
 }
 
-// Draws square (of tetris piece) specified by top left coordinate (x, y) into 
+// Draws square of FALLEN tetris piece specified by top left coordinate (x, y) into 
 // framebuffer (handled by gl / fb modules)
-// Returns true always -- function only called after valid move is verified
-void drawFallenSquare(int x, int y, color_t color) {
+// Function only called after valid move is verified
+static void drawFallenSquare(int x, int y, color_t color) {
     gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, color);
     drawBevelLines(x, y, GL_INDIGO);
 }
@@ -146,7 +144,7 @@ void drawFallenSquare(int x, int y, color_t color) {
 // Draws square (of tetris piece) specified by top left coordinate (x, y) into 
 // framebuffer (handled by gl / fb modules)
 // Returns true always -- function only called after valid move is verified
-bool drawFallingSquare(int x, int y, falling_piece_t* piece) {
+static bool drawFallingSquare(int x, int y, falling_piece_t* piece) {
     gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, piece->pieceT.color);
     
     drawBevelLines(x, y, GL_WHITE);
@@ -160,6 +158,26 @@ bool update_background(int x, int y, falling_piece_t* piece) {
     unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
     background[y][x] = piece->pieceT.color;
     return true;
+}
+
+bool iterateVariant(falling_piece_t* piece, functionPtr action) {
+    int piece_config = (piece->pieceT).block_rotations[(int) piece->rotation];
+
+    // pieceRow and pieceCol will change from 0 through 3 during loop
+    // Indicates where on 4x4 piece grid we are checking
+    int pieceRow = 0; int pieceCol = 0;  
+    for (int bitSequence = 0x8000; bitSequence > 0; bitSequence = bitSequence >> 1) {
+        // if piece has a square in the 4x4 grid spot we're checking, perform action fn on that square
+        if (piece_config & bitSequence) {
+            if (action(piece->x + pieceCol, piece->y + pieceRow, piece)) return true;
+        }
+        pieceCol++;
+        // move to next row in grid, reset pieceCol to 0
+        if (pieceCol == 4) {
+            pieceCol = 0; pieceRow++;
+        }
+    }
+    return false;
 }
 
 // Input (x, y) top left coordinate of tetris square being drawn; 
@@ -181,7 +199,7 @@ bool checkIfFallen(int x, int y, falling_piece_t* piece) {
 
 // Called as prologue to every move/rotate function
 // Sets up screen according to background tracker 
-void draw_background(void) {
+static void draw_background(void) {
     gl_clear(game_config.bg_col);
     unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
     for (int y = 0; y < game_config.nrows; y++) {
@@ -202,7 +220,7 @@ void draw_background(void) {
     gl_draw_string(0, 0, buf, GL_WHITE);
 }
 
-void clearRow(int row) {
+static void clearRow(int row) {
     unsigned int (*background)[game_config.ncols] = game_config.background_tracker;
     for (int col = 0; col < game_config.ncols; col++) {
         background[row][col] = 0;
@@ -247,16 +265,15 @@ void clearRows(void) {
     else if (rowsFilled == 4) game_config.gameScore += 1200;
 }
 
-void drawPiece(falling_piece_t* piece) {
+static void drawPiece(falling_piece_t* piece) {
     draw_background();
     iterateThroughPieceSquares(piece, drawFallingSquare);
     gl_swap_buffer();
-    if (piece->fallen) {
-        iterateThroughPieceSquares(piece, update_background);
-        clearRows();
-    }
+    // if (piece->fallen) {
+    //     iterateThroughPieceSquares(piece, update_background);
+    //     clearRows();
+    // }
 }
-///////
 
 // Move and rotate functions do nothing for invalid move 
 void move_down(falling_piece_t* piece) {

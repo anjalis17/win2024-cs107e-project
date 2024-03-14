@@ -614,31 +614,27 @@ void integration_test_v6(void) {
 
                 while (remote_is_button_press()) rotate(&piece);
                 if (piece.fallen) {
-                    piece = init_falling_piece();
-                }
-                // if (piece.fallen) {
-                //     printf("initallyfallen");
-                //     // piece.fallen = false;
-                //     // tilt blocks
-                //     remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
-            
-                //     // horizontal movement
-                //     if (roll == LEFT) {
-                //         move_left(&piece);
-                //         printf("LEFT");
-                //     }
-                //     else if (roll == RIGHT) {
-                //         move_right(&piece); 
-                //         printf("RIGHT");
-                //     }
+                    printf("FALLEN\n");
 
-                //     if (iterateThroughPieceSquares(&piece, checkIfFallen)) {
-                //         printf("HEREEEEE");
-                //         iterateThroughPieceSquares(&piece, update_background);
-                //         clearRows();
-                //         piece = init_falling_piece();
-                //     }
-                // }
+                    remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+            
+                    // horizontal movement
+                    if (roll == LEFT) {
+                        move_left(&piece);
+                        printf("LEFT");
+                    }
+                    else if (roll == RIGHT) {
+                        move_right(&piece); 
+                        printf("RIGHT");
+                    }
+
+                    if (iterateVariant(&piece, checkIfFallen)) {
+                        printf("HEREEEEE\n");
+                        iterateThroughPieceSquares(&piece, update_background);
+                        clearRows();
+                        piece = init_falling_piece();
+                    }
+                }
             } 
             
             move_down(&piece);

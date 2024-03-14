@@ -33,17 +33,17 @@ typedef bool (*functionPtr)(int x, int y, falling_piece_t* piece);
 
 bool iterateThroughPieceSquares(falling_piece_t* piece, functionPtr action);
 
-bool checkIfValidMove(int x, int y, falling_piece_t* piece);
+static bool checkIfValidMove(int x, int y, falling_piece_t* piece);
 
-bool drawFallingSquare(int x, int y, falling_piece_t* piece);
+static bool drawFallingSquare(int x, int y, falling_piece_t* piece);
 
-void drawFallenSquare(int x, int y, color_t color);
+static void drawFallenSquare(int x, int y, color_t color);
 
 static void drawBevelLines(int x, int y, color_t color);
 
 bool update_background(int x, int y, falling_piece_t* piece);
 
-void draw_background(void);
+static void draw_background(void);
 
 void move_down(falling_piece_t* piece);
 
@@ -55,7 +55,7 @@ void rotate(falling_piece_t* piece);
 
 bool checkIfFallen(int x, int y, falling_piece_t* piece);
 
-void drawPiece(falling_piece_t* piece);
+static void drawPiece(falling_piece_t* piece);
 
 void endGame(void);
 
@@ -68,5 +68,7 @@ int game_update_get_rows_cleared(void) ;
 int game_update_get_score(void) ;
 
 bool game_update_is_game_over(void) ;
+
+bool iterateVariant(falling_piece_t* piece, functionPtr action);
 
 #endif
