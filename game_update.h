@@ -35,7 +35,11 @@ bool iterateThroughPieceSquares(falling_piece_t* piece, functionPtr action);
 
 bool checkIfValidMove(int x, int y, falling_piece_t* piece);
 
-bool drawSquare(int x, int y, falling_piece_t* piece);
+bool drawFallingSquare(int x, int y, falling_piece_t* piece);
+
+void drawFallenSquare(int x, int y, color_t color);
+
+static void drawBevelLines(int x, int y, color_t color);
 
 bool update_background(int x, int y, falling_piece_t* piece);
 

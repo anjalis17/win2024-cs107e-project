@@ -70,7 +70,7 @@ falling_piece_t init_falling_piece(void) {
 
     if (!iterateThroughPieceSquares(&piece, checkIfValidMove)) endGame();
     else {
-        iterateThroughPieceSquares(&piece, drawSquare);
+        iterateThroughPieceSquares(&piece, drawFallingSquare);
         gl_swap_buffer();
     }
     return piece;
@@ -128,18 +128,33 @@ bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
     return true;
 }
 
+static void drawBevelLines(int x, int y, color_t color) {
+    gl_draw_line(x * SQUARE_DIM + 1, y *SQUARE_DIM + 1, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, color);
+    gl_draw_line(x * SQUARE_DIM + 1, y * SQUARE_DIM + 1, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, color);
+    gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, color);
+    gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, color);
+}
+
 // Draws square (of tetris piece) specified by top left coordinate (x, y) into 
 // framebuffer (handled by gl / fb modules)
 // Returns true always -- function only called after valid move is verified
-bool drawSquare(int x, int y, falling_piece_t* piece) {
+void drawFallenSquare(int x, int y, color_t color) {
+    gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, color);
+    drawBevelLines(x, y, GL_INDIGO);
+}
+
+// Draws square (of tetris piece) specified by top left coordinate (x, y) into 
+// framebuffer (handled by gl / fb modules)
+// Returns true always -- function only called after valid move is verified
+bool drawFallingSquare(int x, int y, falling_piece_t* piece) {
     gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, piece->pieceT.color);
     
-    //bevel
-    gl_draw_line(x * SQUARE_DIM + 1, y *SQUARE_DIM + 1, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, GL_WHITE) ;
-    gl_draw_line(x * SQUARE_DIM + 1, y * SQUARE_DIM + 1, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, GL_WHITE) ;
-    gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, GL_WHITE) ;
-    gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, GL_WHITE) ;
-
+    // //bevel
+    // gl_draw_line(x * SQUARE_DIM + 1, y *SQUARE_DIM + 1, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, GL_WHITE) ;
+    // gl_draw_line(x * SQUARE_DIM + 1, y * SQUARE_DIM + 1, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, GL_WHITE) ;
+    // gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, GL_WHITE) ;
+    // gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, GL_WHITE) ;
+    drawBevelLines(x, y, GL_WHITE);
     checkIfFallen(x, y, piece);
     return true;
 }
@@ -171,7 +186,8 @@ void draw_background(void) {
         for (int x = 0; x < game_config.ncols; x++) {
             // if colored square in background (from fallen piece), draw
             if (background[y][x] != 0) {
-                gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, background[y][x]);
+                // gl_draw_rect(x * SQUARE_DIM, y * SQUARE_DIM, SQUARE_DIM, SQUARE_DIM, background[y][x]);
+                drawFallenSquare(x, y, background[y][x]);
             }
         }
     }
@@ -231,7 +247,7 @@ void clearRows(void) {
 
 void drawPiece(falling_piece_t* piece) {
     draw_background();
-    iterateThroughPieceSquares(piece, drawSquare);
+    iterateThroughPieceSquares(piece, drawFallingSquare);
     gl_swap_buffer();
     if (piece->fallen) {
         iterateThroughPieceSquares(piece, update_background);
