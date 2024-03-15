@@ -587,12 +587,12 @@ void integration_test_v6(void) {
 
         while(1) {
             while (timer_get_ticks() % n <= (0.8 * n)) {
-                toggle_turns += 1 ; toggle_turns %= (3*8) ; // so we don't overflow
+                toggle_turns += 1 ; toggle_turns %= (3*9) ; // so we don't overflow
 
                 // get accelerometer readings
                 remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
             
-                if (toggle_turns % 8 == 0) {
+                if (toggle_turns % 9 == 0) {
                     if (pitch == X_SWAP) swap(&piece);
                 }
 
