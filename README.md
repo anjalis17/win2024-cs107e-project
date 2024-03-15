@@ -10,7 +10,7 @@ Anjali Sreenivas (anjalisr), Aditi Bhaskar (aditijb)
 Tetris, but with a tiltable controller
 
 ## Features
-# remote (remote, servo, lsd6ds33, i2c):
+### remote (remote, servo, lsd6ds33, i2c):
  - novel design (by Aditi!): 
    - ergonomic shape and compact design. button clicks well!!!
  - game:
@@ -18,12 +18,12 @@ Tetris, but with a tiltable controller
    - tilt down to drop piece faster
    - tilt up to to swap piece with next piece in queue
    - button (using queued interrupts on button press) to turn game piece clockwise
-# leaderboard (game_interlude):
+### leaderboard (game_interlude):
  - user-friendly design to add players to leaderboard:
    - use button to iterate/select on-screen and tilt down to continue to next screen
-# game (game_update, random_bag):
+### game (game_update, random_bag):
  - // TODO ADD GAME FEATURES @anjali
-# music (passive_buzz):
+### music (passive_buzz):
  - plays the song! music library allows user to initialize/reset tempo, and play notes for a duration (whole/half/quarter/eighth) with a frequency (note letter)
  - very friendly to people who know western classical music.
 
@@ -54,9 +54,9 @@ your original work.
 Our code for i2c.c (a slighly more robust version which checked for outgoing addresses to be ACK'ed) was shared with Sazzad and Aditri's teams. They both said they would cite me. Thought it was worth mentioning here for good measure.
 
 ## Self-evaluation
-# How well was your team able to execute on the plan in your proposal?  
+### How well was your team able to execute on the plan in your proposal?  
 TODO
-# Any trying or heroic moments you would like to share? Of what are you particularly proud: the effort you put into it? the end product? the process you followed? what you learned along the way? Tell us about it!
+### Any trying or heroic moments you would like to share? Of what are you particularly proud: the effort you put into it? the end product? the process you followed? what you learned along the way? Tell us about it!
 TODO
 
 ## Photos
