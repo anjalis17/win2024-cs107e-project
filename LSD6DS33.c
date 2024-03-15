@@ -101,7 +101,7 @@ void lsm6ds33_read_accelerometer_z(short *z) {
 #define X_SWAP_UP -12000 // for x
 
 // reads the accelerometer x y values
-void lsm6ds33_read_accelerometer(short *x, short *y, short *z) {
+void lsm6ds33_read_accelerometer_x_y(short *x, short *y) {
     *x =  read_reg(OUTX_L_XL);
     *x |= read_reg(OUTX_H_XL) << 8;
     *y =  read_reg(OUTY_L_XL);
@@ -109,7 +109,7 @@ void lsm6ds33_read_accelerometer(short *x, short *y, short *z) {
 }
 
 // durably (n samples) reads accelerometer x y values
-static void lsm6ds33_read_accelerometer_durable(short *x, short *y, short *z) {
+static void lsm6ds33_read_accelerometer_durable(short *x, short *y) {
     int x_sum = 0 ; int y_sum = 0 ; //int z_sum = 0 ;
     unsigned int n = 3 ;
     for(int i = 0; i < n; i++) {
@@ -128,9 +128,9 @@ static void lsm6ds33_read_accelerometer_durable(short *x, short *y, short *z) {
 // edits x_state and y_state, passed by reference with the (durably read)
 //      y (roll) position's meaning  (LEFT/HOME/RIGHT) 
 //      x (pitch) position's meaning  (HOME/FAST/SWAP) 
-void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *y_state) {
+void lsm6ds33_read_durable_pos(short *x, short *y, int *x_state, int *y_state) {
 
-    lsm6ds33_read_accelerometer_durable(x, y, z) ; // shorter bc I only read data once
+    lsm6ds33_read_accelerometer_durable(x, y) ; // shorter bc I only read data once
 
     *x_state = X_HOME ;
 

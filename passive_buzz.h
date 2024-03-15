@@ -32,7 +32,8 @@ enum { // NOTE FREQUENCY
     NOTE_FREQ_G_SHARP = 415,
     NOTE_FREQ_A = 440,
     NOTE_FREQ_A_SHARP = 466,
-    NOTE_FREQ_B = 494
+    NOTE_FREQ_B = 494,
+    NOTE_FREQ_REST = 0
 } ;
 
 enum { // NOTE LENGTH

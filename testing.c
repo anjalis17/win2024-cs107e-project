@@ -398,7 +398,7 @@ void integration_test_v4(void) {
     interrupts_global_enable() ;
     timer_delay(2) ;
 
-    remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+    remote_is_button_press() ; // get rid of the extra button press...
 
     game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
 
@@ -446,7 +446,7 @@ void integration_test_v4(void) {
             int note_period = (SEC_IN_uSEC / music_notes[music_index]) ; // keep it approximate
 
             while (timer_get_ticks() % n > (0.8 * n)) {
-                // todo aditi play music notes in here???
+                // play music notes in here???
                 gpio_write(GPIO_PB6, 1);
                 timer_delay_us(note_period/2);
                 gpio_write(GPIO_PB6, 0);
@@ -552,13 +552,7 @@ void integration_test_v5(void) {
             music_index += 1; music_index %= num_notes; 
             int note_period = (SEC_IN_uSEC / music_notes[music_index]) ; // keep it approximate
 
-            while (timer_get_ticks() % n > (0.8 * n)) {
-                // todo aditi play music notes in here??? uncomment
-                // gpio_write(GPIO_PB6, 1);
-                // timer_delay_us(note_period/2);
-                // gpio_write(GPIO_PB6, 0);
-                // timer_delay_us(note_period/2);
-            };
+            while (timer_get_ticks() % n > (0.8 * n)) {};
         } 
 
         game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
@@ -572,7 +566,7 @@ void integration_test_v6(void) {
     uart_init() ;
     interrupts_init() ;
     remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_init(GPIO_PB6) ; // todo add to the remote module
+    buzzer_init(GPIO_PB6) ; 
     interrupts_global_enable() ;
     timer_delay(2) ;
 
@@ -654,11 +648,11 @@ void integration_test_v7(void) {
     uart_init() ;
     interrupts_init() ;
     remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_init(GPIO_PB6) ; // todo add to the remote module
+    buzzer_init(GPIO_PB6) ; 
     interrupts_global_enable() ;
     timer_delay(2) ;
 
-    remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+    remote_is_button_press() ; // get rid of the extra button press...
 
     game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
 
