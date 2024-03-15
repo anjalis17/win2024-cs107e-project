@@ -145,15 +145,7 @@ void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *
             *x_state = X_FAST ;// update x info
         } else if (*x < X_SWAP_UP) {
             *x_state = X_SWAP ;
-        } else{
-            // short x_hey = 0 ;
-            // lsm6ds33_read_accelerometer_x(&x_hey) ;
-            // console_clear() ;
-            // console_printf("x: %d", (int)x_hey);
-            // timer_delay(2) ;
-        }
-
-
+        } 
     } 
 
 }

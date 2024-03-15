@@ -64,7 +64,7 @@ static void game_interlude_operations(void) {
 */
 static void game_interlude_display_game_stats(unsigned int score, unsigned int lines_cleared) {
     console_clear() ;
-    console_printf("  score:\n  %d\n lines cleared:\n  %d", score, lines_cleared) ; 
+    console_printf(" score:\n  %d\n lines cleared:\n  %d", score, lines_cleared) ; 
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     timer_delay(2) ;
@@ -194,7 +194,7 @@ void game_interlude_print_leaderboard(unsigned int score, unsigned int lines_cle
 
     console_clear() ;
     console_printf("*LEADERBOARD*\n") ;
-    console_printf("<#>\t <n>\tSCORE\n") ;
+    console_printf("<#>\t\t\b<n>\tSCORE\n") ;
 
     for (int i = 0; i < LEADERBOARD_SIZE; i++) {
         console_printf(" %d \t\t\b%s \t%d\n", i, contents._leaderboard[i]._initials, contents._leaderboard[i]._score) ;
