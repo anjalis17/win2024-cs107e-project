@@ -17,6 +17,7 @@
 #include "interrupts.h"
 #include "ringbuffer.h"
 #include "malloc.h"
+#include "console.h"
 
 enum reg_address {
     WHO_AM_I  = 0x0F, // original
@@ -93,10 +94,11 @@ void lsm6ds33_read_accelerometer_z(short *z) {
 
 // Calibrated values; sensor-specific. 
 // Tuned by Aditi Mar 11 2024
-#define LEFT_ANGLE -8000 // for y // was -12000 // was -15000
-#define RIGHT_ANGLE 7000 // for y // was 9000
+#define LEFT_ANGLE -8000 // for y
+#define RIGHT_ANGLE 7000 // for y
 #define HOME_ANGLE -4000 // for y
 #define X_FAST_DOWN 9000 // for x
+#define X_SWAP_UP -12000 // for x
 
 // reads the accelerometer x y values
 void lsm6ds33_read_accelerometer(short *x, short *y, short *z) {
@@ -125,7 +127,7 @@ static void lsm6ds33_read_accelerometer_durable(short *x, short *y, short *z) {
 
 // edits x_state and y_state, passed by reference with the (durably read)
 //      y (roll) position's meaning  (LEFT/HOME/RIGHT) 
-//      x (pitch) position's meaning  (HOME/FAST/SLAM) 
+//      x (pitch) position's meaning  (HOME/FAST/SWAP) 
 void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *y_state) {
 
     lsm6ds33_read_accelerometer_durable(x, y, z) ; // shorter bc I only read data once
@@ -141,7 +143,17 @@ void lsm6ds33_read_durable_pos(short *x, short *y, short *z, int *x_state, int *
         *y_state = HOME;
         if (*x > X_FAST_DOWN) {     
             *x_state = X_FAST ;// update x info
+        } else if (*x < X_SWAP_UP) {
+            *x_state = X_SWAP ;
+        } else{
+            // short x_hey = 0 ;
+            // lsm6ds33_read_accelerometer_x(&x_hey) ;
+            // console_clear() ;
+            // console_printf("x: %d", (int)x_hey);
+            // timer_delay(2) ;
         }
+
+
     } 
 
 }

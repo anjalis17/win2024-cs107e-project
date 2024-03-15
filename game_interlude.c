@@ -18,6 +18,8 @@
 static interlude_contents_t contents ;
 #define BLINK_DELAY 100 
 
+#define FRANCIS_DEMO 0 // if this == 1, then francis goes to the top of the score chart :)
+
 /* 'game_interlude_init'
  * initializes game screen to nrows and ncols wide, where every row/col size (in pixels) is determined by the character size
  * takes colors text and bg for the text and background colors respectively
@@ -31,20 +33,22 @@ void game_interlude_init(int nrows, int ncols, color_t text, color_t bg) {
     contents._leaderboard = malloc(LEADERBOARD_SIZE*sizeof(leaderboard_character_t)) ; // 3 chars per each leaderboard thing
 
     for(int i = 0; i < LEADERBOARD_SIZE; i++) {
-        // p6 todo fun francis (FR) gets top score :)
         contents._leaderboard[i]._initials[0] = '*' ; 
         contents._leaderboard[i]._initials[1] = '*' ; 
         contents._leaderboard[i]._initials[2] = '\0' ; 
         contents._leaderboard[i]._score = 0 ;
+    }
+    if (FRANCIS_DEMO == 1) { // just for fun: francis (FR) gets top score :)
+        contents._leaderboard[0]._initials[0] = 'F' ; 
+        contents._leaderboard[0]._initials[1] = 'R' ; 
+        contents._leaderboard[0]._initials[2] = '\0' ; 
+        contents._leaderboard[0]._score = 99999 ;
     }
 }
 
 // display instructions
 static void game_interlude_operations(void) {
     console_clear() ;
-    // o = button -- todo use symbols instead? how do i make instruction page neat?
-    // ^ = tilt
-    // console_printf("LEADERBOARD\n\n Tilt Down:\n   select\n   next\n button:\n   iterate\n\n\n") ; 
     console_printf("\nLEADERBOARD!\n\n Down:\n  Set / Next\n  \n Button:\n  Change\n\n\n") ; 
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
@@ -60,7 +64,7 @@ static void game_interlude_operations(void) {
 */
 static void game_interlude_display_game_stats(unsigned int score, unsigned int lines_cleared) {
     console_clear() ;
-    console_printf("score:\n %08d\nlines cleared:\n %03d", score, lines_cleared) ; 
+    console_printf("  score:\n  %d\n lines cleared:\n  %d", score, lines_cleared) ; 
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     timer_delay(2) ;
@@ -101,7 +105,7 @@ static char* game_interlude_get_user_initials(void) {
         if(remote_is_button_press()) {
             first_letter ++ ;
             console_clear() ;
-            console_printf("Your Initials:\n %c*", ('A'+first_letter%26)) ;
+            console_printf("Your Initials:\n %c* \n\ntilt down \n  to continue", ('A'+first_letter%26)) ;
         }
         remote_get_x_y_status(&pitch, &roll) ;
     }
@@ -130,7 +134,7 @@ static char* game_interlude_get_user_initials(void) {
         remote_get_x_y_status(&pitch, &roll) ;
     }
 
-    timer_delay(1) ; // arbitrary; todo train for user
+    timer_delay(1) ; 
 
     // set it into user's initials to return
     initials[0] = ('A'+first_letter%26) ;
@@ -193,11 +197,11 @@ void game_interlude_print_leaderboard(unsigned int score, unsigned int lines_cle
     console_printf("<#>\t <n>\tSCORE\n") ;
 
     for (int i = 0; i < LEADERBOARD_SIZE; i++) {
-        console_printf("%d: \t\t%s \t%d\n", i, contents._leaderboard[i]._initials, contents._leaderboard[i]._score) ;
+        console_printf(" %d \t\t\b%s \t%d\n", i, contents._leaderboard[i]._initials, contents._leaderboard[i]._score) ;
     }
 
-    timer_delay(1) ; //arbitrary, todo update to ux
-    console_printf("\nTilt to Play") ; // todo come up with better message...
+    timer_delay(1) ; 
+    console_printf("\n\nTilt down to \n  play again!") ; 
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     while (pitch != X_FAST) {remote_get_x_y_status(&pitch, &roll) ;}

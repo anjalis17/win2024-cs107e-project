@@ -9,7 +9,7 @@
 #include <stdbool.h>
 
 enum { LEFT = 0, HOME, RIGHT };
-enum { X_HOME = 0, X_FAST, X_SLAM };
+enum { X_HOME = 0, X_FAST, X_SWAP };
 
 
 // initializes the accelerometer

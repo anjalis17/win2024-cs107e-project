@@ -45,6 +45,7 @@ bool remote_is_button_press(void) {
     return false ;
 }
 
+// initializes button, servo, i2c, accelerometer, and interrupts for button
 void remote_init(gpio_id_t servo_id, gpio_id_t button_id) {
     gpio_set_input(button_id) ;
     remote.button = button_id ;

@@ -14,6 +14,7 @@
 #include "i2c.h"
 #include "passive_buzz.h"
 #include "game_interlude.h"
+#include "console.h"
 
 // void pause(const char *message) {
 //     if (message) printf("\n%s\n", message);
@@ -148,7 +149,6 @@ void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
     }
 }
 
-
 void integration_test_v2(void) {
     gpio_init() ;
     timer_init() ;
@@ -211,7 +211,6 @@ void integration_test_v2(void) {
         };
     }
 }
-
 
 void tetris_theme_song(void) {
     gpio_init() ;
@@ -385,7 +384,6 @@ void integration_test_v3(void) {
 
 
 
-
 #define SEC_IN_uSEC 1000000
 
 // DANGER ZONE
@@ -459,7 +457,6 @@ void integration_test_v4(void) {
         game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
     }
 }
-
 
 
 // includes the leaderboard loop and constant games!  AND MUSIC!! actual tetris theme
@@ -568,7 +565,7 @@ void integration_test_v5(void) {
     }
 }
 
-// includes the leaderboard loop and constant games!  AND MUSIC!! actual tetris theme
+// includes the leaderboard loop and constant games! AND MUSIC!! actual tetris theme
 void integration_test_v6(void) {
     gpio_init() ;
     timer_init() ;
@@ -579,7 +576,7 @@ void integration_test_v6(void) {
     interrupts_global_enable() ;
     timer_delay(2) ;
 
-    remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+    remote_is_button_press() ; // get rid of the extra button press... 
 
     game_interlude_init(30, 50, GL_WHITE, GL_INDIGO) ; // can do this outside
 
@@ -596,21 +593,21 @@ void integration_test_v6(void) {
 
         while(1) {
             while (timer_get_ticks() % n <= (0.8 * n)) {
-                toggle_turns += 1 ; toggle_turns %= 3 ; // so we don't overflow
-                // tilt blocks
-                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
-                
-                // SWAP PIECE
-                // if (roll == UP) { -- or whatever other input method :)
-                //     swap(&piece);
-                // }
+                toggle_turns += 1 ; toggle_turns %= (3*8) ; // so we don't overflow
 
-                // horizontal movement
+                // get accelerometer readings
+                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+            
+                if (toggle_turns % 8 == 0) {
+                    if (pitch == X_SWAP) swap(&piece);
+                }
+
+                // horizontal movement or swap
                 if (toggle_turns % 3 == 0) {
                     if (roll == LEFT) move_left(&piece);
-                    else if (roll == RIGHT) move_right(&piece);                
+                    else if (roll == RIGHT) move_right(&piece); 
                 }
-            
+
                 // drop a block faster
                 if (pitch == X_FAST) { 
                     if (!piece.fallen) move_down(&piece);
