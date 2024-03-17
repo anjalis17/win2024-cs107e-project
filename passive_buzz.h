@@ -1,3 +1,5 @@
+#ifndef PB_H
+#define PB_H
 /*
  * Module to send buzzer tones to buzzer
  * Author: Aditi Bhaskar (aditijb@stanford.edu)
@@ -57,6 +59,8 @@ enum { // TEMPO
 
 void buzzer_init(gpio_id_t id) ; 
 
+void buzzer_init_interrupt(gpio_id_t id) ; // for timer-interrupt based music 
+
 // update the tempo (bpm) we want the buzzer to buzz at
 bool buzzer_set_tempo(int new_tempo) ;
 
@@ -68,6 +72,8 @@ int buzzer_get_tempo(void) ;
 void buzzer_play_note(int frequency, int duration_msec) ; 
 
 
-// todo comment and test
-void buzzer_freq_init(int start_ticks_, int note_period_) ;
-void buzzer_timing_play_note(void) ;
+// // todo comment and test
+// void buzzer_freq_init(int start_ticks_, int note_period_) ;
+// void buzzer_timing_play_note(void) ;
+
+#endif
