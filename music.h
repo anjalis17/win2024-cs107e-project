@@ -37,8 +37,7 @@ enum { // NOTE LENGTH
     NOTE_SIXTEENTH = 125
 } ;
 
-
-enum { // NOTE LENGTH, but as useful for the interrupt stuff
+enum { // NOTE LENGTH, but as used for the passive_buzz_intr's interrupt
     NOTE_IPT_WHOLE = 8,
     NOTE_IPT_HALF = 4,
     NOTE_IPT_QUARTER = 2,

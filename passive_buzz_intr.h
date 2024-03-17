@@ -13,6 +13,9 @@
 void buzzer_intr_init(gpio_id_t id, int tempo_) ; // for timer-interrupt based music 
 
 // change tempo. add a reasonable tempo (choose from music.h's tempo enum options)
-void buzzer_intr_change_tempo(int tempo_) ;
+void buzzer_intr_set_tempo(int tempo_) ;
+
+// get tempo. note that there may be rounding issues (so it may not match the tempo enum in music.h)
+int buzzer_intr_get_tempo() ;
 
 #endif

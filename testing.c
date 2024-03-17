@@ -214,93 +214,93 @@ void integration_test_v2(void) {
     }
 }
 
-void tetris_theme_song(void) {
-    gpio_init() ;
-    timer_init() ;
-    uart_init() ;
-    buzzer_init(GPIO_PB6) ; // is also pwm 1
-    buzzer_set_tempo(TEMPO_ANDANTE) ; // TODO FIX allegro+ tempos not working :(
-    // each block of code is a measure
-    // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
-    while(1) {
-        printf("in buzzer tetris theme");
+// void tetris_theme_song(void) {
+//     gpio_init() ;
+//     timer_init() ;
+//     uart_init() ;
+//     buzzer_init(GPIO_PB6) ; // is also pwm 1
+//     buzzer_set_tempo(TEMPO_ANDANTE) ; // RESOLVED IN FUTURE! FIX allegro+ tempos not working :(
+//     // each block of code is a measure
+//     // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
+//     while(1) {
+//         printf("in buzzer tetris theme");
 
-        // fast part
-        for (int i = 0; i < 2; i++) {
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
+//         // fast part
+//         for (int i = 0; i < 2; i++) {
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
 
-            buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
 
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_F, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_A, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_G, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_F, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_F, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_A, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_G, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_F, NOTE_EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
 
-            buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
-        }
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
+//         }
 
-        // slow falling part
-        buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
+//         // slow falling part
+//         buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_D, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_B_3, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_D, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_B_3, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_G_SHARP_3, NOTE_WHOLE) ;
+//         buzzer_play_note(NOTE_FREQ_G_SHARP_3, NOTE_WHOLE) ;
 
-        buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_D, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_B_3, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_D, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_B_3, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
-        buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-        buzzer_play_note(NOTE_FREQ_A, NOTE_HALF) ; 
+//         buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//         buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//         buzzer_play_note(NOTE_FREQ_A, NOTE_HALF) ; 
 
-        buzzer_play_note(NOTE_FREQ_G_SHARP, NOTE_WHOLE) ;
-    }
-}
+//         buzzer_play_note(NOTE_FREQ_G_SHARP, NOTE_WHOLE) ;
+//     }
+// }
 
 void test_leaderboard(void) {
 
@@ -376,7 +376,7 @@ void integration_test_v3(void) {
             if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
 
             while (timer_get_ticks() % n > (0.8 * n)) {
-                // todo aditi play music notes in here???
+                // RESOLVED WITH passive_buzz_intr.c aditi play music notes in here???
             };
         } 
 
@@ -396,7 +396,7 @@ void integration_test_v4(void) {
     uart_init() ;
     interrupts_init() ;
     remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_init(GPIO_PB6) ; // todo add to the remote module
+    buzzer_init(GPIO_PB6) ;
     interrupts_global_enable() ;
     timer_delay(2) ;
 
@@ -468,7 +468,7 @@ void integration_test_v5(void) {
     // uart_init() ;
     // interrupts_init() ;
     // remote_init(GPIO_PB1, GPIO_PB0) ; 
-    // buzzer_init(GPIO_PB6) ; // todo add to the remote module
+    // buzzer_init(GPIO_PB6) ; // RESOLVED in TEST V6 add to the remote module
     // interrupts_global_enable() ;
     // timer_delay(2) ;
 
@@ -678,8 +678,7 @@ void integration_test_v9(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ; // interrupt sandwich start
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_intr_init(GPIO_PB6, TEMPO_VIVACE) ; // this uses both timer0 and timer1 for the pwm and note-change :)
+    remote_init(GPIO_PB1, GPIO_PB0) ;  // buzzer interrupt moved into remote_init
     interrupts_global_enable() ; // interrupt sandwich end
     timer_delay(2) ;
 
@@ -735,7 +734,7 @@ void integration_test_v9(void) {
 
                     if (iterateVariant(&piece, checkIfFallen)) {
                         iterateThroughPieceSquares(&piece, update_background);
-                        clearRows();
+                        clearRows(); // inside clear rows: now, we get and update the tempo +=2 for every line cleared
                         piece = init_falling_piece();
                     }
                 }

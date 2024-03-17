@@ -140,12 +140,21 @@ void buzzer_intr_init(gpio_id_t id, int tempo_) {
     hstimer_enable(HSTIMER1) ;
 }
 
-void buzzer_intr_change_tempo(int tempo_) {
+// buzzer_intr_set_tempo
+// updated tempo will automatically be set by the next note
+void buzzer_intr_set_tempo(int tempo_) {
     if (tempo_ < TEMPO_MIN) tempo_ = TEMPO_MIN ;
     if (tempo_ > TEMPO_MAX) tempo_ = TEMPO_MAX ;
-    tempo = TEMPO_CONSTANT / (tempo_ * 2) ; // it will automatically apply by the next note
+    tempo = TEMPO_CONSTANT / (tempo_ * 2) ; 
 }
 
+// buzzer_intr_get_tempo
+// converts back into reasonable tempo. note that there may be rounding issues.
+int buzzer_intr_get_tempo() {
+    return (tempo/2) * TEMPO_CONSTANT ; // converts back into reasonable tempo. note that there may be rounding issues.
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* For show! 
 // previous version of storing song data:

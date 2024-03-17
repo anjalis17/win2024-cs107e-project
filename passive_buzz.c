@@ -31,7 +31,7 @@ void buzzer_init(gpio_id_t id) {
 // 'buzzer_set_tempo'
 // set the tempo for the buzzer
 // returns false if invalid tempo
-// TODO test tempo ranges!! > andante doesn't work
+// RESOLVED IN PASSIVE_BUZZ_INTR.c test tempo ranges!! > andante doesn't work
 bool buzzer_set_tempo(int new_tempo) {
     if (new_tempo > 50 && new_tempo < 200) {
         tempo = new_tempo ;

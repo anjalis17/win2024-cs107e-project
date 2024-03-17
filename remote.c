@@ -17,7 +17,8 @@
 #include "printf.h"
 #include "assert.h"
 #include <stddef.h>
-
+#include "music.h"
+#include "passive_buzz_intr.h"
 
 static remote_t remote ;
 
@@ -27,12 +28,7 @@ static void handle_button(uintptr_t pc, void *aux_data) {
 
     remote_t *rem = (remote_t *)aux_data ;
 
-    rb_enqueue(rem->rb, 1) ;
-    // if(!rb_enqueue(rem->rb, 1)) { 
-    //     uart_putchar('!') ;
-    // }
-
-    // uart_putchar('b') ; // debugging message
+    rb_enqueue(rem->rb, 1) ; // don't check whether it was added; it's trivial and unlikely that the queue overfills
 }
 
 // checks if there are presses in the queue
@@ -59,6 +55,7 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) {
     // accelerometer init
     i2c_init();
 	lsm6ds33_init();
+    buzzer_intr_init(GPIO_PB6, TEMPO_VIVACE) ; // this uses both timer0 and timer1 for the pwm and note-change :)
 
     gpio_interrupt_init() ;
     gpio_interrupt_config(remote.button, GPIO_INTERRUPT_POSITIVE_EDGE, true) ; // if pressed
