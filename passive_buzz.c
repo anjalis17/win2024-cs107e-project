@@ -16,7 +16,6 @@
 
 static gpio_id_t buzzer_id ;
 static int tempo ; // in beats per minute
-static int song_index ;
 
 // 'buzzer_init'
 // initializes buzzer
@@ -111,6 +110,8 @@ const int tetris_song[8*4*6] = // all notes are eigth notes. each line is a meas
                         NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3
                     } ;
 
+static int song_index ;
+
 // returns period in useconds
 int freq_to_period_s(int frequency) {
     return (uSEC_IN_SEC / frequency) ;
@@ -135,10 +136,10 @@ static void handle_note_change(uintptr_t pc, void *aux_data) {
     // changes the frequency that the buzzer will buzz at
     // remember i need to use note freq / 2 for the toggle in handle_note_buzz to work
     hstimer_init(HSTIMER0, (freq_to_period_s(SONG[song_index]) / 2)); 
+    hstimer_enable(HSTIMER0) ;
 
     hstimer_enable(HSTIMER1);
 }
-
 
 // todo aditi! keep it static for now while I figure it out
 void buzzer_init_interrupt(gpio_id_t id) {
@@ -156,44 +157,15 @@ void buzzer_init_interrupt(gpio_id_t id) {
     // to pwm the note
     interrupts_enable_source(INTERRUPT_SOURCE_HSTIMER0); //= 71, # INTERRUPT_SOURCE_HSTIMER1 = 72,
     interrupts_register_handler(INTERRUPT_SOURCE_HSTIMER0, handle_note_buzz, NULL) ;
-    hstimer_init(HSTIMER0, 1) ; // todo update this number
+    hstimer_init(HSTIMER0, freq_to_period_s(SONG[song_index]) / 2) ; 
     hstimer_enable(HSTIMER0) ;
 
     // to change which note is playing
     interrupts_enable_source(INTERRUPT_SOURCE_HSTIMER1); 
     interrupts_register_handler(INTERRUPT_SOURCE_HSTIMER1, handle_note_change, NULL) ;
-    hstimer_init(HSTIMER1, 1000000) ; // todo update this number to be the tempo
+    hstimer_init(HSTIMER1, TEMPO_DEFAULT * 9000) ; // the 9000 just seemed to workish against a metronome. tempos are approx.
     hstimer_enable(HSTIMER1) ;
 
     song_index = 0 ;
 
 }
-
-
-
-// // new, hands-off way to do pwm :) thanks Javier for the suggestion ... will it work? idk
-// // todo test
-
-// // todo create a struct for this stuff??
-// static int duration ;
-// static int period ;
-
-// // init for every single note change!!
-// void buzzer_freq_init(int note_duration, int note_frequency) {
-//     duration = duration; // the duration of time for an eighth note to play, in ms
-//     period = freq_to_period(note_frequency) ;
-// }
-
-// // for client:
-// // input: int note_period = (uSEC_IN_SEC / music_notes[music_index]) ; 
-// //  aka   int note_period = (uSEC_IN_SEC / NOTE_FREQ) ;  
-// void buzzer_timing_play_note(void) {
-//     // check timer
-//     // if % frequency >/< 1/2 frequency, turn on/off for that note
-//     if ((timer_get_ticks() - start_ticks) % (note_period) < (note_period / 2)) {
-//         gpio_write(buzzer_id, 1);
-//     } else {
-//         gpio_write(buzzer_id, 0);
-//     }
-// }
-

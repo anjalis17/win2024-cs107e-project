@@ -71,9 +71,4 @@ int buzzer_get_tempo(void) ;
 // durations < 200ms do not play
 void buzzer_play_note(int frequency, int duration_msec) ; 
 
-
-// // todo comment and test
-// void buzzer_freq_init(int start_ticks_, int note_period_) ;
-// void buzzer_timing_play_note(void) ;
-
 #endif

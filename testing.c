@@ -645,17 +645,107 @@ void integration_test_v8(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ; // interrupt sandwich start
+    // buzzer_init(GPIO_PB6) ;
     buzzer_init_interrupt(GPIO_PB6) ; // this uses both timer0 and timer1 for the pwm and note-change
     interrupts_global_enable() ; // interrupt sandwich end
     timer_delay(2) ;
 
     gl_init(400, 400, GL_DOUBLEBUFFER) ;
-    gl_clear(GL_BLACK) ;
+    gl_clear(GL_BLUE) ;
+    gl_swap_buffer() ;
+    gl_clear(GL_BLUE) ;
+    timer_delay(2) ;
 
     while(1) {
-        gl_draw_line(timer_get_ticks()%400, timer_get_ticks()%400, timer_get_ticks()%400, timer_get_ticks()%400, GL_AMBER) ;
+        // // confirm the buzzer works
+        // buzzer_play_note(NOTE_FREQ_A_3, NOTE_EIGHTH) ; 
+        // buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
+        
+        gl_draw_line((timer_get_ticks()*12)%400, timer_get_ticks()%400, timer_get_ticks()%400, (timer_get_ticks()*12)%400, GL_AMBER) ;
         gl_swap_buffer() ;
         timer_delay(2) ;
     }
 
 }
+
+
+
+// TETRIS THEME interrupt version!
+void integration_test_v9(void) {
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ; // interrupt sandwich start
+    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    buzzer_init_interrupt(GPIO_PB6) ; // this uses both timer0 and timer1 for the pwm and note-change :)
+    interrupts_global_enable() ; // interrupt sandwich end
+    timer_delay(2) ;
+
+    remote_is_button_press() ; // get rid of the extra button press... 
+
+    game_interlude_init(30, 50, GL_WHITE, GL_INDIGO) ; // can do this outside
+
+    while(1) {
+        game_update_init(20, 10);
+        falling_piece_t piece = init_falling_piece();
+
+        // write accelerometer x/y position to pitch(x) and roll(y)
+        int pitch = 0; int roll = 0;
+        long n = 480 ; // total ms wait for each loop
+        n = (n * 1000 * TICKS_PER_USEC);
+
+        int toggle_turns = 0 ;
+
+        while(1) {
+            while (timer_get_ticks() % n <= (0.8 * n)) {
+                toggle_turns += 1 ; toggle_turns %= (3*9) ; // so we don't overflow
+
+                // get accelerometer readings
+                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+            
+                if (toggle_turns % 9 == 0) {
+                    if (pitch == X_SWAP) swap(&piece);
+                }
+
+                // horizontal movement or swap
+                if (toggle_turns % 3 == 0) {
+                    if (roll == LEFT) move_left(&piece);
+                    else if (roll == RIGHT) move_right(&piece); 
+                }
+
+                // drop a block faster
+                if (pitch == X_FAST) { 
+                    if (!piece.fallen) move_down(&piece);
+                    if (!piece.fallen) move_down(&piece);
+                }
+
+                while (remote_is_button_press()) rotate(&piece);
+                if (piece.fallen) {
+                    remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+            
+                    // horizontal movement
+                    if (roll == LEFT) {
+                        move_left(&piece);
+                    }
+                    else if (roll == RIGHT) {
+                        move_right(&piece); 
+                    }
+
+                    if (iterateVariant(&piece, checkIfFallen)) {
+                        iterateThroughPieceSquares(&piece, update_background);
+                        clearRows();
+                        piece = init_falling_piece();
+                    }
+                }
+            } 
+            
+            move_down(&piece);
+            if (game_update_is_game_over()) {timer_delay(2); break;} // exits game-playing mode if game is over
+
+            while (timer_get_ticks() % n > (0.8 * n)) {};
+        } 
+
+        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()); 
+    }
+}
+

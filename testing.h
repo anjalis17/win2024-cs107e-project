@@ -15,6 +15,7 @@ void integration_test_v3(void) ; // with interlude
 void integration_test_v4(void) ; // chromatic scale
 void integration_test_v5(void) ; // tetris theme staccato
 void integration_test_v6(void) ; // testing with tuck, polishing game loop
-void integration_test_v7(void) ; // tetris theme multithreading
+// void integration_test_v7(void) ; // tetris theme multithreading
+void integration_test_v8(void) ; // tetris theme with blinking screen
 
 #endif
