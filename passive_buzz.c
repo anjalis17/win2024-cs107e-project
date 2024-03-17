@@ -150,7 +150,7 @@ void buzzer_init_interrupt(gpio_id_t id) {
 
     gpio_set_output(id) ;
     buzzer_id = id ;
-    tempo = TEMPO_DEFAULT;
+    tempo = TEMPO_ALLEGRETTO;
 
     // initializing interrupt system to listen for timer
 
@@ -163,7 +163,7 @@ void buzzer_init_interrupt(gpio_id_t id) {
     // to change which note is playing
     interrupts_enable_source(INTERRUPT_SOURCE_HSTIMER1); 
     interrupts_register_handler(INTERRUPT_SOURCE_HSTIMER1, handle_note_change, NULL) ;
-    hstimer_init(HSTIMER1, TEMPO_DEFAULT * 9000) ; // the 9000 just seemed to workish against a metronome. tempos are approx.
+    hstimer_init(HSTIMER1, 300000) ; // todo div by tempo... the 9000 just seemed to workish against a metronome. tempos are approx.
     hstimer_enable(HSTIMER1) ;
 
     song_index = 0 ;

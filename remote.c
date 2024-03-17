@@ -27,20 +27,21 @@ static void handle_button(uintptr_t pc, void *aux_data) {
 
     remote_t *rem = (remote_t *)aux_data ;
 
-    if(!rb_enqueue(rem->rb, 1)) { 
-        uart_putchar('!') ;
-    }
+    rb_enqueue(rem->rb, 1) ;
+    // if(!rb_enqueue(rem->rb, 1)) { 
+    //     uart_putchar('!') ;
+    // }
 
-    uart_putchar('b') ; // debugging message
-    servo_vibrate_milli_sec(100) ;
+    // uart_putchar('b') ; // debugging message
 }
 
 // checks if there are presses in the queue
 bool remote_is_button_press(void) {
     int k = 0 ;
     if (!(rb_empty(remote.rb))) {
-       rb_dequeue(remote.rb, &k) ;
-       return true ;
+        servo_vibrate_milli_sec(100) ;
+        rb_dequeue(remote.rb, &k) ;
+        return true ;
     }
     return false ;
 }
