@@ -648,7 +648,7 @@ void integration_test_v8(void) {
     uart_init() ;
     interrupts_init() ; // interrupt sandwich start
     // buzzer_init(GPIO_PB6) ;
-    buzzer_init_interrupt(GPIO_PB6) ; // this uses both timer0 and timer1 for the pwm and note-change
+    buzzer_intr_init(GPIO_PB6, TEMPO_VIVACE) ; // this uses both timer0 and timer1 for the pwm and note-change
     interrupts_global_enable() ; // interrupt sandwich end
     timer_delay(2) ;
 
@@ -679,7 +679,7 @@ void integration_test_v9(void) {
     uart_init() ;
     interrupts_init() ; // interrupt sandwich start
     remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_init_interrupt(GPIO_PB6) ; // this uses both timer0 and timer1 for the pwm and note-change :)
+    buzzer_intr_init(GPIO_PB6, TEMPO_VIVACE) ; // this uses both timer0 and timer1 for the pwm and note-change :)
     interrupts_global_enable() ; // interrupt sandwich end
     timer_delay(2) ;
 

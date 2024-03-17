@@ -1,6 +1,8 @@
 /* passive_buzz.c
  * Module to play buzzer tones to buzzer
  * Author: Aditi Bhaskar (aditijb@stanford.edu)
+ * Note that, if you're using this module, 100% of the mango pi's attention is towards the song. 
+ *  to multitask, check out passive_buzz_intr.h/.c for interrupt-based control of pitch
  */
 
 #include "gpio.h"

@@ -9,10 +9,10 @@
 #include <stdbool.h>
 #include "music.h"
 
-// todo add tempo param
-void buzzer_init_interrupt(gpio_id_t id) ; // for timer-interrupt based music 
+// init the interrupt system for the buzzer and start playing tetris song! add a reasonable tempo (choose from music.h's tempo enum options)
+void buzzer_intr_init(gpio_id_t id, int tempo_) ; // for timer-interrupt based music 
 
-// todo add function to change tempo
-// todo add function to init with song ?? maybe ...
+// change tempo. add a reasonable tempo (choose from music.h's tempo enum options)
+void buzzer_intr_change_tempo(int tempo_) ;
 
 #endif

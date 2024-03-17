@@ -37,7 +37,16 @@ enum { // NOTE LENGTH
     NOTE_SIXTEENTH = 125
 } ;
 
+
+enum { // NOTE LENGTH, but as useful for the interrupt stuff
+    NOTE_IPT_WHOLE = 8,
+    NOTE_IPT_HALF = 4,
+    NOTE_IPT_QUARTER = 2,
+    NOTE_IPT_EIGHTH = 1,
+} ;
+
 enum { // TEMPO
+    TEMPO_MIN = 50,
     TEMPO_LENTO = 55,
     TEMPO_DEFAULT = 60,
     TEMPO_ADAGIO = 65,
@@ -46,7 +55,7 @@ enum { // TEMPO
     TEMPO_ALLEGRETTO = 120,
     TEMPO_ALLEGRO = 140,
     TEMPO_VIVACE = 160,
-    TEMPO_OMG_SO_FAST = 500,
+    TEMPO_MAX = 500,
 } ;
 
 #endif

@@ -12,46 +12,64 @@
 #include <stddef.h>
 
 #define uSEC_IN_SEC 1000000
-#define SONG tetris_song // can declare and start using a new song
+#define TEMPO_CONSTANT 54000000 // tuned, and it works :)
 
+// class info
 static gpio_id_t buzzer_id ;
-static int tempo ; // in beats per minute
+static int tempo ; // converted from beats per minute to a frequency (Hz)
 
-const int song_length = 8*4*6 ;
-const int tetris_song[8*4*6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
-                    {
-                        // theme 
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                        NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                        
-                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+// song info
+const int song_length =93 ;
+const int tetris_song[93][2] = // note freq followed by duration. each 2 lines are a measure. each 8 lines is a grouped musical phrase
+                    {   
+                        // // theme
+                        {NOTE_FREQ_E, NOTE_IPT_QUARTER}, {NOTE_FREQ_B_3, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_D, NOTE_IPT_QUARTER}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, {NOTE_FREQ_B_3, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_A_3, NOTE_IPT_QUARTER}, {NOTE_FREQ_A_3, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_E, NOTE_IPT_QUARTER}, {NOTE_FREQ_D, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_B_3, NOTE_IPT_QUARTER}, {NOTE_FREQ_B_3, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_D, NOTE_IPT_QUARTER}, {NOTE_FREQ_E, NOTE_IPT_QUARTER},
+                        {NOTE_FREQ_C, NOTE_IPT_QUARTER}, {NOTE_FREQ_A_3, NOTE_IPT_QUARTER}, 
+                        {NOTE_FREQ_A_3, NOTE_IPT_HALF}, 
+
+                        {NOTE_FREQ_D, NOTE_IPT_EIGHTH}, {NOTE_FREQ_D, NOTE_IPT_QUARTER}, {NOTE_FREQ_F, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_A, NOTE_IPT_QUARTER}, {NOTE_FREQ_G, NOTE_IPT_EIGHTH}, {NOTE_FREQ_F, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_E, NOTE_IPT_QUARTER+NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_E, NOTE_IPT_QUARTER}, {NOTE_FREQ_D, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_B_3, NOTE_IPT_QUARTER}, {NOTE_FREQ_B_3, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_D, NOTE_IPT_QUARTER}, {NOTE_FREQ_E, NOTE_IPT_QUARTER},
+                        {NOTE_FREQ_C, NOTE_IPT_QUARTER}, {NOTE_FREQ_A_3, NOTE_IPT_QUARTER}, 
+                        {NOTE_FREQ_A_3, NOTE_IPT_HALF}, 
                         
                         // theme again
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                        NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                        
-                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+                        {NOTE_FREQ_E, NOTE_IPT_QUARTER}, {NOTE_FREQ_B_3, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_D, NOTE_IPT_QUARTER}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, {NOTE_FREQ_B_3, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_A_3, NOTE_IPT_QUARTER}, {NOTE_FREQ_A_3, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_E, NOTE_IPT_QUARTER}, {NOTE_FREQ_D, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_B_3, NOTE_IPT_QUARTER}, {NOTE_FREQ_B_3, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_D, NOTE_IPT_QUARTER}, {NOTE_FREQ_E, NOTE_IPT_QUARTER},
+                        {NOTE_FREQ_C, NOTE_IPT_QUARTER}, {NOTE_FREQ_A_3, NOTE_IPT_QUARTER}, 
+                        {NOTE_FREQ_A_3, NOTE_IPT_HALF}, 
 
-                        // slow falling part
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                        NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3,
-                        
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A,
-                        NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3
+                        {NOTE_FREQ_D, NOTE_IPT_EIGHTH}, {NOTE_FREQ_D, NOTE_IPT_QUARTER}, {NOTE_FREQ_F, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_A, NOTE_IPT_QUARTER}, {NOTE_FREQ_G, NOTE_IPT_EIGHTH}, {NOTE_FREQ_F, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_E, NOTE_IPT_QUARTER+NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_E, NOTE_IPT_QUARTER}, {NOTE_FREQ_D, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH},
+                        {NOTE_FREQ_B_3, NOTE_IPT_QUARTER}, {NOTE_FREQ_B_3, NOTE_IPT_EIGHTH}, {NOTE_FREQ_C, NOTE_IPT_EIGHTH}, 
+                        {NOTE_FREQ_D, NOTE_IPT_QUARTER}, {NOTE_FREQ_E, NOTE_IPT_QUARTER},
+                        {NOTE_FREQ_C, NOTE_IPT_QUARTER}, {NOTE_FREQ_A_3, NOTE_IPT_QUARTER}, 
+                        {NOTE_FREQ_A_3, NOTE_IPT_HALF}, 
+                       
+                        // // slow falling part (each line is a full measure)
+                        {NOTE_FREQ_E, NOTE_IPT_HALF}, {NOTE_FREQ_C, NOTE_IPT_HALF}, 
+                        {NOTE_FREQ_D, NOTE_IPT_HALF}, {NOTE_FREQ_B_3, NOTE_IPT_HALF},
+                        {NOTE_FREQ_C, NOTE_IPT_HALF}, {NOTE_FREQ_A_3, NOTE_IPT_HALF},
+                        {NOTE_FREQ_G_SHARP_3, NOTE_IPT_WHOLE},
+
+                        {NOTE_FREQ_E, NOTE_IPT_HALF}, {NOTE_FREQ_C, NOTE_IPT_HALF}, 
+                        {NOTE_FREQ_D, NOTE_IPT_HALF}, {NOTE_FREQ_B_3, NOTE_IPT_HALF},
+                        {NOTE_FREQ_C, NOTE_IPT_QUARTER}, {NOTE_FREQ_E, NOTE_IPT_QUARTER}, {NOTE_FREQ_A, NOTE_IPT_HALF},
+                        {NOTE_FREQ_G_SHARP, NOTE_IPT_WHOLE}
                     } ;
 
 static int song_index ;
@@ -87,34 +105,86 @@ static void handle_note_change(uintptr_t pc, void *aux_data) {
     song_index = (song_index+1) % song_length; // 8*4*6 is the number of notes in the tetris song
 
     // changes the frequency that the buzzer will buzz at
-    // remember I need to use note freq / 2 for the toggle in handle_note_buzz to work
-    hstimer_init(HSTIMER0, (freq_to_period_us(SONG[song_index]) / 2)); 
+    // remember: we need to use note freq / 2 for the toggle in handle_note_buzz to work
+    // hstimer_init(HSTIMER0, (freq_to_period_us(SONG[song_index][0]) / 2)); 
+    hstimer_init(HSTIMER0, (freq_to_period_us(tetris_song[song_index][0]) / 2)) ; 
     hstimer_enable(HSTIMER0) ;
 
-    hstimer_enable(HSTIMER1);
+    hstimer_init(HSTIMER1, tempo * tetris_song[song_index][1]) ; // for the proper note length
+    hstimer_enable(HSTIMER1) ;
 }
 
-// `buzzer_init_interrupt`
+// `buzzer_intr_init`
 // initializes the interrupts which play the tetris theme
-void buzzer_init_interrupt(gpio_id_t id) {
+void buzzer_intr_init(gpio_id_t id, int tempo_) {
     gpio_set_output(id) ;
     buzzer_id = id ;
-    tempo = TEMPO_VIVACE * 2; // todo make this a param, see I multiply by 2 because I do my stuff in 8th notes, not quarter
+    if (tempo_ < TEMPO_MIN) tempo_ = TEMPO_MIN ;
+    if (tempo_ > TEMPO_MAX) tempo_ = TEMPO_MAX ;
+    tempo = TEMPO_CONSTANT / (tempo_ * 2); // multiply by 2 because song's smallest note is in 8th notes, not quarter
 
+    song_index = 0 ;
     // initializing interrupt system to listen for timer
 
     // INTERRUPT_SOURCE_HSTIMER0 to pwm the note
     interrupts_enable_source(INTERRUPT_SOURCE_HSTIMER0); //= 71, # INTERRUPT_SOURCE_HSTIMER1 = 72,
     interrupts_register_handler(INTERRUPT_SOURCE_HSTIMER0, handle_note_buzz, NULL) ;
-    hstimer_init(HSTIMER0, freq_to_period_us(SONG[song_index]) / 2) ; 
+    hstimer_init(HSTIMER0, freq_to_period_us(tetris_song[song_index][0]) / 2) ; 
     hstimer_enable(HSTIMER0) ;
 
     // INTERRUPT_SOURCE_HSTIMER1 to change which note is playing
     interrupts_enable_source(INTERRUPT_SOURCE_HSTIMER1); 
     interrupts_register_handler(INTERRUPT_SOURCE_HSTIMER1, handle_note_change, NULL) ;
     // hstimer_init(HSTIMER1, 300000) ; 
-    hstimer_init(HSTIMER1, 54000000/tempo) ; // todo div by tempo better
+    hstimer_init(HSTIMER1, tetris_song[song_index][1]) ; 
     hstimer_enable(HSTIMER1) ;
-
-    song_index = 0 ;
 }
+
+void buzzer_intr_change_tempo(int tempo_) {
+    if (tempo_ < TEMPO_MIN) tempo_ = TEMPO_MIN ;
+    if (tempo_ > TEMPO_MAX) tempo_ = TEMPO_MAX ;
+    tempo = TEMPO_CONSTANT / (tempo_ * 2) ; // it will automatically apply by the next note
+}
+
+
+/* For show! 
+// previous version of storing song data:
+
+const int song_length = 8*4*6 ;
+const int tetris_song[8*4*6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
+                    {
+                        // theme 
+                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
+                        NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+                        
+                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
+                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+                        
+                        // theme again
+                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
+                        NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+                        
+                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
+                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+
+                        // slow falling part
+                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
+                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
+                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+                        NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3,
+                        
+                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
+                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
+                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A,
+                        NOTE_FREQ_G_SHARP, NOTE_FREQ_G_SHARP, NOTE_FREQ_G_SHARP, NOTE_FREQ_G_SHARP, NOTE_FREQ_G_SHARP, NOTE_FREQ_G_SHARP, NOTE_FREQ_G_SHARP, NOTE_FREQ_G_SHARP
+                    } ;
+
+*/
