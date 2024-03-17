@@ -9,10 +9,10 @@
 #include "passive_buzz.h"
 #include "interrupts.h"
 #include "hstimer.h"
+#include "music.h"
 
 #define TICKS_PER_USEC 24 // 24 ticks counted per one microsecond
 #define uSEC_IN_SEC 1000000
-#define SONG tetris_song // can declare and just start using a new song :)
 
 static gpio_id_t buzzer_id ;
 static int tempo ; // in beats per minute
@@ -69,103 +69,3 @@ void buzzer_play_note(int frequency, int duration_msec) {
     }
 }
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// thanks to Antonio for mentioning https://cs107e.github.io/header#hstimer had the timer_interrupt_clear function
-
-const int tetris_song[8*4*6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
-                    {
-                        // theme 
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                        NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                        
-                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                        
-                        // theme again
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                        NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                        
-                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                        NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-
-                        // slow falling part
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                        NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3,
-                        
-                        NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                        NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                        NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A,
-                        NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3
-                    } ;
-
-static int song_index ;
-
-// returns period in useconds
-int freq_to_period_s(int frequency) {
-    return (uSEC_IN_SEC / frequency) ;
-}
-
-static void handle_note_buzz(uintptr_t pc, void *aux_data) {
-    hstimer_interrupt_clear(HSTIMER0);
-
-    // toggle buzzer
-    if (gpio_read(buzzer_id) == 1) gpio_write(buzzer_id, 0);
-    else gpio_write(buzzer_id, 1);
-
-    hstimer_enable(HSTIMER0);
-}
-
-static void handle_note_change(uintptr_t pc, void *aux_data) {
-    hstimer_interrupt_clear(HSTIMER1);
-
-    // iterates to next note in the song 
-    song_index = (song_index+1) % (8*4*6); // 8*4*6 is the number of notes in the tetris song
-
-    // changes the frequency that the buzzer will buzz at
-    // remember i need to use note freq / 2 for the toggle in handle_note_buzz to work
-    hstimer_init(HSTIMER0, (freq_to_period_s(SONG[song_index]) / 2)); 
-    hstimer_enable(HSTIMER0) ;
-
-    hstimer_enable(HSTIMER1);
-}
-
-// todo aditi! keep it static for now while I figure it out
-void buzzer_init_interrupt(gpio_id_t id) {
-
-    // pg 1086: Table 9-21 PB Multiplex Function    
-    //      PB6, function 5 : PWM1
-    // gpio_set_function(GPIO_PB6, GPIO_FN_ALT5) ;
-
-    gpio_set_output(id) ;
-    buzzer_id = id ;
-    tempo = TEMPO_ALLEGRETTO;
-
-    // initializing interrupt system to listen for timer
-
-    // to pwm the note
-    interrupts_enable_source(INTERRUPT_SOURCE_HSTIMER0); //= 71, # INTERRUPT_SOURCE_HSTIMER1 = 72,
-    interrupts_register_handler(INTERRUPT_SOURCE_HSTIMER0, handle_note_buzz, NULL) ;
-    hstimer_init(HSTIMER0, freq_to_period_s(SONG[song_index]) / 2) ; 
-    hstimer_enable(HSTIMER0) ;
-
-    // to change which note is playing
-    interrupts_enable_source(INTERRUPT_SOURCE_HSTIMER1); 
-    interrupts_register_handler(INTERRUPT_SOURCE_HSTIMER1, handle_note_change, NULL) ;
-    hstimer_init(HSTIMER1, 300000) ; // todo div by tempo... the 9000 just seemed to workish against a metronome. tempos are approx.
-    hstimer_enable(HSTIMER1) ;
-
-    song_index = 0 ;
-
-}

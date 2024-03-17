@@ -12,9 +12,11 @@
 #include "remote.h"
 #include "LSD6DS33.h"
 #include "i2c.h"
+#include "passive_buzz_intr.h"
 #include "passive_buzz.h"
 #include "game_interlude.h"
 #include "console.h"
+#include "music.h"
 
 // void pause(const char *message) {
 //     if (message) printf("\n%s\n", message);
@@ -461,102 +463,102 @@ void integration_test_v4(void) {
 
 // includes the leaderboard loop and constant games!  AND MUSIC!! actual tetris theme
 void integration_test_v5(void) {
-    gpio_init() ;
-    timer_init() ;
-    uart_init() ;
-    interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_init(GPIO_PB6) ; // todo add to the remote module
-    interrupts_global_enable() ;
-    timer_delay(2) ;
+    // gpio_init() ;
+    // timer_init() ;
+    // uart_init() ;
+    // interrupts_init() ;
+    // remote_init(GPIO_PB1, GPIO_PB0) ; 
+    // buzzer_init(GPIO_PB6) ; // todo add to the remote module
+    // interrupts_global_enable() ;
+    // timer_delay(2) ;
 
-    remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+    // remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
 
-    game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
+    // game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
 
-    while(1) {
-        game_update_init(20, 10);
-        falling_piece_t piece = init_falling_piece();
+    // while(1) {
+    //     game_update_init(20, 10);
+    //     falling_piece_t piece = init_falling_piece();
 
-        // write accelerometer x/y position to pitch(x) and roll(y)
-        int pitch = 0; int roll = 0;
-        long n = 500 ; // total ms wait for each loop
-        n = (n * 1000 * TICKS_PER_USEC);
+    //     // write accelerometer x/y position to pitch(x) and roll(y)
+    //     int pitch = 0; int roll = 0;
+    //     long n = 500 ; // total ms wait for each loop
+    //     n = (n * 1000 * TICKS_PER_USEC);
 
-        int toggle_turns = 0 ;
+    //     int toggle_turns = 0 ;
 
-        const int num_notes = 8*4*6 ; 
-        int music_notes[8*4 * 6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
-                                {
-                                    // theme 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                                    NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //     const int num_notes = 8*4*6 ; 
+    //     int music_notes[8*4 * 6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
+    //                             {
+    //                                 // theme 
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
+    //                                 NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+    //                                 NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
                                     
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //                                 NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+    //                                 NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
                                     
-                                    // theme again
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                                    NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //                                 // theme again
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
+    //                                 NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+    //                                 NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
                                     
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //                                 NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+    //                                 NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
 
-                                    // slow falling part
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                                    NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3,
+    //                                 // slow falling part
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
+    //                                 NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //                                 NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3,
                                     
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A,
-                                    NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3
-                                } ;
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
+    //                                 NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A,
+    //                                 NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3
+    //                             } ;
 
-        int music_index = 0 ;
+    //     int music_index = 0 ;
 
-        while(1) {
-            while (timer_get_ticks() % n <= (0.8 * n)) {
-                toggle_turns += 1 ; toggle_turns %= 3 ; // so we don't overflow
-                // tilt blocks
-                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+    //     while(1) {
+    //         while (timer_get_ticks() % n <= (0.8 * n)) {
+    //             toggle_turns += 1 ; toggle_turns %= 3 ; // so we don't overflow
+    //             // tilt blocks
+    //             remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
         
-                // horizontal movement
-                if (toggle_turns % 3 == 0) {
-                    if (roll == LEFT) move_left(&piece);
-                    else if (roll == RIGHT) move_right(&piece);                
-                }
+    //             // horizontal movement
+    //             if (toggle_turns % 3 == 0) {
+    //                 if (roll == LEFT) move_left(&piece);
+    //                 else if (roll == RIGHT) move_right(&piece);                
+    //             }
             
-                // drop a block faster
-                if (pitch == X_FAST) { 
-                    if (!piece.fallen) move_down(&piece);
-                    if (!piece.fallen) move_down(&piece);
-                }
+    //             // drop a block faster
+    //             if (pitch == X_FAST) { 
+    //                 if (!piece.fallen) move_down(&piece);
+    //                 if (!piece.fallen) move_down(&piece);
+    //             }
 
-                while (remote_is_button_press()) rotate(&piece);
-                if (piece.fallen) piece = init_falling_piece();
-            } 
+    //             while (remote_is_button_press()) rotate(&piece);
+    //             if (piece.fallen) piece = init_falling_piece();
+    //         } 
 
-            move_down(&piece);
-            if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
+    //         move_down(&piece);
+    //         if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
 
-            music_index += 1; music_index %= num_notes; 
-            int note_period = (uSEC_IN_SEC / music_notes[music_index]) ; // keep it approximate
+    //         music_index += 1; music_index %= num_notes; 
+    //         int note_period = (uSEC_IN_SEC / music_notes[music_index]) ; // keep it approximate
 
-            while (timer_get_ticks() % n > (0.8 * n)) {};
-        } 
+    //         while (timer_get_ticks() % n > (0.8 * n)) {};
+    //     } 
 
-        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
-    }
+    //     game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
+    // }
 }
 
 // includes the leaderboard loop and constant games! AND MUSIC!! actual tetris theme
