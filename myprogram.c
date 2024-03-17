@@ -19,6 +19,8 @@ void main(void) {
     // test_leaderboard() ;
     // integration_test_v3() ;
     
-    integration_test_v8();   
+    // integration_test_v8();  
+
+    integration_test_v9() ; // tetris theme intrp with game
 
 }
