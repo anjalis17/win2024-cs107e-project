@@ -36,12 +36,20 @@ int buzzer_intr_get_tempo(void) ;
 */
 void buzzer_intr_restart_song(void) ;
 
-
-// todo comment
-
+/* 'buzzer_intr_pause'
+ * @functionality - pauses music by disabling the note and pitch interrupts
+*/
 void buzzer_intr_pause(void) ;
-void buzzer_intr_play(void) ;
-bool buzzer_intr_is_playing(void) ;
 
+/* 'buzzer_intr_play'
+ * @functionality - resumes music by enabling the note and pitch interrupts
+*/
+void buzzer_intr_play(void) ;
+
+/* 'buzzer_intr_is_playing'
+ * @return - boolean of whether song is currently playing
+ * @functionality - checks if music is playing
+*/
+bool buzzer_intr_is_playing(void) ;
 
 #endif

@@ -165,19 +165,24 @@ void buzzer_intr_restart_song(void) {
     song_index = 0 ;
 }
 
-// todo add comments
+// 'buzzer_intr_pause'
+// pause music
 void buzzer_intr_pause(void) {
     hstimer_disable(HSTIMER1) ;
     hstimer_disable(HSTIMER0) ;
     is_playing = false ;
 }
 
+// 'buzzer_intr_play'
+// resume music
 void buzzer_intr_play(void) {
     hstimer_enable(HSTIMER0) ;
     hstimer_enable(HSTIMER1) ;
     is_playing = true ;
 }
 
+// 'buzzer_intr_is_playing'
+// returns whether music is currently playing
 bool buzzer_intr_is_playing(void) {
     return is_playing ;
 }

@@ -118,10 +118,13 @@ void pause(const char *message) {
 void startGame(void) {
     // gl_draw_string("")
     // Draw 107mango
-    gl_clear(game_config.bg_col);
+    // console_init(30, 50, GL_WHITE, GL_INDIGO);
+
+    gl_clear(game_config.bg_col) ;
+    gl_clear(game_config.bg_col) ;
 
     console_printf("\n   TILTRIS!\n\n\n\n Button:On/Off\n         Music\n\n Tilt to Play") ;
-    gl_swap_buffer();
+    gl_swap_buffer() ;
 
     // Draw 1 (as i piece)
     drawFallenSquare(0, 15, i.color);

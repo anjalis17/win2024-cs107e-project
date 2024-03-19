@@ -206,6 +206,8 @@ void game_interlude_print_leaderboard(unsigned int score, unsigned int lines_cle
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     while (pitch != X_FAST) {remote_get_x_y_status(&pitch, &roll) ;}
+    console_clear() ;
+
 }
 
 // returns num rows in console
