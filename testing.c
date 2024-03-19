@@ -746,3 +746,96 @@ void integration_test_v9(void) {
     }
 }
 
+
+
+
+
+
+
+
+// TETRIS THEME interrupt version!
+void integration_test_v10(void) {
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ; // interrupt sandwich start
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6, TEMPO_ALLEGRO) ;  // buzzer interrupt moved into remote_init
+    interrupts_global_enable() ; // interrupt sandwich end
+    timer_delay(2) ;
+
+    remote_is_button_press() ; // get rid of the extra button press... 
+
+    game_interlude_init(30, 50, GL_WHITE, GL_INDIGO) ; // can do this outside
+
+    while(1) {
+        game_update_init(20, 10);
+        falling_piece_t piece = init_falling_piece();
+        buzzer_intr_set_tempo(TEMPO_ALLEGRO) ;
+
+        // write accelerometer x/y position to pitch(x) and roll(y)
+        int pitch = 0; int roll = 0;
+        // int n_init = 480 ;
+        long n = 480 ; // total ms wait for each loop
+        n = (n * 1000 * TICKS_PER_USEC);
+
+        int toggle_turns = 0 ;
+
+        while(1) {
+            while (timer_get_ticks() % n <= (0.8 * n)) {
+                toggle_turns += 1 ; toggle_turns %= (3*9) ; // so we don't overflow
+
+                // get accelerometer readings
+                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+            
+                if (toggle_turns % 5 == 0) {
+                    if (pitch == X_SWAP) swap(&piece);
+                }
+
+                // horizontal movement or swap
+                if (toggle_turns % 3 == 0) {
+                    if (roll == LEFT) move_left(&piece);
+                    else if (roll == RIGHT) move_right(&piece); 
+                }
+
+                // drop a block faster
+                if (pitch == X_FAST) { 
+                    if (!piece.fallen) move_down(&piece);
+                    if (!piece.fallen) move_down(&piece);
+                }
+
+                while (remote_is_button_press()) rotate(&piece);
+                if (piece.fallen) {
+                    remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+            
+                    // horizontal movement
+                    if (roll == LEFT) {
+                        move_left(&piece);
+                    }
+                    else if (roll == RIGHT) {
+                        move_right(&piece); 
+                    }
+
+                    if (iterateVariant(&piece, checkIfFallen)) {
+                        iterateThroughPieceSquares(&piece, update_background);
+                        clearRows(); // inside clear rows: now, we get and update the tempo +=2 for every line cleared
+                        piece = init_falling_piece();
+                    }
+                }
+            } 
+            
+            move_down(&piece);
+            if (game_update_is_game_over()) {timer_delay(2); break;} // exits game-playing mode if game is over
+            // if(n > ((n_init-200) * 1000 * TICKS_PER_USEC)) {n = n_init-100000*TICKS_PER_USEC*game_update_get_rows_cleared();} // update n based on lines cleared
+
+            while (timer_get_ticks() % n > (0.8 * n)) {};
+        } 
+
+        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()); 
+    }
+}
+
+
+
+
+
+

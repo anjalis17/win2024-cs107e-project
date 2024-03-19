@@ -18,5 +18,5 @@ void integration_test_v6(void) ; // testing with tuck, polishing game loop
 // void integration_test_v7(void) ; // tetris theme multithreading
 void integration_test_v8(void) ; // tetris theme intrp with blinking screen
 void integration_test_v9(void) ; // tetris theme intrp with game
-
+void integration_test_v10(void) ; // with speedup dropping blocks
 #endif
