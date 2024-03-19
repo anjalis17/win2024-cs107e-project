@@ -1,9 +1,9 @@
-#ifndef PBINTERRUPT_H
-#define PBINTERRUPT_H
 /*
  * Module to send buzzer tones to buzzer with interrupt-based setup. Yay multitasking!
  * Author: Aditi Bhaskar (aditijb@stanford.edu)
  */
+#ifndef PBINTERRUPT_H
+#define PBINTERRUPT_H
 
 #include "gpio.h"
 #include <stdbool.h>

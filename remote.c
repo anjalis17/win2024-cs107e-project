@@ -19,6 +19,7 @@
 
 static remote_t remote ;
 
+// 'handle_button'
 // handles a button press 
 static void handle_button(uintptr_t pc, void *aux_data) {
     gpio_interrupt_clear(remote.button) ;
@@ -28,6 +29,7 @@ static void handle_button(uintptr_t pc, void *aux_data) {
     rb_enqueue(rem->rb, 1) ; 
 }
 
+// 'remote_is_button_press'
 // checks if there are presses in the queue
 bool remote_is_button_press(void) {
     int k = 0 ;
@@ -39,6 +41,7 @@ bool remote_is_button_press(void) {
     return false ;
 }
 
+// 'remote_init'
 // initializes button, servo, i2c, accelerometer, and interrupts for button
 void remote_init(gpio_id_t servo_id, gpio_id_t button_id, gpio_id_t buzzer_id, int music_tempo) {
     gpio_set_input(button_id) ;
@@ -61,11 +64,13 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id, gpio_id_t buzzer_id, i
 
 }
 
+// 'remote_vibrate'
 // only vibrates the most recently configured servo
 void remote_vibrate(int duration_sec) {
     servo_vibrate(duration_sec) ;
 }
 
+// 'remote_get_x_y_status'
 // returns int enum "left/right/home" ... enum defined in lsd6ds33.h
 void remote_get_x_y_status(int *x_mod, int *y_mod) {
     short x=0; short y=0; 

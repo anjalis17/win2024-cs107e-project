@@ -335,7 +335,7 @@ void integration_test_v3(void) {
     interrupts_global_enable() ;
     timer_delay(2) ;
 
-    remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+    remote_is_button_press() ; // get rid of the extra button press...
 
     game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
 
@@ -472,7 +472,7 @@ void integration_test_v5(void) {
     // interrupts_global_enable() ;
     // timer_delay(2) ;
 
-    // remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+    // remote_is_button_press() ; // get rid of the extra button press... 
 
     // game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
 

@@ -1,12 +1,12 @@
+/*
+ * Module for remote control for Tetris game
+ * Author: Aditi Bhaskar (aditijb@stanford.edu)
+ */
 #ifndef REMOTE_H
 #define REMOTE_H
 
 #include "ringbuffer.h"
 #include "gpio.h"
-/*
- * Module for remote control for Tetris game
- * Author: Aditi Bhaskar (aditijb@stanford.edu)
- */
 
 // remote struct 
 typedef struct {
