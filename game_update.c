@@ -15,6 +15,7 @@
 #include "random_bag.h"
 #include "passive_buzz_intr.h"
 #include "LSD6DS33.h"
+#include "console.h"
 
 const piece_t i = {'i', 0x1AE6DC, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', 0x0000E4, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
@@ -118,6 +119,9 @@ void startGame(void) {
     // gl_draw_string("")
     // Draw 107mango
     gl_clear(game_config.bg_col);
+
+    console_printf("\n   TILTRIS!\n\n\n\n Button:On/Off\n         Music\n\n Tilt to Play") ;
+    gl_swap_buffer();
 
     // Draw 1 (as i piece)
     drawFallenSquare(0, 15, i.color);
