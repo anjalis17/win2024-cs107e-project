@@ -63,7 +63,7 @@ void lsm6ds33_init(void) {
     write_reg(CTRL9_XL, 0x38);  // ACCEL: x,y,z enabled (bits 4-6)
 }
 
-/// GENERAL-PURPOSE FUNCTIONS
+/// GENERAL-PURPOSE FUNCTIONS /////////////////////////////////////////////////////////////////////////////
 
 // reads the accelerometer x y z values
 void lsm6ds33_read_accelerometer_all(short *x, short *y, short *z) {
@@ -90,7 +90,7 @@ void lsm6ds33_read_accelerometer_z(short *z) {
 }
 
 
-/// USED FOR TETRIS
+/// USED FOR TETRIS ///////////////////////////////////////////////////////////////////////////////////////
 
 // Calibrated values; sensor-specific. 
 // Tuned by Aditi Mar 11 2024

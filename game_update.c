@@ -13,6 +13,7 @@
 #include "remote.h"
 #include "uart.h"
 #include "random_bag.h"
+#include "passive_buzz_intr.h"
 
 const piece_t i = {'i', 0x1AE6DC, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', 0x0000E4, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
@@ -156,7 +157,7 @@ static bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
 }
 
 static void drawBevelLines(int x, int y, color_t color) {
-    gl_draw_line(x * SQUARE_DIM + 1, y *SQUARE_DIM + 1, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, color);
+    gl_draw_line(x * SQUARE_DIM + 1, y * SQUARE_DIM + 1, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, color);
     gl_draw_line(x * SQUARE_DIM + 1, y * SQUARE_DIM + 1, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, color);
     gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, color);
     gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, color);
@@ -286,6 +287,7 @@ void clearRows(void) {
         if (rowFilled) {
             clearRow(row); 
             remote_vibrate(2); // remote_vibrate(rowsFilled + 1);
+            buzzer_intr_set_tempo(buzzer_intr_get_tempo() + 2) ;
             game_config.numLinesCleared++ ;
             rowsFilled++;
         }

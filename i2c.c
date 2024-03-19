@@ -6,7 +6,7 @@
     Tue Feb 13 17:44:05 PST 2024
 
 ////////////////
-    Updated by Aditi Bhaskar (aditijb@stanford.edu) to repeat commands if not rightfully ACK/NAK'ed
+    Updated by Aditi (aditijb@stanford.edu) to repeat commands if not rightfully ACK/NAK'ed
     i2c reference: https://www.ti.com/lit/an/slva704/slva704.pdf
  */
 #include "i2c.h"
@@ -47,9 +47,9 @@ static void stop(void) {
     gpio_set_input(module.sda);
 }
 
-// amended by aditijb@stanford.edu
+// amended by Aditi (aditijb@stanford.edu)
 // edits include the goto statement to re-send the address if not rightfully ACK'ed
-// WARNING: this code has not been tested on writing multiple-byte (>1 byte) data 
+// WARNING: this code has not been rigorously tested on writing multiple-byte (>1 byte) data 
 static void write_byte(unsigned char byte) {
     write:
     for (int j = 0; j < 8; j++) {
@@ -67,7 +67,7 @@ static void write_byte(unsigned char byte) {
     timer_delay_us(5); 
 
 
-    // Julie's implm - no error checking
+    // Julie's implementation - no error checking
     // gpio_read(module.sda) 
 
     // Aditi's implm WITH check 

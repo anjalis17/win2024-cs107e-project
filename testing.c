@@ -12,9 +12,11 @@
 #include "remote.h"
 #include "LSD6DS33.h"
 #include "i2c.h"
+#include "passive_buzz_intr.h"
 #include "passive_buzz.h"
 #include "game_interlude.h"
 #include "console.h"
+#include "music.h"
 
 // void pause(const char *message) {
 //     if (message) printf("\n%s\n", message);
@@ -78,7 +80,7 @@ void test_remote(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6, TEMPO_DEFAULT) ; 
     interrupts_global_enable() ; 
     printf("\nremote tests enabled\n") ;
     while(1) {
@@ -98,7 +100,7 @@ void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     interrupts_global_enable() ;
     
     game_update_init(20, 10);
@@ -154,7 +156,7 @@ void integration_test_v2(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     interrupts_global_enable() ;
     
     game_update_init(20, 10);
@@ -212,93 +214,93 @@ void integration_test_v2(void) {
     }
 }
 
-void tetris_theme_song(void) {
-    gpio_init() ;
-    timer_init() ;
-    uart_init() ;
-    buzzer_init(GPIO_PB6) ; // is also pwm 1
-    buzzer_set_tempo(TEMPO_ANDANTE) ; // TODO FIX allegro+ tempos not working :(
-    // each block of code is a measure
-    // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
-    while(1) {
-        printf("in buzzer tetris theme");
+// void tetris_theme_song(void) {
+//     gpio_init() ;
+//     timer_init() ;
+//     uart_init() ;
+//     buzzer_init(GPIO_PB6) ; // is also pwm 1
+//     buzzer_set_tempo(TEMPO_ANDANTE) ; // RESOLVED IN FUTURE! FIX allegro+ tempos not working :(
+//     // each block of code is a measure
+//     // music: https://musescore.com/neoguizmo/scores/2601951; shifted down 1 octave
+//     while(1) {
+//         printf("in buzzer tetris theme");
 
-        // fast part
-        for (int i = 0; i < 2; i++) {
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
+//         // fast part
+//         for (int i = 0; i < 2; i++) {
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
 
-            buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
 
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_F, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_A, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_G, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_F, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_F, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_A, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_G, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_F, NOTE_EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
 
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
-            buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_B_3, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_EIGHTH) ;
+//             buzzer_play_note(NOTE_FREQ_D, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
 
-            buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
-            buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
-        }
+//             buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_QUARTER) ;
+//             buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
+//         }
 
-        // slow falling part
-        buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
+//         // slow falling part
+//         buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_D, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_B_3, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_D, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_B_3, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_A_3, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_G_SHARP_3, NOTE_WHOLE) ;
+//         buzzer_play_note(NOTE_FREQ_G_SHARP_3, NOTE_WHOLE) ;
 
-        buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_E, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_C, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_D, NOTE_HALF) ;
-        buzzer_play_note(NOTE_FREQ_B_3, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_D, NOTE_HALF) ;
+//         buzzer_play_note(NOTE_FREQ_B_3, NOTE_HALF) ;
 
-        buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
-        buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
-        buzzer_play_note(NOTE_FREQ_A, NOTE_HALF) ; 
+//         buzzer_play_note(NOTE_FREQ_C, NOTE_QUARTER) ;
+//         buzzer_play_note(NOTE_FREQ_E, NOTE_QUARTER) ;
+//         buzzer_play_note(NOTE_FREQ_A, NOTE_HALF) ; 
 
-        buzzer_play_note(NOTE_FREQ_G_SHARP, NOTE_WHOLE) ;
-    }
-}
+//         buzzer_play_note(NOTE_FREQ_G_SHARP, NOTE_WHOLE) ;
+//     }
+// }
 
 void test_leaderboard(void) {
 
@@ -306,7 +308,7 @@ void test_leaderboard(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     interrupts_global_enable() ;
     timer_delay(2) ;
 
@@ -329,11 +331,11 @@ void integration_test_v3(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     interrupts_global_enable() ;
     timer_delay(2) ;
 
-    remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+    remote_is_button_press() ; // get rid of the extra button press...
 
     game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
 
@@ -374,7 +376,7 @@ void integration_test_v3(void) {
             if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
 
             while (timer_get_ticks() % n > (0.8 * n)) {
-                // todo aditi play music notes in here???
+                // RESOLVED WITH passive_buzz_intr.c aditi play music notes in here???
             };
         } 
 
@@ -384,7 +386,7 @@ void integration_test_v3(void) {
 
 
 
-#define SEC_IN_uSEC 1000000
+#define uSEC_IN_SEC 1000000
 
 // DANGER ZONE
 // includes the leaderboard loop and constant games!  AND MUSIC?? chromatic scale...
@@ -393,8 +395,8 @@ void integration_test_v4(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_init(GPIO_PB6) ; // todo add to the remote module
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
+    buzzer_init(GPIO_PB6) ;
     interrupts_global_enable() ;
     timer_delay(2) ;
 
@@ -443,7 +445,7 @@ void integration_test_v4(void) {
             if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
 
             music_index += 1; music_index %= num_notes; 
-            int note_period = (SEC_IN_uSEC / music_notes[music_index]) ; // keep it approximate
+            int note_period = (uSEC_IN_SEC / music_notes[music_index]) ; // keep it approximate
 
             while (timer_get_ticks() % n > (0.8 * n)) {
                 // play music notes in here???
@@ -461,102 +463,102 @@ void integration_test_v4(void) {
 
 // includes the leaderboard loop and constant games!  AND MUSIC!! actual tetris theme
 void integration_test_v5(void) {
-    gpio_init() ;
-    timer_init() ;
-    uart_init() ;
-    interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_init(GPIO_PB6) ; // todo add to the remote module
-    interrupts_global_enable() ;
-    timer_delay(2) ;
+    // gpio_init() ;
+    // timer_init() ;
+    // uart_init() ;
+    // interrupts_init() ;
+    // remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
+    // buzzer_init(GPIO_PB6) ; // RESOLVED in TEST V6 add to the remote module
+    // interrupts_global_enable() ;
+    // timer_delay(2) ;
 
-    remote_is_button_press() ; // get rid of the extra button press... todo fix this bug!
+    // remote_is_button_press() ; // get rid of the extra button press... 
 
-    game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
+    // game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
 
-    while(1) {
-        game_update_init(20, 10);
-        falling_piece_t piece = init_falling_piece();
+    // while(1) {
+    //     game_update_init(20, 10);
+    //     falling_piece_t piece = init_falling_piece();
 
-        // write accelerometer x/y position to pitch(x) and roll(y)
-        int pitch = 0; int roll = 0;
-        long n = 500 ; // total ms wait for each loop
-        n = (n * 1000 * TICKS_PER_USEC);
+    //     // write accelerometer x/y position to pitch(x) and roll(y)
+    //     int pitch = 0; int roll = 0;
+    //     long n = 500 ; // total ms wait for each loop
+    //     n = (n * 1000 * TICKS_PER_USEC);
 
-        int toggle_turns = 0 ;
+    //     int toggle_turns = 0 ;
 
-        const int num_notes = 8*4*6 ; 
-        int music_notes[8*4 * 6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
-                                {
-                                    // theme 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                                    NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //     const int num_notes = 8*4*6 ; 
+    //     int music_notes[8*4 * 6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
+    //                             {
+    //                                 // theme 
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
+    //                                 NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+    //                                 NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
                                     
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //                                 NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+    //                                 NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
                                     
-                                    // theme again
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                                    NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //                                 // theme again
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
+    //                                 NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+    //                                 NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
                                     
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //                                 NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
+    //                                 NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
 
-                                    // slow falling part
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                                    NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3,
+    //                                 // slow falling part
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
+    //                                 NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
+    //                                 NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3,
                                     
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A,
-                                    NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3
-                                } ;
+    //                                 NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
+    //                                 NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
+    //                                 NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A,
+    //                                 NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3
+    //                             } ;
 
-        int music_index = 0 ;
+    //     int music_index = 0 ;
 
-        while(1) {
-            while (timer_get_ticks() % n <= (0.8 * n)) {
-                toggle_turns += 1 ; toggle_turns %= 3 ; // so we don't overflow
-                // tilt blocks
-                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+    //     while(1) {
+    //         while (timer_get_ticks() % n <= (0.8 * n)) {
+    //             toggle_turns += 1 ; toggle_turns %= 3 ; // so we don't overflow
+    //             // tilt blocks
+    //             remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
         
-                // horizontal movement
-                if (toggle_turns % 3 == 0) {
-                    if (roll == LEFT) move_left(&piece);
-                    else if (roll == RIGHT) move_right(&piece);                
-                }
+    //             // horizontal movement
+    //             if (toggle_turns % 3 == 0) {
+    //                 if (roll == LEFT) move_left(&piece);
+    //                 else if (roll == RIGHT) move_right(&piece);                
+    //             }
             
-                // drop a block faster
-                if (pitch == X_FAST) { 
-                    if (!piece.fallen) move_down(&piece);
-                    if (!piece.fallen) move_down(&piece);
-                }
+    //             // drop a block faster
+    //             if (pitch == X_FAST) { 
+    //                 if (!piece.fallen) move_down(&piece);
+    //                 if (!piece.fallen) move_down(&piece);
+    //             }
 
-                while (remote_is_button_press()) rotate(&piece);
-                if (piece.fallen) piece = init_falling_piece();
-            } 
+    //             while (remote_is_button_press()) rotate(&piece);
+    //             if (piece.fallen) piece = init_falling_piece();
+    //         } 
 
-            move_down(&piece);
-            if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
+    //         move_down(&piece);
+    //         if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
 
-            music_index += 1; music_index %= num_notes; 
-            int note_period = (SEC_IN_uSEC / music_notes[music_index]) ; // keep it approximate
+    //         music_index += 1; music_index %= num_notes; 
+    //         int note_period = (uSEC_IN_SEC / music_notes[music_index]) ; // keep it approximate
 
-            while (timer_get_ticks() % n > (0.8 * n)) {};
-        } 
+    //         while (timer_get_ticks() % n > (0.8 * n)) {};
+    //     } 
 
-        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
-    }
+    //     game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
+    // }
 }
 
 // includes the leaderboard loop and constant games! AND MUSIC!! actual tetris theme
@@ -564,10 +566,10 @@ void integration_test_v6(void) {
     gpio_init() ;
     timer_init() ;
     uart_init() ;
-    interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    interrupts_init() ; // interrupt sandwich start
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     buzzer_init(GPIO_PB6) ; 
-    interrupts_global_enable() ;
+    interrupts_global_enable() ; // interrupt sandwich end
     timer_delay(2) ;
 
     remote_is_button_press() ; // get rid of the extra button press... 
@@ -587,13 +589,17 @@ void integration_test_v6(void) {
 
         while(1) {
             while (timer_get_ticks() % n <= (0.8 * n)) {
-                toggle_turns += 1 ; toggle_turns %= (3*8) ; // so we don't overflow
+                toggle_turns += 1 ; toggle_turns %= (3*9) ; // so we don't overflow
 
                 // get accelerometer readings
                 remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
             
+<<<<<<< HEAD
                 // horizontal movement or swap
                 if (toggle_turns % 8 == 0) {
+=======
+                if (toggle_turns % 9 == 0) {
+>>>>>>> 759e6f6f8645ec6a44510d5c118da83108fd098f
                     if (pitch == X_SWAP) swap(&piece);
                 }
 
@@ -639,22 +645,47 @@ void integration_test_v6(void) {
 }
 
 
-
-
-// MULTITHREADING FOR MUSIC!
-void integration_test_v7(void) {
+// using timer interrupt for music
+void integration_test_v8(void) {
     gpio_init() ;
     timer_init() ;
     uart_init() ;
-    interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
-    buzzer_init(GPIO_PB6) ; 
-    interrupts_global_enable() ;
+    interrupts_init() ; // interrupt sandwich start
+    // buzzer_init(GPIO_PB6) ;
+    buzzer_intr_init(GPIO_PB6, TEMPO_VIVACE) ; // this uses both timer0 and timer1 for the pwm and note-change
+    interrupts_global_enable() ; // interrupt sandwich end
     timer_delay(2) ;
 
-    remote_is_button_press() ; // get rid of the extra button press...
+    gl_init(400, 400, GL_DOUBLEBUFFER) ;
+    gl_clear(GL_BLUE) ;
+    gl_swap_buffer() ;
+    gl_clear(GL_BLUE) ;
+    timer_delay(2) ;
 
-    game_interlude_init(30, 50, GL_AMBER, GL_BLACK) ; // can do this outside
+    while(1) {
+        // // confirm the buzzer works
+        // buzzer_play_note(NOTE_FREQ_A_3, NOTE_EIGHTH) ; 
+        // buzzer_play_note(NOTE_FREQ_D, NOTE_EIGHTH) ;
+        
+        gl_draw_line((timer_get_ticks()*12)%400, timer_get_ticks()%400, timer_get_ticks()%400, (timer_get_ticks()*12)%400, GL_AMBER) ;
+        gl_swap_buffer() ;
+        timer_delay(2) ;
+    }
+}
+
+// TETRIS THEME interrupt version!
+void integration_test_v9(void) {
+    gpio_init() ;
+    timer_init() ;
+    uart_init() ;
+    interrupts_init() ; // interrupt sandwich start
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6, TEMPO_ALLEGRO) ;  // buzzer interrupt moved into remote_init
+    interrupts_global_enable() ; // interrupt sandwich end
+    timer_delay(2) ;
+
+    remote_is_button_press() ; // get rid of the extra button press... 
+
+    game_interlude_init(30, 50, GL_WHITE, GL_INDIGO) ; // can do this outside
 
     while(1) {
         game_update_init(20, 10);
@@ -662,71 +693,27 @@ void integration_test_v7(void) {
 
         // write accelerometer x/y position to pitch(x) and roll(y)
         int pitch = 0; int roll = 0;
-        long n = 500 ; // total ms wait for each loop
+        long n = 480 ; // total ms wait for each loop
         n = (n * 1000 * TICKS_PER_USEC);
 
         int toggle_turns = 0 ;
 
-        const int num_notes = 8*4*6 ; 
-        int music_notes[8*4 * 6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
-                                {
-                                    // theme 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                                    NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                                    
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                                    
-                                    // theme again
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_C, NOTE_FREQ_B_3, 
-                                    NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                                    
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_F, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_G, NOTE_FREQ_F, 
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_D, NOTE_FREQ_C,
-                                    NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_C, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_E, NOTE_FREQ_E,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-
-                                    // slow falling part
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3, NOTE_FREQ_A_3,
-                                    NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3,
-                                    
-                                    NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_C, 
-                                    NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_D, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3, NOTE_FREQ_B_3,
-                                    NOTE_FREQ_C, NOTE_FREQ_C, NOTE_FREQ_E, NOTE_FREQ_E, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A, NOTE_FREQ_A,
-                                    NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3, NOTE_FREQ_G_SHARP_3
-                                } ;
-
-        int music_index = -1 ;
-
         while(1) {
-
-            music_index += 1; music_index %= num_notes ; 
-            int note_period = (SEC_IN_uSEC / music_notes[music_index]) ; 
-            buzzer_freq_init(timer_get_ticks(), note_period) ;
-            // todo: play music notes in gl draw functions too?? 
-
             while (timer_get_ticks() % n <= (0.8 * n)) {
-                toggle_turns += 1 ; toggle_turns %= 3 ; // so we don't overflow
-                // tilt blocks
-                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
-        
-                // buzzer_timing_play_note() ; // play the note!
+                toggle_turns += 1 ; toggle_turns %= (3*9) ; // so we don't overflow
 
-                // horizontal movement
-                if (toggle_turns % 3 == 0) {
-                    if (roll == LEFT) move_left(&piece);
-                    else if (roll == RIGHT) move_right(&piece);                
+                // get accelerometer readings
+                remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+            
+                if (toggle_turns % 9 == 0) {
+                    if (pitch == X_SWAP) swap(&piece);
                 }
 
-                // buzzer_timing_play_note() ; // play the note!
+                // horizontal movement or swap
+                if (toggle_turns % 3 == 0) {
+                    if (roll == LEFT) move_left(&piece);
+                    else if (roll == RIGHT) move_right(&piece); 
+                }
 
                 // drop a block faster
                 if (pitch == X_FAST) { 
@@ -734,22 +721,33 @@ void integration_test_v7(void) {
                     if (!piece.fallen) move_down(&piece);
                 }
 
-                // buzzer_timing_play_note() ; // play the note!
-
                 while (remote_is_button_press()) rotate(&piece);
-                if (piece.fallen) piece = init_falling_piece();
+                if (piece.fallen) {
+                    remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
+            
+                    // horizontal movement
+                    if (roll == LEFT) {
+                        move_left(&piece);
+                    }
+                    else if (roll == RIGHT) {
+                        move_right(&piece); 
+                    }
 
-                // buzzer_timing_play_note() ; // play the note!
+                    if (iterateVariant(&piece, checkIfFallen)) {
+                        iterateThroughPieceSquares(&piece, update_background);
+                        clearRows(); // inside clear rows: now, we get and update the tempo +=2 for every line cleared
+                        piece = init_falling_piece();
+                    }
+                }
             } 
-
+            
             move_down(&piece);
-            if (game_update_is_game_over()) {timer_delay(2) ; break ;} // exits game-playing mode if game is over
+            if (game_update_is_game_over()) {timer_delay(2); break;} // exits game-playing mode if game is over
 
-            while (timer_get_ticks() % n > (0.8 * n)) {
-                // buzzer_timing_play_note() ; // play the note!
-            };
+            while (timer_get_ticks() % n > (0.8 * n)) {};
         } 
 
-        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()) ; 
+        game_interlude_print_leaderboard(game_update_get_score(), game_update_get_rows_cleared()); 
     }
 }
+
