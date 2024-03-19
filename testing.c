@@ -592,11 +592,11 @@ void integration_test_v6(void) {
                 // get accelerometer readings
                 remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
             
+                // horizontal movement or swap
                 if (toggle_turns % 8 == 0) {
                     if (pitch == X_SWAP) swap(&piece);
                 }
 
-                // horizontal movement or swap
                 if (toggle_turns % 3 == 0) {
                     if (roll == LEFT) move_left(&piece);
                     else if (roll == RIGHT) move_right(&piece); 
