@@ -23,10 +23,12 @@ Tetris, but with a tiltable controller
    - use button to iterate/select on-screen and tilt down to continue to next screen
 ### game (game_update, random_bag):
  - // TODO ADD GAME FEATURES @anjali
-### music (passive_buzz):
- - plays the song! music library allows user to initialize/reset tempo, and play notes for a duration (whole/half/quarter/eighth) with a frequency (note letter)
- - very friendly to people who know western classical music.
-
+### music (passive_buzz_intr):
+ - Plays the song! This means MULTITASKING!! 
+ - Music library allows user to initialize/change tempo, and play a song on repeat USING INTERRUPTS! 
+ - Notes within a song are specified by a (1)  frequency (note letter) and (2) duration (whole/half/quarter/eighth)
+ - Very friendly to people who know western classical music.
+ - passive_buzz files are a previous version of passive buzzer works : they play notes but do not control the PWM via interrupts
 
 ## Member contribution
 TODO A short description of the work performed by each member of the team.
