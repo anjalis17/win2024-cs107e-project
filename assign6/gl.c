@@ -140,7 +140,6 @@ int gl_get_char_width(void) {
     return font_get_glyph_width();
 }
 
-
 //// EXTENSION CODE 
 // ANTI-ALIASED LINE DRAWING!
 // Rounds num to nearest integer 

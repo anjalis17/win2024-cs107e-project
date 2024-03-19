@@ -14,6 +14,8 @@
 #include "uart.h"
 #include "random_bag.h"
 #include "passive_buzz_intr.h"
+#include "LSD6DS33.h"
+#include "console.h"
 
 const piece_t i = {'i', 0x1AE6DC, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', 0x0000E4, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
@@ -114,11 +116,17 @@ void pause(const char *message) {
 }
 
 void startGame(void) {
-    // gl_draw_string("")
-    // Draw 107mango
-    // Draw 1 (as i piece)
-    gl_clear(game_config.bg_col);
 
+    gl_clear(game_config.bg_col) ;
+    gl_clear(game_config.bg_col) ;
+
+    // Draw text
+    console_printf("\n   TILTRIS!\n\n\n\n Button:On/Off\n         Music\n\n Tilt to Play") ;
+    gl_swap_buffer() ;
+
+    // Draw 107mango
+
+    // Draw 1 (as i piece)
     drawFallenSquare(0, 15, i.color);
     drawFallenSquare(0, 16, i.color);
     drawFallenSquare(0, 17, i.color);
@@ -135,15 +143,6 @@ void startGame(void) {
     drawFallenSquare(3, 18, l.color);
 
     // Draw 7 (as j and t pieces)
-    // drawFallenSquare(4, 14, j.color);
-    // drawFallenSquare(5, 14, j.color);
-    // drawFallenSquare(6, 14, j.color);
-    // drawFallenSquare(6, 15, j.color);
-    // drawFallenSquare(6, 16, t.color);  
-    // drawFallenSquare(6, 17, t.color);
-    // drawFallenSquare(6, 18, t.color);  
-    // drawFallenSquare(5, 17, t.color);  
-
     drawFallenSquare(3, 14, j.color);
     drawFallenSquare(4, 14, j.color);
     drawFallenSquare(5, 14, j.color);
@@ -164,6 +163,18 @@ void startGame(void) {
     drawFallenSquare(9, 16, s.color); 
 
     gl_swap_buffer();
+
+    // wait for downward tilt
+    timer_delay(2) ;
+    int pitch = 0 ; int roll = 0 ;
+    remote_get_x_y_status(&pitch, &roll) ;
+    while (pitch != X_FAST) { 
+        remote_get_x_y_status(&pitch, &roll) ; 
+        if (remote_is_button_press()) {
+            buzzer_intr_is_playing() ? buzzer_intr_pause() : buzzer_intr_play() ;
+        }
+    }
+
 }
 
 void endGame(void) {

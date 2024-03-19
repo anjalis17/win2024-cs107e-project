@@ -774,11 +774,7 @@ void integration_test_v10(void) {
 
         int toggle_turns = 0 ;
         
-        remote_get_x_y_status(&pitch, &roll);
-
         startGame();
-        timer_delay(2) ;
-        while (pitch != X_FAST) { remote_get_x_y_status(&pitch, &roll); }
 
         while(1) {
             while (timer_get_ticks() % n <= (0.8 * n)) {
@@ -796,12 +792,6 @@ void integration_test_v10(void) {
                     if (roll == LEFT) move_left(&piece);
                     else if (roll == RIGHT) move_right(&piece); 
                 }
-
-                // // drop a block faster
-                // if (pitch == X_FAST) { 
-                //     if (!piece.fallen) move_down(&piece);
-                //     if (!piece.fallen) move_down(&piece);
-                // }
 
                 while (remote_is_button_press()) rotate(&piece);
                 if (piece.fallen) {
@@ -831,7 +821,6 @@ void integration_test_v10(void) {
             
             move_down(&piece);
             if (game_update_is_game_over()) {timer_delay(2); break;} // exits game-playing mode if game is over
-            // if(n > ((n_init-200) * 1000 * TICKS_PER_USEC)) {n = n_init-100000*TICKS_PER_USEC*game_update_get_rows_cleared();} // update n based on lines cleared
 
             while (timer_get_ticks() % n > (0.8 * n)) {};
         } 
