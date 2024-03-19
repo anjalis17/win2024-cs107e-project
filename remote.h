@@ -16,7 +16,7 @@ typedef struct {
 } remote_t;
 
 // initializes button and servo
-void remote_init(gpio_id_t servo_id, gpio_id_t button_id) ;
+void remote_init(gpio_id_t servo_id, gpio_id_t button_id, gpio_id_t buzzer_id, int music_tempo) ;
 
 // button
 // handled via interrupt

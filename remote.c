@@ -11,11 +11,8 @@
 #include "uart.h"
 #include "LSD6DS33.h"
 #include "i2c.h"
-#include "game_update.h"
 #include "ringbuffer.h"
 #include "remote.h"
-#include "printf.h"
-#include "assert.h"
 #include <stddef.h>
 #include "music.h"
 #include "passive_buzz_intr.h"
@@ -27,8 +24,8 @@ static void handle_button(uintptr_t pc, void *aux_data) {
     gpio_interrupt_clear(remote.button) ;
 
     remote_t *rem = (remote_t *)aux_data ;
-
-    rb_enqueue(rem->rb, 1) ; // don't check whether it was added; it's trivial and unlikely that the queue overfills
+    // don't check whether it was added; it's trivial and unlikely that the queue overfills and branching takes time
+    rb_enqueue(rem->rb, 1) ; 
 }
 
 // checks if there are presses in the queue
@@ -43,7 +40,7 @@ bool remote_is_button_press(void) {
 }
 
 // initializes button, servo, i2c, accelerometer, and interrupts for button
-void remote_init(gpio_id_t servo_id, gpio_id_t button_id) {
+void remote_init(gpio_id_t servo_id, gpio_id_t button_id, gpio_id_t buzzer_id, int music_tempo) {
     gpio_set_input(button_id) ;
     remote.button = button_id ;
 
@@ -55,7 +52,7 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id) {
     // accelerometer init
     i2c_init();
 	lsm6ds33_init();
-    buzzer_intr_init(GPIO_PB6, TEMPO_VIVACE) ; // this uses both timer0 and timer1 for the pwm and note-change :)
+    buzzer_intr_init(buzzer_id, music_tempo) ; // this uses both timer0 and timer1 for the pwm and note-change :)
 
     gpio_interrupt_init() ;
     gpio_interrupt_config(remote.button, GPIO_INTERRUPT_POSITIVE_EDGE, true) ; // if pressed

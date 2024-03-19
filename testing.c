@@ -80,7 +80,7 @@ void test_remote(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6, TEMPO_DEFAULT) ; 
     interrupts_global_enable() ; 
     printf("\nremote tests enabled\n") ;
     while(1) {
@@ -100,7 +100,7 @@ void test_motions_integrated(void) { // OBSOLETE TEST FUNCTION!!
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     interrupts_global_enable() ;
     
     game_update_init(20, 10);
@@ -156,7 +156,7 @@ void integration_test_v2(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     interrupts_global_enable() ;
     
     game_update_init(20, 10);
@@ -308,7 +308,7 @@ void test_leaderboard(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     interrupts_global_enable() ;
     timer_delay(2) ;
 
@@ -331,7 +331,7 @@ void integration_test_v3(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     interrupts_global_enable() ;
     timer_delay(2) ;
 
@@ -395,7 +395,7 @@ void integration_test_v4(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ;
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     buzzer_init(GPIO_PB6) ;
     interrupts_global_enable() ;
     timer_delay(2) ;
@@ -467,7 +467,7 @@ void integration_test_v5(void) {
     // timer_init() ;
     // uart_init() ;
     // interrupts_init() ;
-    // remote_init(GPIO_PB1, GPIO_PB0) ; 
+    // remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     // buzzer_init(GPIO_PB6) ; // RESOLVED in TEST V6 add to the remote module
     // interrupts_global_enable() ;
     // timer_delay(2) ;
@@ -567,7 +567,7 @@ void integration_test_v6(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ; // interrupt sandwich start
-    remote_init(GPIO_PB1, GPIO_PB0) ; 
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6,TEMPO_DEFAULT) ; 
     buzzer_init(GPIO_PB6) ; 
     interrupts_global_enable() ; // interrupt sandwich end
     timer_delay(2) ;
@@ -667,10 +667,7 @@ void integration_test_v8(void) {
         gl_swap_buffer() ;
         timer_delay(2) ;
     }
-
 }
-
-
 
 // TETRIS THEME interrupt version!
 void integration_test_v9(void) {
@@ -678,7 +675,7 @@ void integration_test_v9(void) {
     timer_init() ;
     uart_init() ;
     interrupts_init() ; // interrupt sandwich start
-    remote_init(GPIO_PB1, GPIO_PB0) ;  // buzzer interrupt moved into remote_init
+    remote_init(GPIO_PB1, GPIO_PB0, GPIO_PB6, TEMPO_ALLEGRO) ;  // buzzer interrupt moved into remote_init
     interrupts_global_enable() ; // interrupt sandwich end
     timer_delay(2) ;
 

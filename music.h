@@ -54,7 +54,8 @@ enum { // TEMPO
     TEMPO_ALLEGRETTO = 120,
     TEMPO_ALLEGRO = 140,
     TEMPO_VIVACE = 160,
-    TEMPO_MAX = 500,
+    TEMPO_200 = 200,
+    TEMPO_MAX = 280,
 } ;
 
 #endif

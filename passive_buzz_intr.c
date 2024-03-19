@@ -151,7 +151,7 @@ void buzzer_intr_set_tempo(int tempo_) {
 // buzzer_intr_get_tempo
 // converts back into reasonable tempo. note that there may be rounding issues.
 int buzzer_intr_get_tempo() {
-    return (tempo/2) * TEMPO_CONSTANT ; // converts back into reasonable tempo. note that there may be rounding issues.
+    return TEMPO_CONSTANT / ((tempo*2)) ; // converts back into reasonable tempo. note that there may be rounding issues.
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
