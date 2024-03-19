@@ -1,6 +1,6 @@
 /*
  * Module to read accelerometer
- * Author: Aditi Bhaskar (aditijb@stanford.edu)
+ * Author: Aditi (aditijb@stanford.edu)
  * Based on Julie Zelenski's version from Mar 1 2024 https://github.com/cs107e/cs107e.github.io/tree/master/lectures/Sensors/code/accel
  *  Adafruit LSM6DS3TR + LIS3MDL - Precision 9 DoF IMU Accel + Gyro + Magnetometer 
  *          https://www.adafruit.com/product/5543 

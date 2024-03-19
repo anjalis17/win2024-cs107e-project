@@ -1,6 +1,6 @@
 /*
  * Module to send tasks to servo
- * Author: Aditi Bhaskar (aditijb@stanford.edu)
+ * Author: Aditi (aditijb@stanford.edu)
  */
 
 #include "gpio.h"

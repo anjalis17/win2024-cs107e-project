@@ -2,7 +2,7 @@
 #define SERVO_H
 /*
  * Module to send signals to servo
- * Author: Aditi Bhaskar (aditijb@stanford.edu)
+ * Author: Aditi (aditijb@stanford.edu)
  */
 
 void servo_init(gpio_id_t id) ;

@@ -1,6 +1,6 @@
 /* passive_buzz.c
  * Module to play buzzer tones to buzzer
- * Author: Aditi Bhaskar (aditijb@stanford.edu)
+ * Author: Aditi (aditijb@stanford.edu)
  * Note that, if you're using this module, 100% of the mango pi's attention is towards the song. 
  *  to multitask, check out passive_buzz_intr.h/.c for interrupt-based control of pitch
  */
@@ -31,7 +31,6 @@ void buzzer_init(gpio_id_t id) {
 // 'buzzer_set_tempo'
 // set the tempo for the buzzer
 // returns false if invalid tempo
-// RESOLVED IN PASSIVE_BUZZ_INTR.c test tempo ranges!! > andante doesn't work
 bool buzzer_set_tempo(int new_tempo) {
     if (new_tempo > 50 && new_tempo < 200) {
         tempo = new_tempo ;

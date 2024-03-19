@@ -1,6 +1,6 @@
 /*
  * Module for remote control for Tetris game
- * Author: Aditi Bhaskar (aditijb@stanford.edu)
+ * Author: Aditi (aditijb@stanford.edu)
  */
 
 #include "gpio.h"

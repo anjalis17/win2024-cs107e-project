@@ -1,7 +1,7 @@
 /* passive_buzz.c
  * Module to send buzzer tones to buzzer with interrupt-based setup. Yay multitasking!
- * Author: Aditi Bhaskar (aditijb@stanford.edu)
- * credit: thanks to Antonio for mentioning https://cs107e.github.io/header#hstimer had the timer_interrupt_clear function
+ * Author: Aditi (aditijb@stanford.edu)
+ * Credit: thanks to Antonio K. for mentioning https://cs107e.github.io/header#hstimer had the timer_interrupt_clear function
  */
 
 #include "gpio.h"
@@ -141,7 +141,7 @@ void buzzer_intr_init(gpio_id_t id, int tempo_) {
     hstimer_enable(HSTIMER1) ;
 }
 
-// buzzer_intr_set_tempo
+// `buzzer_intr_set_tempo`
 // updated tempo will automatically be set by the next note
 void buzzer_intr_set_tempo(int tempo_) {
     if (tempo_ < TEMPO_MIN) tempo_ = TEMPO_MIN ;
@@ -149,12 +149,17 @@ void buzzer_intr_set_tempo(int tempo_) {
     tempo = TEMPO_CONSTANT / (tempo_ * 2) ; 
 }
 
-// buzzer_intr_get_tempo
+// `buzzer_intr_get_tempo`
 // converts back into reasonable tempo. note that there may be rounding issues.
-int buzzer_intr_get_tempo() {
+int buzzer_intr_get_tempo(void) {
     return TEMPO_CONSTANT / ((tempo*2)) ; // converts back into reasonable tempo. note that there may be rounding issues.
 }
 
+// `buzzer_intr_restart_song`
+// restarts the song on the next note-loop
+void buzzer_intr_restart_song(void) {
+    song_index = 0 ;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

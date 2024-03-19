@@ -6,7 +6,7 @@
     Tue Feb 13 17:44:05 PST 2024
 
 ////////////////
-    Updated by Aditi Bhaskar (aditijb@stanford.edu) to repeat commands if not rightfully ACK/NAK'ed
+    Updated by Aditi (aditijb@stanford.edu) to repeat commands if not rightfully ACK/NAK'ed
     i2c reference: https://www.ti.com/lit/an/slva704/slva704.pdf
  */
 #include "i2c.h"

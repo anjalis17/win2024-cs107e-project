@@ -1,6 +1,6 @@
 /*
  * Module to print game interlude (leaderboard and adding people)
- * Author: Aditi Bhaskar (aditijb@stanford.edu)
+ * Author: Aditi (aditijb@stanford.edu)
  * abilities:
  *   store and show leaderboard 
  *   to add yourself to leaderboard, select 2-letter initials (using button presses)
