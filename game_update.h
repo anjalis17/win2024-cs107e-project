@@ -62,6 +62,8 @@ static void drawPiece(falling_piece_t* piece);
 
 void endGame(void);
 
+void startGame(void);
+
 void pause(const char *message);
 
 void clearRows(void);

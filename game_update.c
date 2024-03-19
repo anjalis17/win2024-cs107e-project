@@ -113,6 +113,59 @@ void pause(const char *message) {
     uart_putchar('\n');
 }
 
+void startGame(void) {
+    // gl_draw_string("")
+    // Draw 107mango
+    // Draw 1 (as i piece)
+    gl_clear(game_config.bg_col);
+
+    drawFallenSquare(0, 15, i.color);
+    drawFallenSquare(0, 16, i.color);
+    drawFallenSquare(0, 17, i.color);
+    drawFallenSquare(0, 18, i.color);
+
+    // Draw 0 as (2 l pieces)
+    drawFallenSquare(1, 16, l.color);
+    drawFallenSquare(2, 16, l.color);
+    drawFallenSquare(3, 16, l.color);
+    drawFallenSquare(1, 17, l.color);
+    drawFallenSquare(3, 17, l.color);
+    drawFallenSquare(1, 18, l.color);
+    drawFallenSquare(2, 18, l.color);
+    drawFallenSquare(3, 18, l.color);
+
+    // Draw 7 (as j and t pieces)
+    // drawFallenSquare(4, 14, j.color);
+    // drawFallenSquare(5, 14, j.color);
+    // drawFallenSquare(6, 14, j.color);
+    // drawFallenSquare(6, 15, j.color);
+    // drawFallenSquare(6, 16, t.color);  
+    // drawFallenSquare(6, 17, t.color);
+    // drawFallenSquare(6, 18, t.color);  
+    // drawFallenSquare(5, 17, t.color);  
+
+    drawFallenSquare(3, 14, j.color);
+    drawFallenSquare(4, 14, j.color);
+    drawFallenSquare(5, 14, j.color);
+    drawFallenSquare(5, 15, j.color);
+    drawFallenSquare(5, 16, t.color);  
+    drawFallenSquare(5, 17, t.color);
+    drawFallenSquare(5, 18, t.color);  
+    drawFallenSquare(4, 17, t.color);  
+
+    // Draw mango (as o and z pieces)
+    drawFallenSquare(8, 17, o.color);
+    drawFallenSquare(9, 17, o.color);  
+    drawFallenSquare(8, 18, o.color);  
+    drawFallenSquare(9, 18, o.color);  
+    drawFallenSquare(7, 15, s.color);   
+    drawFallenSquare(8, 15, s.color); 
+    drawFallenSquare(8, 16, s.color); 
+    drawFallenSquare(9, 16, s.color); 
+
+    gl_swap_buffer();
+}
+
 void endGame(void) {
     draw_background();
     char buf[20];

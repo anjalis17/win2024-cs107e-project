@@ -747,12 +747,6 @@ void integration_test_v9(void) {
 }
 
 
-
-
-
-
-
-
 // TETRIS THEME interrupt version!
 void integration_test_v10(void) {
     gpio_init() ;
@@ -779,6 +773,12 @@ void integration_test_v10(void) {
         n = (n * 1000 * TICKS_PER_USEC);
 
         int toggle_turns = 0 ;
+        
+        remote_get_x_y_status(&pitch, &roll);
+
+        startGame();
+        timer_delay(2) ;
+        while (pitch != X_FAST) { remote_get_x_y_status(&pitch, &roll); }
 
         while(1) {
             while (timer_get_ticks() % n <= (0.8 * n)) {
@@ -787,7 +787,7 @@ void integration_test_v10(void) {
                 // get accelerometer readings
                 remote_get_x_y_status(&pitch, &roll); // the x and y tilt statuses
             
-                if (toggle_turns % 5 == 0) {
+                if (toggle_turns % 7 == 0) {
                     if (pitch == X_SWAP) swap(&piece);
                 }
 
@@ -797,11 +797,11 @@ void integration_test_v10(void) {
                     else if (roll == RIGHT) move_right(&piece); 
                 }
 
-                // drop a block faster
-                if (pitch == X_FAST) { 
-                    if (!piece.fallen) move_down(&piece);
-                    if (!piece.fallen) move_down(&piece);
-                }
+                // // drop a block faster
+                // if (pitch == X_FAST) { 
+                //     if (!piece.fallen) move_down(&piece);
+                //     if (!piece.fallen) move_down(&piece);
+                // }
 
                 while (remote_is_button_press()) rotate(&piece);
                 if (piece.fallen) {
@@ -820,6 +820,12 @@ void integration_test_v10(void) {
                         clearRows(); // inside clear rows: now, we get and update the tempo +=2 for every line cleared
                         piece = init_falling_piece();
                     }
+                }
+
+                // drop a block faster
+                if (pitch == X_FAST) { 
+                    if (!piece.fallen) move_down(&piece);
+                    if (!piece.fallen) move_down(&piece);
                 }
             } 
             
