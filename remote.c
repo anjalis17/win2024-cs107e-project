@@ -44,8 +44,9 @@ bool remote_is_button_press(void) {
 // 'remote_init'
 // initializes button, servo, i2c, accelerometer, and interrupts for button
 void remote_init(gpio_id_t servo_id, gpio_id_t button_id, gpio_id_t buzzer_id, int music_tempo) {
-    gpio_set_input(button_id) ;
+    
     remote.button = button_id ;
+    gpio_set_input(button_id) ;
 
     remote.servo = servo_id ;    
     servo_init(servo_id) ;
@@ -55,6 +56,8 @@ void remote_init(gpio_id_t servo_id, gpio_id_t button_id, gpio_id_t buzzer_id, i
     // accelerometer init
     i2c_init();
 	lsm6ds33_init();
+
+    remote.buzzer = buzzer_id ;    
     buzzer_intr_init(buzzer_id, music_tempo) ; // this uses both timer0 and timer1 for the pwm and note-change :)
 
     gpio_interrupt_init() ;
