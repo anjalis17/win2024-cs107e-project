@@ -774,11 +774,7 @@ void integration_test_v10(void) {
 
         int toggle_turns = 0 ;
         
-        remote_get_x_y_status(&pitch, &roll);
-
         startGame();
-        timer_delay(2) ;
-        while (pitch != X_FAST) { remote_get_x_y_status(&pitch, &roll); }
 
         while(1) {
             while (timer_get_ticks() % n <= (0.8 * n)) {

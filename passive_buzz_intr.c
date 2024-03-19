@@ -17,6 +17,7 @@
 // class info
 static gpio_id_t buzzer_id ;
 static int tempo ; // converted from beats per minute to a frequency (Hz)
+static bool is_playing ;
 
 // song info
 const int song_length =93 ;
@@ -119,6 +120,7 @@ static void handle_note_change(uintptr_t pc, void *aux_data) {
 void buzzer_intr_init(gpio_id_t id, int tempo_) {
     gpio_set_output(id) ;
     buzzer_id = id ;
+    
     if (tempo_ < TEMPO_MIN) tempo_ = TEMPO_MIN ;
     if (tempo_ > TEMPO_MAX) tempo_ = TEMPO_MAX ;
     tempo = TEMPO_CONSTANT / (tempo_ * 2); // multiply by 2 because song's smallest note is in 8th notes, not quarter
@@ -139,6 +141,8 @@ void buzzer_intr_init(gpio_id_t id, int tempo_) {
     // hstimer_init(HSTIMER1, 300000) ; 
     hstimer_init(HSTIMER1, tetris_song[song_index][1]) ; 
     hstimer_enable(HSTIMER1) ;
+
+    is_playing = true ;
 }
 
 // `buzzer_intr_set_tempo`
@@ -159,6 +163,23 @@ int buzzer_intr_get_tempo(void) {
 // restarts the song on the next note-loop
 void buzzer_intr_restart_song(void) {
     song_index = 0 ;
+}
+
+// todo add comments
+void buzzer_intr_pause(void) {
+    hstimer_disable(HSTIMER1) ;
+    hstimer_disable(HSTIMER0) ;
+    is_playing = false ;
+}
+
+void buzzer_intr_play(void) {
+    hstimer_enable(HSTIMER0) ;
+    hstimer_enable(HSTIMER1) ;
+    is_playing = true ;
+}
+
+bool buzzer_intr_is_playing(void) {
+    return is_playing ;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

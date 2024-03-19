@@ -65,7 +65,7 @@ static void game_interlude_operations(void) {
 */
 static void game_interlude_display_game_stats(unsigned int score, unsigned int lines_cleared) {
     console_clear() ;
-    console_printf(" score:\n  %d\n lines cleared:\n  %d", score, lines_cleared) ; 
+    console_printf("\n score:\n  %d\n lines cleared:\n  %d", score, lines_cleared) ; 
     int pitch = 0; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
     timer_delay(2) ;

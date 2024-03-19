@@ -36,4 +36,12 @@ int buzzer_intr_get_tempo(void) ;
 */
 void buzzer_intr_restart_song(void) ;
 
+
+// todo comment
+
+void buzzer_intr_pause(void) ;
+void buzzer_intr_play(void) ;
+bool buzzer_intr_is_playing(void) ;
+
+
 #endif
