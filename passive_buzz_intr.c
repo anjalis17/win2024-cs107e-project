@@ -74,7 +74,7 @@ const int tetris_song[93][2] = // note freq followed by duration. each 2 lines a
 
 static int song_index ;
 
-// freq_to_period_us
+// `freq_to_period_us`
 // @param frequency in Hertz (1/s)
 // @returns period in useconds
 static int freq_to_period_us(int frequency) {
@@ -124,6 +124,7 @@ void buzzer_intr_init(gpio_id_t id, int tempo_) {
     tempo = TEMPO_CONSTANT / (tempo_ * 2); // multiply by 2 because song's smallest note is in 8th notes, not quarter
 
     song_index = 0 ;
+
     // initializing interrupt system to listen for timer
 
     // INTERRUPT_SOURCE_HSTIMER0 to pwm the note
@@ -154,10 +155,11 @@ int buzzer_intr_get_tempo() {
     return TEMPO_CONSTANT / ((tempo*2)) ; // converts back into reasonable tempo. note that there may be rounding issues.
 }
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/* For show! 
-// previous version of storing song data:
+/* Historical Representations of the song! 
+// previous version of storing song data: The issue was that there was a short pause between every note, so quarter notes all sounded like 2 eighth notes/etc
 
 const int song_length = 8*4*6 ;
 const int tetris_song[8*4*6] = // all notes are eigth notes. each line is a measure. each 4 lines is a grouped musical phrase
