@@ -2,6 +2,7 @@
 
 ## general todo
  - readme answers
+ - bug right before start screen
  - clean code / comments
 
 ## bugs
