@@ -1,10 +1,11 @@
 /*
  * Module to print game interlude (leaderboard and adding people)
  * Author: Aditi (aditijb@stanford.edu)
- * abilities:
- *   store and show leaderboard 
- *   to add yourself to leaderboard, select 2-letter initials (using button presses)
- *   play game again
+ * 
+ * user abilities:
+ *    - store and show leaderboard 
+ *    - to add yourself to leaderboard, select 2-letter initials (using button presses)
+ *    - play game again
  */
 
 #include "console.h"

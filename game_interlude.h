@@ -33,7 +33,7 @@ void game_interlude_init(int nrows, int ncols, color_t text, color_t bg) ;
 */
 void game_interlude_print_leaderboard(unsigned int score, unsigned int lines_cleared) ;
 
-// getter methods for game_interlude variables
+// getter methods for game_interlude's interlude_contents_t variables
 int game_interlude_get_rows(void) ;
 int game_interlude_get_cols(void) ;
 

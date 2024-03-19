@@ -1,7 +1,8 @@
 #ifndef MUSIC_H
 #define MUSIC_H
 
-enum { // NOTE FREQUENCY
+// NOTE FREQUENCY
+enum { 
     
     // in hertz 
     // https://miro.medium.com/v2/resize:fit:618/format:webp/1*K7y56Rd1kolwV_GNOpmwEg.png
@@ -29,7 +30,8 @@ enum { // NOTE FREQUENCY
     NOTE_FREQ_B = 494
 } ;
 
-enum { // NOTE LENGTH
+// NOTE LENGTH
+enum { 
     NOTE_WHOLE = 2000,
     NOTE_HALF = 1000,
     NOTE_QUARTER = 500,
@@ -37,14 +39,16 @@ enum { // NOTE LENGTH
     NOTE_SIXTEENTH = 125
 } ;
 
-enum { // NOTE LENGTH, but as used for the passive_buzz_intr's interrupt
+// NOTE LENGTH, but as used for the passive_buzz_intr's interrupt
+enum { 
     NOTE_IPT_WHOLE = 8,
     NOTE_IPT_HALF = 4,
     NOTE_IPT_QUARTER = 2,
     NOTE_IPT_EIGHTH = 1,
 } ;
 
-enum { // TEMPO
+// TEMPO
+enum { 
     TEMPO_MIN = 50,
     TEMPO_LENTO = 55,
     TEMPO_DEFAULT = 60,
