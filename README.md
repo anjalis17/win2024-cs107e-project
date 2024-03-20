@@ -45,12 +45,11 @@ Tetris, but with a tiltable controller!
  - Ability to pause/resume music on start screen for the following game. This means that (if the beautiful music is giving you a headache) you can configure on/off for music at the beginning of each game using button presses.
 
 ## Member contribution
-Aditi did everything on the hardware-side and created the leaderboard!
- - files: remote, servo, lsd6ds33, i2c, passive_buzz, passive_buzz_intr, game_interlude, testing/main 
-Anjali built all the software underlying the game itself! 
- - files: game_update, random_bag, testing/main
-Together, we did lots of fine-tuning, debugging, play testing, and calibrating of remote angling. We also decided on "new"/next features to add, 
-and perhaps most importantly, had lots of fun and discovered new things together :)
+ - Aditi did everything on the hardware-side and created the leaderboard!
+   - files: remote, servo, lsd6ds33, i2c, passive_buzz, passive_buzz_intr, game_interlude, testing/main 
+ - Anjali built all the software underlying the game itself! 
+   - files: game_update, random_bag, testing/main
+ - Together, we did lots of fine-tuning, debugging, play testing, and calibrating of remote angling. We also decided on "new"/next features to add, and perhaps most importantly, had lots of fun and discovered new things together :)
 
 ## References
  - all references are also inline in our code, but here is a short summary:
@@ -81,6 +80,10 @@ Our team executed our goals super well! We are really proud of our end-product, 
 
 ## Photos
 ### Photos & writeups are in the /documents directory 
- - /documents/demo : contains video demo of Tiltris! includes endgame (blocks stack to signal end of game), leaderboard (entering user info; updated leaderboard), and starting a new game (tuck, clear line, swap)
+ - /documents/demo : contains video demos of Tiltris! 
+   - cs107e-tiltris-demo.mp4 features Aditi playing Tiltris. It includes endgame (blocks stack to signal end of game), leaderboard (entering user info; updated leaderboard), and starting a new game (tuck, clear line, swap). 
+   - cs107e-tiltris-demo-intermediary-screens.mp4 features Anjali playing Tiltris. It includes more footage of swap, the *newly* added start screen, toggling on/off music, and more!
+   - cs107e-tiltris-danielshighscore features high score on Tiltris is 92 lines, by Daniel
+   - cs107e-start-screen features a recent (but not final) version of the start screen
  - /documents/remote : contains pictures of the remote (including earlier breadboard stages to show the transformation)
- - /documents/specs+initialnotes : contains a list of features we wanted initially + Aditi's initial hardware notes
+ - /documents/specs+initialnotes : contains a list of features we wanted initially in *Tetris.pdf + Aditi's initial hardware notes in *HW_notes.pdf
