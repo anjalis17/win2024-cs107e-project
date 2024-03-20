@@ -42,7 +42,7 @@ Tetris, but with a tiltable controller!
  - Libraries allow user to initialize/change tempo, and play a song on repeat using interrupts! Very friendly interface for people who know western classical music
  - Notes that compose a song are specified by a (1) frequency (note letter) and (2) duration (whole/half/quarter/eighth)
  - passive_buzz files are from a previous version of the passive buzzer implementation: they play notes directly instead of controlling the PWM via interrupts
- - Ability to pause/resume music on start screen for the following game. This means that (if the beautiful music is giving you a headache) you can configure on/off for music at the beginning of each game using button presses.
+ - Ability to pause/resume music on start screen for the upcoming game. This means that (if the beautiful music is giving you a headache) you can configure on/off for music at the beginning of each game using button presses.
 
 ## Member contribution
  - Aditi did everything on the hardware-side and created the leaderboard!
