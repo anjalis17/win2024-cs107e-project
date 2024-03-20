@@ -2,9 +2,7 @@
 #include "testing.h"
 
 void main(void) {
-
-    // anjali tests
-
+    // INITIAL TEST CYCLES
     // uart_init();
     // say_hello("CS107e"); 
     // test_random_init();
@@ -12,17 +10,14 @@ void main(void) {
     // test_motions();
     // test_remote() ;
     // integration_test_v2();
-
-    // aditi tests
-    // test_motions_integrated() ;  // OBSOLETE
+    // test_motions_integrated() ;  
     // tetris_theme_song() ;
     // test_leaderboard() ;
     // integration_test_v3() ;
-    
-    // integration_test_v8();  
+    // integration_test_v8(); 
+    // integration_test_v6() ; 
 
-    // integration_test_v6() ; // tetris game normal
-
-    integration_test_v10() ; // tetris theme intrp with game
+    // Final game loop used in demo!
+    integration_test_v10(); 
 
 }

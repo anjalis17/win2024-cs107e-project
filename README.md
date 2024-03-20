@@ -56,7 +56,7 @@ Tetris, but with a tiltable controller!
  - all references are also inline in our code, but here is a short summary:
    - i2c and lsd6ds33 libraries were borrowed and modified from Julie's week 8 Sensors lecture. The code is commented to deliniate what is borrowed vs. new
    - Talked to Javier, Antonio briefly about multitasking and where the timer interrupt clear functions were
- - https://codeincomplete.com/articles/javascript-tetris/ -- Our hex representation of the rotational configurations for each tetris piece was taken from this site. This facilitated a super efficient way to iterate over the squares of each tetris piece using bit shifting! (The rest of the Javascript code on this site was not used or referenced.)
+ - https://codeincomplete.com/articles/javascript-tetris/ -- Our hex representation of the rotational configurations for each tetris piece was inspired from this site. This structure facilitated a super efficient way to iterate over the squares of each tetris piece using bit shifting! (The rest of the Javascript code on this site was not used, consulted, or referenced.)
 
 ## Sharing Code
 Our code for i2c.c (a slighly more robust version which checked for outgoing addresses to be ACK'ed) was shared with Sazzad and Aditri's teams. They both said they would cite us. Thought it was worth mentioning here for good measure.
@@ -73,9 +73,9 @@ Our team executed our goals super well! We are really proud of our end-product, 
  - Anjali: 
    - the codebase architecture of the game!! From the structuring of the tetris game pieces, the use of function pointers in being able to iterate through game pieces with a variety of functions, and the decomposition scheme, I think the design is efficient and easy to work with :) It made adding features super easy! 
      - "Anjali's architecture is super modular and easy to work with" ~ Aditi, when she changed the blocks to be beveled on the spot during lab :O
-   - TUCK! The tuck feature was a bit tricky to implement, but I was able to integrate it without too much trouble (also thanks to my architecture; I'm thankful I spent time drawing it out / thinking about it in the beginning!) and it adds so much to the game, we think!
+   - TUCK! (This is the feature where the user can slide an immediately fallen piece left/right before it locks in place... an advanced Tetris tactic! ;)) This tuck feature was tricky to implement, but I was able to integrate it quite smoothly (also thanks to my architecture; I'm thankful I spent time drawing it out / thinking about it in the beginning!). It adds so much to the game, we think!
    - It took quite an adventure to figure out that in C header files, when declaring const variables, they must be declared using extern... otherwise, we get "multiple definition" errors from the linker :O
-   - I'm proud of both mine and Aditi's effort, how we worked together/divided up the project, our integration, and our enthusiasm to keep adding new features and push ourselves! <3 I'm also super happy seeing our end product! YAY!
+   - I'm proud of both mine and Aditi's effort, how we worked together/divided up the project, our integration, and our enthusiasm to keep adding new features and touches and push ourselves! <3 I'm also super happy seeing our end product! YAY!
  - Both:
    - the game is addictive! I'm not sure if we spent more time debugging or playing hahaha :)
 
