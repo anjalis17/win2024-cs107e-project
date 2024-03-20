@@ -18,7 +18,25 @@
 #include "LSD6DS33.h"
 #include "console.h"
 
-// Define the 7 Tetris pieces as piece_t structs, laying out their name, color, and rotational configurations
+/* Define the 7 Tetris pieces as piece_t structs, laying out their name, color, and rotational configurations
+Rotational configs are stored as hex numbers (bit representations). 
+Here's an example of how it works for one 'j' piece configuration: 0x44C0 which is 0100 0100 1100 0000 in binary                                                                           
+       8       4      2     1
+    +------+------+------+------+
+ 0  |      |      |      |      |
+    |      |   *  |      |      |     
+    +------+------+------+------+
+ 1  |      |      |      |      |
+    |      |   *  |      |      |     
+    +------+------+------+------+
+ 2  |      |      |      |      |
+    |  *   |   *  |      |      |     
+    +------+------+------+------+
+ 3  |      |      |      |      |
+    |      |      |      |      |     
+    +------+------+------+------+
+This setup supports iterating through the piece squares in a super fast and space-efficient manner! :)
+*/
 const piece_t i = {'i', 0x1AE6DC, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', 0x0000E4, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
 const piece_t l = {'l', 0xEA9B11, {0x4460, 0x0E80, 0xC440, 0x2E00}};
@@ -73,8 +91,8 @@ falling_piece_t init_falling_piece(void) {
     nextFallingPiece = pieces[random_bag_choose()];
     piece.rotation = 0;
 
-    // subtract half of each piece's 4x4 grid width from the board's center x-coordinate
-    // (Representing each piece config as a hex value / bit sequence denotes the squares filled within a 4x4 grid) 
+    // Subtract half of each piece's 4x4 grid width from the board's center x-coordinate
+    // (Representing each piece config as a hex value / bit sequence denotes the squares filled within a 4 x 4 grid) 
     piece.x = (game_config.ncols / 2) - 2;
     piece.y = 0;
     piece.fallen = false;
@@ -88,6 +106,7 @@ falling_piece_t init_falling_piece(void) {
     return piece;
 }
 
+// Helper function to check if swap attempt is valid; returns true/false
 static bool isSwapValid(falling_piece_t piece) {
     falling_piece_t swapPiece;
     swapPiece.pieceT = nextFallingPiece;
@@ -100,8 +119,10 @@ static bool isSwapValid(falling_piece_t piece) {
     return false;
 }
 
+// Swap function to swap current falling game piece with next queued piece
 void swap(falling_piece_t* piece) {
     if (isSwapValid(*piece)) {
+        // make swap
         piece_t curr = piece->pieceT;
         piece->pieceT = nextFallingPiece;
         nextFallingPiece = curr;
@@ -120,8 +141,8 @@ void pause(const char *message) {
     uart_putchar('\n');
 }
 
+// Draw game start screen
 void startGame(void) {
-
     gl_clear(game_config.bg_col);
 
     // Draw text
@@ -169,7 +190,7 @@ void startGame(void) {
 
     gl_swap_buffer();
 
-    // wait for downward tilt
+    // Wait for downward tilt of remote
     timer_delay(2) ;
     int pitch = 0 ; int roll = 0 ;
     remote_get_x_y_status(&pitch, &roll) ;
@@ -182,6 +203,7 @@ void startGame(void) {
 
 }
 
+// End game screen
 void endGame(void) {
     draw_background();
     char buf[20];
@@ -192,8 +214,10 @@ void endGame(void) {
     game_config.gameOver = true;
 }
 
-// typedef bool (*functionPtr)(int x, int y, color_t color); 
-
+// This is the magical function that is frequently called to apply an action (taken in as a functionPtr) to 
+// each square in the tetris piece!  The coordinate locations of the squares are accessed using bitshifting!
+// If for any square in the tetris piece the action returns false, this function returns false and terminates.
+// If the action is successfully applied to all squares in the tetris piece, we return true.
 bool iterateThroughPieceSquares(falling_piece_t* piece, functionPtr action) {
     int piece_config = (piece->pieceT).block_rotations[(int) piece->rotation];
 
@@ -214,6 +238,7 @@ bool iterateThroughPieceSquares(falling_piece_t* piece, functionPtr action) {
     return true;
 }
 
+// Helper function to check if moving a square to location (x, y) is valid
 static bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
     // make sure (x, y) is in bounds
     if (x < 0 || y < 0) return false;
@@ -225,6 +250,7 @@ static bool checkIfValidMove(int x, int y, falling_piece_t* piece) {
     return true;
 }
 
+// Helper function to draw bevel lines within a square given its top left (x, y) cooridinate 
 static void drawBevelLines(int x, int y, color_t color) {
     gl_draw_line(x * SQUARE_DIM + 1, y * SQUARE_DIM + 1, x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + 1, color);
     gl_draw_line(x * SQUARE_DIM + 1, y * SQUARE_DIM + 1, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, color);
@@ -232,7 +258,7 @@ static void drawBevelLines(int x, int y, color_t color) {
     gl_draw_line(x * SQUARE_DIM + SQUARE_DIM - 2, y * SQUARE_DIM + SQUARE_DIM - 2, x * SQUARE_DIM + 1, y * SQUARE_DIM + SQUARE_DIM - 2, color);
 }
 
-// Draws square of FALLEN tetris piece specified by top left coordinate (x, y) into 
+// Helper to draw square of FALLEN tetris piece specified by top left coordinate (x, y) into 
 // framebuffer (handled by gl / fb modules)
 // Function only called after valid move is verified
 static void drawFallenSquare(int x, int y, color_t color) {
@@ -240,7 +266,7 @@ static void drawFallenSquare(int x, int y, color_t color) {
     drawBevelLines(x, y, GL_INDIGO);
 }
 
-// Draws square (of tetris piece) specified by top left coordinate (x, y) into 
+// Helper to draw square of FALLING tetris piece specified by top left coordinate (x, y) into 
 // framebuffer (handled by gl / fb modules)
 // Returns true always -- function only called after valid move is verified
 static bool drawFallingSquare(int x, int y, falling_piece_t* piece) {

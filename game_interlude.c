@@ -19,7 +19,7 @@
 static interlude_contents_t contents ;
 #define BLINK_DELAY 100 
 
-#define FRANCIS_DEMO 0 // if this == 1, then francis goes to the top of the score chart :)
+#define FRANCIS_DEMO 1 // if this == 1, then francis goes to the top of the score chart :)
 
 /* 'game_interlude_init'
  * initializes game screen to nrows and ncols wide, where every row/col size (in pixels) is determined by the character size

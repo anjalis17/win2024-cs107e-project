@@ -47,6 +47,7 @@ Tetris, but with a tiltable controller!
 ## Member contribution
  - Aditi did everything on the hardware-side and created the leaderboard!
    - files: remote, servo, lsd6ds33, i2c, passive_buzz, passive_buzz_intr, game_interlude, testing/main 
+   - written with future users in mind! thoroughly commented
  - Anjali built all the software underlying the game itself! 
    - files: game_update, random_bag, testing/main
  - Together, we did lots of fine-tuning, debugging, play testing, and calibrating of remote angling. We also decided on "new"/next features to add, and perhaps most importantly, had lots of fun and discovered new things together :)
