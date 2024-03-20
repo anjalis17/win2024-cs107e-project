@@ -2,7 +2,8 @@
 * -----------------------------------
 * Author: Anjali Sreenivas (anjalisr)
 * 
-* FILL IN FILE HEADER
+* The game_update.c module consists of all the architecture and functions 
+* underlying our game of Tetris, layering on top of the gl.c and fb.c modules.
 */
 
 #include "game_update.h"
@@ -17,6 +18,7 @@
 #include "LSD6DS33.h"
 #include "console.h"
 
+// Define the 7 Tetris pieces as piece_t structs, laying out their name, color, and rotational configurations
 const piece_t i = {'i', 0x1AE6DC, {0x0F00, 0x2222, 0x00F0, 0x4444}};
 const piece_t j = {'j', 0x0000E4, {0x44C0, 0x8E00, 0x6440, 0x0E20}};
 const piece_t l = {'l', 0xEA9B11, {0x4460, 0x0E80, 0xC440, 0x2E00}};
@@ -26,8 +28,7 @@ const piece_t t = {'t', 0x9305E2, {0x0E40, 0x4C40, 0x4E00, 0x4640}};
 const piece_t z = {'z', 0xE80201, {0x0C60, 0x4C80, 0xC600, 0x2640}};
 
 const piece_t pieces[7] = {i, j, l, o, s, t, z};
-// static int nextFallingPiece; // number 0 - 6 indicating which piece type in above pieces array
-piece_t nextFallingPiece;
+piece_t nextFallingPiece;  
 
 static struct {
     int nrows;
@@ -37,10 +38,9 @@ static struct {
     int gameScore;
     int numLinesCleared; 
     bool gameOver;
-
 } game_config;
 
-const unsigned int SQUARE_DIM = 20; // game pixel dimensions
+const unsigned int SQUARE_DIM = 20;  // game square dimensions in pixels
 
 // Required init 
 void game_update_init(int nrows, int ncols) {
@@ -63,6 +63,8 @@ void game_update_init(int nrows, int ncols) {
     gl_swap_buffer();
 }
 
+// Required init to construct and obtain a new falling piece
+// Falling piece type is selected from the elements remaining in random bag
 falling_piece_t init_falling_piece(void) {
     draw_background();
 
@@ -70,11 +72,14 @@ falling_piece_t init_falling_piece(void) {
     piece.pieceT = nextFallingPiece;
     nextFallingPiece = pieces[random_bag_choose()];
     piece.rotation = 0;
-    // subtract half of 4x4 grid width from board center x coordinate since bits sequence denotes 4x4 grid 
+
+    // subtract half of each piece's 4x4 grid width from the board's center x-coordinate
+    // (Representing each piece config as a hex value / bit sequence denotes the squares filled within a 4x4 grid) 
     piece.x = (game_config.ncols / 2) - 2;
     piece.y = 0;
     piece.fallen = false;
 
+    // End game if new piece drawn from random bag is not valid (coordinates out of bounds); otherwise, return chosen piece
     if (!iterateThroughPieceSquares(&piece, checkIfValidMove)) endGame();
     else {
         iterateThroughPieceSquares(&piece, drawFallingSquare);
@@ -117,12 +122,13 @@ void pause(const char *message) {
 
 void startGame(void) {
 
-    gl_clear(game_config.bg_col) ;
-    gl_clear(game_config.bg_col) ;
+    gl_clear(game_config.bg_col);
 
     // Draw text
-    console_printf("\n   TILTRIS!\n\n\n\n Button:On/Off\n         Music\n\n Tilt to Play") ;
-    gl_swap_buffer() ;
+    gl_draw_string(2 * SQUARE_DIM, 2 * SQUARE_DIM, "TILTRIS!", 0xCB4899);
+    gl_draw_string(SQUARE_DIM / 5, 5 * SQUARE_DIM, "Button: On/Off", 0xf9d740);
+    gl_draw_string(6 * SQUARE_DIM, 6 * SQUARE_DIM, "Music", 0xf9d740);
+    gl_draw_string(SQUARE_DIM / 2, 8 * SQUARE_DIM, "Tilt to Play!", 0x219756);
 
     // DRAW 107 MANGO
     // Draw 1 (as i piece)
