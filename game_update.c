@@ -124,8 +124,7 @@ void startGame(void) {
     console_printf("\n   TILTRIS!\n\n\n\n Button:On/Off\n         Music\n\n Tilt to Play") ;
     gl_swap_buffer() ;
 
-    // Draw 107mango
-
+    // DRAW 107 MANGO
     // Draw 1 (as i piece)
     drawFallenSquare(0, 15, i.color);
     drawFallenSquare(0, 16, i.color);
