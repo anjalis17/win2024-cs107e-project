@@ -78,6 +78,7 @@ Our team executed our goals super well! We are really proud of our end-product, 
    - I'm proud of both mine and Aditi's effort, how we worked together/divided up the project, our integration, and our enthusiasm to keep adding new features and push ourselves! <3 I'm also super happy seeing our end product! YAY!
  - Both:
    - the game is addictive! I'm not sure if we spent more time debugging or playing hahaha :)
+   - Creativity statement! We thought the addition of a continuous tilt/no tilt to move the blocks left/right as opposed to the usual key click for lateral movement was very innovative. In addition, the attention to detail in the haptic feedback, song, and more are indicators of all the details of the game implementation we thought through to give the user the best experience possible. The creativity comes from thinking about what would make the user have a smooth interaction and adding creative features that bolster that motivation.
 
 ## Photos
 ### Photos & writeups are in the /documents directory 
