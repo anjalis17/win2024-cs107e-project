@@ -61,7 +61,7 @@ Tetris, but with a tiltable controller!
  - https://codeincomplete.com/articles/javascript-tetris/ -- Our hex representation of the rotational configurations for each tetris piece was inspired from this site. This structure facilitated a super efficient way to iterate over the squares of each tetris piece using bit shifting! (The rest of the Javascript code on this site was not used, consulted, or referenced.)
 
 ## Sharing Code
-Our code for i2c.c (a slighly more robust version which checked for outgoing addresses to be ACK'ed) was shared with Sazzad and Aditri's teams. They both said they would cite us. Thought it was worth mentioning here for good measure.
+Our code for i2c.c (a slighly more robust version which checked for outgoing addresses to be ACK'ed) was shared with [classmates'] teams.
 
 ## Self-evaluation
 ### How well was your team able to execute on the plan in your proposal?  
