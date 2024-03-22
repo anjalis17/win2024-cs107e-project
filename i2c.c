@@ -73,7 +73,6 @@ static void write_byte(unsigned char byte) {
     // Aditi's implm WITH check 
     int dev_ack = gpio_read(module.sda) ;
 
-
     gpio_write(module.scl, 0); // clock low
     timer_delay_us(1);
     gpio_set_output(module.sda);
