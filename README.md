@@ -57,7 +57,7 @@ Tetris, but with a tiltable controller!
 ## References
  - all references are also inline in our code, but here is a short summary:
    - i2c and lsd6ds33 libraries were borrowed and modified from Julie's week 8 Sensors lecture. The code is commented to deliniate what is borrowed vs. new
-   - Talked to Javier, Antonio briefly about multitasking and where the timer interrupt clear functions were
+   - Talked to [classmates] briefly about multitasking and where the timer interrupt clear functions were
  - https://codeincomplete.com/articles/javascript-tetris/ -- Our hex representation of the rotational configurations for each tetris piece was inspired from this site. This structure facilitated a super efficient way to iterate over the squares of each tetris piece using bit shifting! (The rest of the Javascript code on this site was not used, consulted, or referenced.)
 
 ## Sharing Code
