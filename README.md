@@ -87,7 +87,7 @@ Our team executed our goals super well! We are really proud of our end-product, 
  - /documents/demo : contains video demos of Tiltris! 
    - cs107e-tiltris-demo.mp4 features Aditi playing Tiltris. It includes endgame (blocks stack to signal end of game), leaderboard (entering user info; updated leaderboard), and starting a new game (tuck, clear line, swap). 
    - cs107e-tiltris-demo-intermediary-screens.mp4 features Anjali playing Tiltris. It includes more footage of swap, the *newly* added start screen, toggling on/off music, and more!
-   - cs107e-tiltris-danielshighscore features high score on Tiltris is 92 lines, by Daniel
+   - cs107e-tiltris-highscore features high score on Tiltris is 92 lines
    - cs107e-start-screen features a recent (but not final) version of the start screen
  - /documents/remote : contains pictures of the remote (including earlier breadboard stages to show the transformation)
  - /documents/specs+initialnotes : contains a list of features we wanted initially in *Tetris.pdf + Aditi's initial hardware notes in *HW_notes.pdf
