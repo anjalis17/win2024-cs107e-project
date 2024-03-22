@@ -90,4 +90,3 @@ Our team executed our goals super well! We are really proud of our end-product, 
    - cs107e-tiltris-highscore features high score on Tiltris is 92 lines
    - cs107e-start-screen features a recent (but not final) version of the start screen
  - /documents/remote : contains pictures of the remote (including earlier breadboard stages to show the transformation)
- - /documents/specs+initialnotes : contains a list of features we wanted initially in *Tetris.pdf + Aditi's initial hardware notes in *HW_notes.pdf
