@@ -1,11 +1,28 @@
-## Project title
+## CS 107E Context
+Through CS107E at Stanford, I got the opportunity to program on a bare metal single board computer (Risc-V) and ultimately build up a full computer system with simple console. Over the course of 10 weeks (primarily in C and with some assembly), I wrote the following modules culminating in the full system: 
+- larson.s (larson scanner on LEDs)
+- gpio.c (GPIO module), clock.c (GPIO application -- a digital clock with configurable time setting)
+- timer.c + timer_asm.s (countdown timer application on clock setup)
+- strings.c, printf.c
+- backtrace.c + backtrace_asm.s (backtrace modules to see active functions on call stack)
+- malloc.c (memory allocation with Mini-Valgrind to detect memory leaks/errors)
+- ps2.c (PS/2 device input module)
+- keyboard.c (keyboard module to support reading in a PS/2 keyboard)
+- shell.c
+- fb.c, gl.c, config_fp.s (Graphics library; I additionally implemented Wu's algorithm to support anti-aliasing for lines and triangles in my graphics library and configured hardware floating point)
+- console.c
+- Revised version of ps2.c (Redesigned PS/2 driver to use GPIO interrupts so no keyboard scancodes are dropped)
+- interrupts_console_shell.c (Complete full system!)
+
+For our final project, we were challenged to take our modules and build any creative application of our choice. My classmate Aditi and I built upon my full system code to create Tiltris: Tetris, but with a tiltable, hand-designed controller! This GitHub repo contains all code we developed for our project, and additional details/reflections/feature summaries are below:
+----------------------------------------------------------------
 ### Tiltris
+----------------------------------------------------------------
 
 ## Team members
 Anjali Sreenivas (anjalisr), Aditi Bhaskar (aditijb)
 
 ## Project description
-Tetris, but with a tiltable controller!
 
 ## Features
 ### 3D printed remote (remote, servo, lsd6ds33, i2c):
