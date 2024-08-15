@@ -15,14 +15,15 @@ Through CS107E at Stanford, I got the opportunity to program on a bare metal sin
 - interrupts_console_shell.c (Complete full system!)
 
 For our final project, we were challenged to take our modules and build any creative application of our choice. My classmate Aditi and I built upon my full system code to create Tiltris: Tetris, but with a tiltable, hand-designed controller! This GitHub repo contains all code we developed for our project, and additional details/reflections/feature summaries are below.
-Thank you for reading!
+
+Thank you for reading! 
 Anjali
 
 ### Tiltris
 ----------------------------------------------------------------
 
 ## Team members
-Anjali Sreenivas (anjalisr), Aditi Bhaskar (aditijb)
+Anjali Sreenivas (anjalisr@stanford.edu), Aditi Bhaskar (aditijb@stanford.edu)
 
 ## Project description
 
